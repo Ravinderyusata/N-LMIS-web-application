@@ -1,0 +1,64 @@
+.table_div {
+	overflow: scroll;
+    height: 100%;
+    position: relative;
+    width: 100%
+}
+.data_table{
+	
+}
+.data_table thead {
+	background-color: #f2f2f2;
+}
+.data_table thead tr {
+	
+}
+.data_table thead th {
+	border-color: #ccc;
+	padding: 5px;
+	border-width: 0px 1px 1px 0px;
+	border-style: dotted;
+	margin: 0px;
+	padding: 0px;
+}
+
+.data_table  tr td {
+	border-color: #ccc;
+	padding: 5px;
+	border-width: 0px 1px 1px 0px;
+	border-style: dotted;
+	margin: 0px;
+	padding: 0px;
+}
+.data_table thead tr th.headerSortUp span{
+  background-image: url('../images/up-arrow.png');
+  background-position: 100% 100%;
+    background-repeat: no-repeat;
+    padding-right: 20px;
+}
+.data_table thead tr th.headerSortDown span{
+  background-image: url('../images/down-arrow.png');
+   background-position: 100% 100%;
+    background-repeat: no-repeat;
+    padding-right: 20px;
+}
+.data_table thead tr th{
+	cursor: pointer;
+
+}
+.data_table tbody tr:hover {
+	background-color: #eaf2ff;
+}
+.data_table tbody tr{
+position: relative;	
+}
+.row-number {
+	width: inherit;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	background-color: #f2f2f2;
+}
+.higligh-row{
+	background-color: #ffe48d;
+}

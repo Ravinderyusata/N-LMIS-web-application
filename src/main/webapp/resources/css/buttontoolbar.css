@@ -1,0 +1,93 @@
+#button_bar{
+}
+#button_bar ul{
+	#button_bar ul list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    /* overflow: hidden; */
+    background-color: transparent;
+}
+
+#button_bar ul li {
+    float: left;
+    padding: 6px;
+    list-style: none;
+}
+
+#button_bar ul li:last-child {
+    border-right: none;
+}
+
+
+/* #button_bar ul li a:hover:not(.active) {
+    background-color: red;
+} */
+#button_bar ul li a{
+	border-radius: 16px;
+    color: white;
+    display: block;
+    opacity: 0.8;
+    font-size: 13px;
+    height: 30px;
+    padding-left: 13px;
+    padding-right: 12px;
+    text-align: center;
+    background-color: #6995bf;
+}
+#button_bar ul li a:hover{
+	background-color: #2e4e6b;
+}
+
+#button_bar ul li a img{
+	height: 15px;
+}
+#button_bar a{
+text-transform:capitalize;	
+}
+
+/*for report button bar */
+#button_bar_for_report ul{
+	#button_bar_for_report ul list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    /* overflow: hidden; */
+    background-color: transparent;
+}
+
+#button_bar_for_report ul li {
+    float: left;
+    padding: 6px;
+    list-style-type: none;
+}
+#button_bar_for_report ul li label {
+	font-weight: bold;
+
+	}
+#button_bar_for_report ul li:last-child {
+    border-right: none;
+}
+
+
+/* #button_bar_for_report ul li a:hover:not(.active) {
+    background-color: red;
+} */
+#button_bar_for_report ul li a{
+    color: black;
+    display: block;
+    font-size: 13px;
+    height: 30px;
+    padding-left: 13px;
+    padding-right: 12px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #e1e6f6;
+}
+#button_bar_for_report ul li a img{
+	height: 15px;
+}
+#button_bar_for_report a{
+text-transform:capitalize;	
+}
+#filters div span,#filters div label{
+	font-weight: bold;
+}
