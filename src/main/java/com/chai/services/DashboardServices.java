@@ -9,6 +9,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,34 +18,34 @@ import com.chai.model.views.AdmUserV;
 import com.chai.util.GetJsonResultSet;
 
 public class DashboardServices {
+	SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
 	public JSONArray getLgaStockSummaryGridData(AdmUserV userBean, String year, String week, String lgaID) {
 		System.out.println("-- DashboardServices.getLgaStockSummaryGridData() mehtod called: -- ");
 		JSONArray array=new JSONArray();
-		SQLQuery query=null;
+		Session session = sf.openSession();
 		try {
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			String x_query="";
 			if(userBean.getX_ROLE_NAME().equals("NTO")){
 			 x_query="select STATE_ID,STATE_NAME,LGA_ID, LGA_NAME,ITEM_ID , "
-						+" ITEM_NUMBER, YEAR ,WEEK,ONHAND_QUANTITY,LEGEND_FLAG ,LEGEND_COLOR"
+						+ " ITEM_NUMBER, YEAR ,WEEK,ONHAND_QUANTITY AS ONHAND_QUANTITY,LEGEND_FLAG ,LEGEND_COLOR"
 						+" from STATE_LCCO_stock_performance_dashbord_v "
 						+" where year="+year+" and week="+week+" AND STATE_ID="+lgaID
 						+" ORDER BY LGA_NAME, ITEM_NUMBER";
 			}else{
 				 x_query="select STATE_ID,STATE_NAME,LGA_ID, LGA_NAME,ITEM_ID , "
-						+" ITEM_NUMBER, YEAR ,WEEK,ONHAND_QUANTITY,LEGEND_FLAG ,LEGEND_COLOR"
+						+ " ITEM_NUMBER, YEAR ,WEEK,ONHAND_QUANTITY AS ONHAND_QUANTITY,LEGEND_FLAG ,LEGEND_COLOR"
 						+" from STATE_LCCO_stock_performance_dashbord_v "
 						+" where year="+year+" and week="+week+" AND STATE_ID="+userBean.getX_WAREHOUSE_ID()
 						+" ORDER BY LGA_NAME, ITEM_NUMBER";
 			}
-			
-			query = session.createSQLQuery(x_query);
+			SQLQuery query = session.createSQLQuery(x_query);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();
-			 array=GetJsonResultSet.getjson(resultlist);
+			array = GetJsonResultSet.getjson(resultlist);
 	}catch (HibernateException e) {
 		e.printStackTrace();
+		} finally {
+			session.close();
 	}
 		return array;
 	}
@@ -52,9 +53,8 @@ public class DashboardServices {
 	public JSONArray getHFStockSummaryGridData(String year, String week, String lgaID) {
 		System.out.println("-- DashboardServices.getHFStockSummaryGridData() mehtod called: lgaID=-- "+lgaID);
 		JSONArray array = new JSONArray();
-		SQLQuery query = null;
+		Session session = sf.openSession();
 		try {
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
 			String x_query = "";
 			x_query = "SELECT  LGA_ID,	LGA_NAME, CUSTOMER_ID, CUSTOMER_NAME, ITEM_ID, "
 					+ " ITEM_NUMBER, STOCK_RECEIVED_DATE, STOCK_BALANCE, MIN_STOCK, MAX_STOCK, "
@@ -69,19 +69,23 @@ public class DashboardServices {
 					+ " AND default_store_id="+lgaID
 					+ " AND STATUS='A'";
 
-			query = sf.openSession().createSQLQuery(x_query);
+			Transaction tx = null;
+			tx = session.beginTransaction();
+			SQLQuery query = session.createSQLQuery(x_query);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();
 			array = GetJsonResultSet.getjson(resultlist);
 		} catch (HibernateException e) {
 			e.printStackTrace();
-		} 
+		} finally {
+			session.close();
+		}
 		return array;
 	}
 	public JSONArray getStateStockPerfDashboard(AdmUserV userBean,String year,String week,String lgaid){
 		System.out.println("-- DashboardServices.getStateStockPerfDashboard() mehtod called: -- ");
 		JSONArray array=new JSONArray();
-		SQLQuery query=null;
+		Session session = sf.openSession();
 		String previousWeek="";
 		String previousyear="";
 		try {
@@ -102,8 +106,6 @@ public class DashboardServices {
 				}
 				previousyear=year;
 			}
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			String x_query="SELECT STATE_ID,"
 					+" STATE_NAME,"
 					+"  LGA_ID,"
@@ -119,7 +121,7 @@ public class DashboardServices {
 					+" WHERE STOCK_RECEIVED_YEAR="+year
 					+" AND STOCK_RECEIVED_WEEK="+week
 					+" AND LGA_ID=IFNULL("+lgaid+",LGA_ID) AND STATE_ID=IFNULL("+passNullAsStateIdIfLIOMOH+",STATE_ID)";
-			query = session.createSQLQuery(x_query);
+			SQLQuery query = session.createSQLQuery(x_query);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist1 = query.list();
 			String x_query2="SELECT STATE_ID,"
@@ -137,9 +139,9 @@ public class DashboardServices {
 					+" WHERE STOCK_RECEIVED_YEAR="+previousyear
 					+" AND STOCK_RECEIVED_WEEK="+previousWeek
 					+" AND LGA_ID=IFNULL("+lgaid+",LGA_ID) AND STATE_ID=IFNULL("+passNullAsStateIdIfLIOMOH+",STATE_ID)";
-			query = session.createSQLQuery(x_query2);
-			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-			List resultlist2 = query.list();
+			SQLQuery query1 = session.createSQLQuery(x_query2);
+			query1.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist2 = query1.list();
 			for (int i = 0; i < resultlist1.size(); i++) {
 				JSONObject obj=new JSONObject();
 				HashMap<String, String> row = (HashMap)resultlist1.get(i);
@@ -156,7 +158,7 @@ public class DashboardServices {
 			       }else if((currunt_green<pre_green) ){
 			    	   obj.put("rotation", 90);			    	  
 			       }else if(currunt_green==pre_green){
-			    	   System.out.println("green same");
+					// System.out.println("green same");
 			    	   if(currunt_red>pre_red){			    		  
 			    		   obj.put("rotation", 90);
 			    	   }else if(currunt_red<pre_red){			    		  
@@ -169,6 +171,8 @@ public class DashboardServices {
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return array;
 	}
@@ -182,6 +186,8 @@ public class DashboardServices {
 		String queryForCurrentWeek = "";
 		String queryForPreviousWeek = "";
 		String queryForUnioun = "";
+		Session session = sf.openSession();
+		Transaction tx = null;
 		try {
 			if(week.equals("01")){
 				previousyear=String.valueOf(Integer.parseInt(year)-1);
@@ -194,8 +200,6 @@ public class DashboardServices {
 				}
 				previousyear=year;
 			}
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			if(lgaid.equals("null") || lgaid.equals("")){
 //				System.out.println("selected State is All");
 				queryForCurrentWeek = "SELECT STATE_ID, STATE_NAME, LGA_ID, LGA_NAME, "
@@ -327,6 +331,8 @@ public class DashboardServices {
 			}
 	}catch (Exception e) {
 		e.printStackTrace();
+		} finally {
+			session.close();
 	}
 		return array;
 	}
@@ -337,6 +343,7 @@ public class DashboardServices {
 		SQLQuery query=null;
 		String previousWeek="";
 		String previousyear="";
+		Session session = sf.openSession();
 		try {
 			if(week.equals("01")){
 				previousyear=String.valueOf(Integer.parseInt(year)-1);
@@ -349,8 +356,6 @@ public class DashboardServices {
 				}
 				previousyear=year;
 			}
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			String x_query=" SELECT STATE_ID, STATE_NAME, "
 					+"   LESS_3_ANTIGENS_TOTAL_HF_PER,"
 					+"   LESS_3_ANTIGENS_TOTAL_HF_PER_FLAG,  "
@@ -419,7 +424,7 @@ public class DashboardServices {
 			       }else if((currunt_green<pre_green) ){
 			    	   obj.put("rotation", 90);
 			    	 }else if(currunt_green==pre_green){
-			    	   System.out.println("green same");
+					// System.out.println("green same");
 			    	   if(currunt_red>pre_red){
 			    		   obj.put("rotation", 90);
 			    	   }else if(currunt_red<pre_red){
@@ -432,7 +437,9 @@ public class DashboardServices {
 			}
 	}catch (Exception e) {
 		e.printStackTrace();
+	} finally {
+		session.close();
 	}
 		return array;
-	}	
+	}
 }

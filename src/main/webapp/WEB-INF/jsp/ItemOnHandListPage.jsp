@@ -16,21 +16,27 @@
 		var user = '${userBean.getX_ROLE_NAME()}';
 		switch (user) {
 		case "SCCO":
-
+			$('#stateFilter').hide();
+			loadLgaComboboxList('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		case "SIO":
-
+			$('#stateFilter').hide();
+			loadLgaComboboxList('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		case "SIFP":
-
+			$('#stateFilter').hide();
+			loadLgaComboboxList('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		case "NTO":
+			loadStateComboboxList();
 			break;
 		case "LIO":
+			$('#stateFilter').hide();
 			$('#lga_combobox_div').hide();
 			loadProductBasedOnLga('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		case "MOH":
+			$('#stateFilter').hide();
 			$('#lga_combobox_div').hide();
 			loadProductBasedOnLga('${userBean.getX_WAREHOUSE_ID()}');
 			break;
@@ -73,6 +79,11 @@
 	</div>
 	<!-- filters -->
 	<div id="filters" style="padding: 3px;display: inline-flex">
+		<div id="stateFilter" >
+					<label id="state_label">State Store:</label>
+					<input id="state_combobox"  class="easyui-combobox" name="state_combobox"  style="width:120px" >
+		</div>&nbsp;&nbsp;&nbsp;
+		
 		<div id="lga_combobox_div">
 		<span>LGA:</span> 
 		<select id="lga_combobox" class="easyui-combobox"
@@ -85,11 +96,14 @@
 			class="easyui-combobox" name="product_id" style="width: 200px;">
 		</select>
 		</div>&nbsp;&nbsp;&nbsp;&nbsp;
-		 <a href="#" class="easyui-linkbutton" 
+		
+		<div>
+		<a href="#" class="easyui-linkbutton" 
 			onclick="filterGridData()">Search</a>
+		
 	</div>
 	
-
+</div>
 
 	<!--  footer page -->
 
@@ -154,20 +168,34 @@ function filterGridData(lga_id,product_id){
 }
 </script>
 <script type="text/javascript">
+function loadLgaComboboxList(stateId){
 	$('#lga_combobox').combobox({
-		url : 'getlgalist',
+		url : 'getlgalistBasedOnStateId?option=NotAll&stateId='+stateId,
 		valueField : 'value',
 		textField : 'label',
-		onSelect : function(lga){
-			loadProductBasedOnLga(lga.value) 
+		onSelect : function(lgaId){
+			$('#product_combobox').combobox('clear');
+			$('#transaction_combobox').combobox('clear');
+			loadProductBasedOnLga(lgaId.value);
 		}
 	});
+}
 	function loadProductBasedOnLga(lgaId){
 		$('#product_combobox').combobox({
 			url : 'getproductlist?lgaid=' +lgaId+'&option=All',
 			valueField : 'value',
 			textField : 'label'
 		});	
+	}
+	function loadStateComboboxList(){
+		$('#state_combobox').combobox({
+			url:"get_state_store_list?option=notAll",
+			valueField : 'value',
+			textField : 'label' ,
+			onSelect:function(state){
+				loadLgaComboboxList(state.value);
+			}
+		});
 	}
 </script>
 </html>

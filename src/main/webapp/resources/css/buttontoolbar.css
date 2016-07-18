@@ -91,3 +91,6 @@ text-transform:capitalize;
 #filters div span,#filters div label{
 	font-weight: bold;
 }
+.report_title{
+	font-weight: bold;
+}

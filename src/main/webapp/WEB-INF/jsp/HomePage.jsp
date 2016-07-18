@@ -82,7 +82,6 @@ $(document).ready(function(){
 		$("#stockDashboardTabsUL .indicator").css('height','5px');
 		$("#ntoStockDashboardTabsUL .indicator").css('height','5px');
 		$("#lioMohStockDashboardTabsUL .indicator").css('height','5px');
-		
 		var user = '${userdata.getX_ROLE_NAME()}';
 		$('#user').text('User: '+user+' ${userdata.getX_WAREHOUSE_NAME()}');
 		$('#login_time').text('${login_time}');
@@ -112,10 +111,10 @@ $(document).ready(function(){
 					var hfStockSummaryDashboardTabDivId = $("#stockDashboardTabsUL li:eq(2) > a").attr('href');
 // 					alert("hfStockSummaryDashboardTabDivId: "+hfStockSummaryDashboardTabDivId);
 					
-					var stateStockPerfoDashboardDataUrl = "get_state_stock_perfo_dashboard_data?year="+new Date().getFullYear()+"&week="+(getWeekNumber(new Date())-1)+"&lga_id=null";
-					var lgaStockSummaryDashboardDataUrl = "get_lga_stock_summary_grid_data?year="+new Date().getFullYear()+"&week="+(getWeekNumber(new Date())-1)+"&stateId=${userdata.x_WAREHOUSE_ID}";
+					var stateStockPerfoDashboardDataUrl = "get_state_stock_perfo_dashboard_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR}+"&lga_id=null";
+					var lgaStockSummaryDashboardDataUrl = "get_lga_stock_summary_grid_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR}+"&stateId=${userdata.x_WAREHOUSE_ID}";
 // 					alert("lgaStockSummaryDashboardDataUrl: "+lgaStockSummaryDashboardDataUrl);
-					var hfStockSummarySheetDashboardDataUrl = "get_hf_stock_summary_grid_data?year="+new Date().getFullYear()+"&week="+(getWeekNumber(new Date())-1)+"&lgaId=null&lgaName=null";
+					var hfStockSummarySheetDashboardDataUrl = "get_hf_stock_summary_grid_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR}+"&lgaId=null&lgaName=null";
 					document.getElementById("loader_div").style.display = "block";
 						$.ajax({
 						    type: "GET",
@@ -139,8 +138,8 @@ $(document).ready(function(){
 									valueField : 'value',
 									textField : 'label'
 								});
-						    	$('#week_combobox').combobox('setValue',(getWeekNumber(new Date())-1));
-						    	$('#week_combobox').combobox('setText',(getWeekNumber(new Date())-1));
+						    	$('#week_combobox').combobox('setValue','${PREVIOUS_WEEK_OF_YEAR}');
+						    	$('#week_combobox').combobox('setText','${PREVIOUS_WEEK_OF_YEAR}');
 						    }
 						});
 						
@@ -226,12 +225,13 @@ $(document).ready(function(){
 				break;
 			case "NTO":
 				$('#warehouse_name').text('National: ${userdata.getX_WAREHOUSE_NAME()}');			
-// 				$('#stockManagementNavigationUL').hide();
+				//$('#stockManagementNavigationUL').hide();
 				$('#stockDashboardTabsUL').hide();
 				$('#lioMohStockDashboardTabsUL').hide();
 				$('#stockDashboardDropdown li:lt(5), #stockDashboardDropdown li:gt(7)').hide();
 				$('#reportsDropdown li:gt(10)').hide();
-				
+				$('#reportsDropdown li').eq(4).hide();
+				$('#productsDropdown li').eq(2).hide();
 				$("#ntoStockDashboardTabsUL .indicator").css('height','5px');
 				if(reloadDashboards){
 					/* Below ajax request will run when user log-in(By-Default screen!) */
@@ -247,9 +247,9 @@ $(document).ready(function(){
 					
 //	 				alert("Current Week: "+getWeekNumber(new Date())+", Currrent-- : "+(getWeekNumber(new Date())-1));
 					
-					var stateStockStatusLgaAggDashboardDataUrl = "get_lga_agg_stock_dashboard_data?year="+new Date().getFullYear()+"&week="+(getWeekNumber(new Date())-1);
+					var stateStockStatusLgaAggDashboardDataUrl = "get_lga_agg_stock_dashboard_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR};
 //	 				alert("NTO stateStockStatusLgaAggDashboardDataUrl: "+stateStockStatusLgaAggDashboardDataUrl);
-					var lgaStockSummaryDashboardDataUrl = "get_lga_stock_summary_grid_data?year="+new Date().getFullYear()+"&week="+(getWeekNumber(new Date())-1)+"&stateId=null";
+					var lgaStockSummaryDashboardDataUrl = "get_lga_stock_summary_grid_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR}+"&stateId=null";
 //	 				alert("NTO lgaStockSummaryDashboardDataUrl: "+lgaStockSummaryDashboardDataUrl);
 					document.getElementById("loader_div").style.display = "block";
 					 $.ajax({
@@ -284,8 +284,8 @@ $(document).ready(function(){
 								valueField : 'value',
 								textField : 'label'
 							});
-					    	$('#week_comboboxNTO').combobox('setValue',(getWeekNumber(new Date())-1));
-					    	$('#week_comboboxNTO').combobox('setText',(getWeekNumber(new Date())-1));
+					    	$('#week_comboboxNTO').combobox('setValue','${PREVIOUS_WEEK_OF_YEAR}');
+					    	$('#week_comboboxNTO').combobox('setText','${PREVIOUS_WEEK_OF_YEAR}');
 					    }
 					});
 					
@@ -314,6 +314,7 @@ $(document).ready(function(){
 			case "LIO":
 				$('#warehouse_name').text('LGA: ${userdata.getX_WAREHOUSE_NAME()}');				
 				$('#ntoStockDashboardTabsUL').hide();
+				//$('#stockManagementNavigationUL').hide();
 				$('#stockDashboardTabsUL').hide();				
 				$('#stockDashboardDropdown li:lt(9)').hide();
 				$('#reportsDropdown li:lt(6)').hide();
@@ -325,9 +326,9 @@ $(document).ready(function(){
 					var defaultDashboardTabdivID = $("#lioMohStockDashboardTabsUL a").filter(".active").attr('href');
 					var hfStockSummaryDashboardTabDivId = $("#lioMohStockDashboardTabsUL li:eq(1) > a").attr('href');
 					
-					var stateStockPerfoDashboardDataUrl = "get_state_stock_perfo_dashboard_data?year="+new Date().getFullYear()+"&week="+(getWeekNumber(new Date())-1)+"&lga_id=${userdata.x_WAREHOUSE_ID}";
+					var stateStockPerfoDashboardDataUrl = "get_state_stock_perfo_dashboard_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR}+"&lga_id=${userdata.x_WAREHOUSE_ID}";
 // 					alert("stateStockPerfoDashboardDataUrl: "+stateStockPerfoDashboardDataUrl);
-					var hfStockSummarySheetDashboardDataUrl = "get_hf_stock_summary_grid_data?year="+new Date().getFullYear()+"&week="+(getWeekNumber(new Date())-1)+"&lgaId=${userdata.x_WAREHOUSE_ID}&lgaName=${userdata.x_WAREHOUSE_NAME}";
+					var hfStockSummarySheetDashboardDataUrl = "get_hf_stock_summary_grid_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR}+"&lgaId=${userdata.x_WAREHOUSE_ID}&lgaName=${userdata.x_WAREHOUSE_NAME}";
 					document.getElementById("loader_div").style.display = "block";
 					$.ajax({
 					    type: "GET",
@@ -353,8 +354,8 @@ $(document).ready(function(){
 								valueField : 'value',
 								textField : 'label'
 							});
-					    	$('#week_combobox').combobox('setValue',(getWeekNumber(new Date())-1));
-					    	$('#week_combobox').combobox('setText',(getWeekNumber(new Date())-1));
+					    	$('#week_combobox').combobox('setValue','${PREVIOUS_WEEK_OF_YEAR}');
+					    	$('#week_combobox').combobox('setText','${PREVIOUS_WEEK_OF_YEAR}');
 					    }
 					});
 					
@@ -438,10 +439,6 @@ $(document).ready(function(){
 
 <body>
 	<jsp:include page="Header.jsp"></jsp:include>
-	<%if(request.getSession().getAttribute("userBean")==null){
-			response.sendRedirect("loginPage");
-		}
-	%>
 	<%! int loadCount=0; %>
 	<% loadCount =(int)request.getSession().getAttribute("loadCount");
 		loadCount++;
@@ -495,7 +492,7 @@ $(document).ready(function(){
 		<li class="divider"></li>
 		<li><a href="hf_bin_card_page">HF Bin Cards</a></li>
 		<li class="divider"></li>
-		<li><a href="#">HF Min./Max. Stock Balance Report</a></li>
+		<li><a href="hf_min_max_stock_level_report_page">HF Min./Max. Stock Balance Report</a></li>
 		<li class="divider"></li>
 	</ul>
 	

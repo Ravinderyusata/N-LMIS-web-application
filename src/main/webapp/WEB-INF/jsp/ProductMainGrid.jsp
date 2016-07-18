@@ -705,13 +705,6 @@ function loadProductOverViewData(warehouse_id){
 			
 			});
 		}
-	 function formateDate(date){
-			var date=new Date(date);
-			var day = date.getDate();
-			var monthIndex = date.getMonth();
-			var year = date.getFullYear();
-			return day+'-'+(monthIndex<10?('0'+monthIndex):monthIndex)+'-'+year;
-		}
 	 function alertBox(message){
 		  $.messager.alert('Warning!',message,'warning');
 	}

@@ -24,7 +24,8 @@ public class LgaWastageController {
 	}
 
 	@RequestMapping(value = "/get_Lga_wsatage_report_grid_data")
-	public void getLgaWastageReportGridData(@RequestParam("lgaID") String lgaID, 
+	public void getLgaWastageReportGridData(@RequestParam("lgaID") String lgaID,
+			@RequestParam("stateId") String stateId,
 											@RequestParam("filterBy") String filterBy,
 											@RequestParam("year") String year, 
 											@RequestParam("month") String month, 
@@ -34,8 +35,11 @@ public class LgaWastageController {
 		System.out.println("in LgaWastageController.getLgaWastageReportGridData()");
 		try{
 			AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
+			if (!userBean.getX_ROLE_NAME().equals("NTO")) {
+				stateId = Integer.toString(userBean.getX_WAREHOUSE_ID());
+			}
 			//           0,       1,   2,    3,   4,     5
-		JSONArray data=new ReportServices().lgaWastageReportGridData(Integer.toString(userBean.getX_WAREHOUSE_ID()),
+			JSONArray data = new ReportServices().lgaWastageReportGridData(stateId,
 				lgaID,filterBy,year,month,week,dayDate);
 			// System.out.println("json lgaWastageReport: "+data.toString());
 		

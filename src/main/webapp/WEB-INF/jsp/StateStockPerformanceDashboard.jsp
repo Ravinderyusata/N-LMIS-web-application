@@ -3,7 +3,9 @@
 <script src="resources/easyui/jquery.easyui.min.js"></script>
 <link type="text/css" href="resources/easyui/themes/default/easyui.css" rel="stylesheet">
 <style>
-
+#table_div table{
+border-collapse: inherit;
+}
 .l-btn {
     background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #ffffff 0px, #eeeeee 100%) repeat-x scroll 0 0;
     border: 1px solid #bbb;
@@ -35,10 +37,10 @@
 	display: inline-block;
 }
 .yellow-status {
-	width: 10px;
-	height: 10px;
-	background: yellow;
-	display: inline-block;
+	background: yellow none repeat scroll 0 0;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
 }
 h6 {
     font-weight: normal;
@@ -77,9 +79,11 @@ h6 {
 			</div>
 			<div class="row" style="margin-bottom: 0px">
 				<!-- FOR TEST : border color of table_div - #95d0b7 -->
-				<div id="table_div" class="col l10" style="border: 1px solid #000000">
+				<hr style="width: 100%;">
+				<div id="table_div" class="col l10" style="overflow-y:auto;height:60%; ">
 					<!-- dynamic row created and inserted here... -->
 				</div>
+			
 				<div class="col l2">
 					<!--FOR TESTING: parent div's border color-> style="border: 1px solid #881818;" -->
 <!-- 					<ul style="line-height: 35px;;margin-top:0"> -->
@@ -88,7 +92,7 @@ h6 {
 <!-- 						<li>&nbsp;<div class="green-status"></div>&nbsp;&nbsp;&nbsp;&nbsp;% LGA With no -->
 <!-- 							Antigen in red</li> -->
 <!-- 						<li>&nbsp;<div class="yellow-status"></div>&nbsp;&nbsp;&nbsp;&nbsp; -->
-<!-- 							<span style="line-height: 5px"> -->
+<!-- 							<span style="float: right;line-height: 34px; text-align: left; width: 197px"> -->
 <!-- 								% LGA With Antigen that need to &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 <!-- 								&nbsp;&nbsp;re-order Stock -->
 <!-- 							</span> -->
@@ -105,20 +109,26 @@ h6 {
 <!-- 					</ul> -->
 					<ul style="line-height: 35px; margin-top: 0;">
 						<li>
-							&nbsp; <span class="red-status"></span> 
+							 <div>
+							 <span class="red-status"></span> 
 							<span>% LGA	With &gt;3 Antigen in red</span>
+							 </div>
 						</li>
 	
 						<li>
-							&nbsp; <span class="green-status"></span> 
+							<div>
+							 <span class="green-status"></span> 
 							<span> % LGA With no Antigen in red</span>
+							</div>
 						</li>
 	
 						<li>
-							&nbsp; <span class="yellow-status"></span>
-							<span style="text-align: left; float: right; width: 205px; line-height: 34px;">
+							<div>
+							 <span class="yellow-status"></span>
+							<span >
 								% LGA With Antigen that need to re-order Stock 
 							</span>
+							</div>
 						</li>
 						<li>
 							<span style="padding-left: 13px;">
@@ -178,7 +188,10 @@ function showTableData(url) {
 	$('#lga_combobox').combobox({
 		url : 'getlgalist?option=All',
 		valueField : 'value',
-		textField : 'label'
+		textField : 'label',
+		onLoadError:function(data){
+			window.location.href="logOutPage?logOutFlag=logOut";
+		} 
 	});
 	/* Do not delete below code - IMPORTANT */
 	$('#week_combobox').combobox({});

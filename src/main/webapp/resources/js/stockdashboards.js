@@ -31,9 +31,9 @@ function filterStockDashboardGridData(url, lgaComboBoxId, yearComboBoxId, weekCo
 	}
 }
 function loaddata(data) {
-	var datacard = "";
+	var datacard = "<table style='width=80%'>";
 	for (var i = 0; i < data.length; i++) {
-		datacard += "<div class='row' style='height:29px; border: 1px solid #000000;'>";
+		datacard +="<tr>";
 		/* FOR TESTING: */
 		/* h6-border-color:#dd5b25 */
 		/* col l3 border color #fff259 */
@@ -41,32 +41,31 @@ function loaddata(data) {
 		/* col l8 > .row border color #0f83c7 */
 		/* col l1 border color #6d557d */
 		/* col l1 > img border color #36626b */
-		datacard += "<div class='col l3' style='height:27px; width:240px; border-right: 1px solid #000000;'><h6 style='margin-top:2px;margin-bottom:2px;'>"+data[i].LGA_NAME+"</h6></div>";
-		datacard += "<div class='col l8' style='width:727px;border-right: 1px solid #000000;border-left: 1px solid #000000;'><div class='row' style='width:725px;'>";
+		datacard += "<td style='width:20%;align:center;height: 100%;'><h6 style='margin-top:2px;margin-bottom:2px;text-align:left;padding-left:3px;'>"+data[i].LGA_NAME+"</h6></td>";
+		datacard +="<td style='width:80%;margin:0px;padding:0px;'><div style='display:inline-flex;width:100%;height:100%;'>"
 		var col_to_group;
 		if(!data[i].LESS_3_ANTIGENS_TOTAL_HF_PER=="0"){
-			col_to_group=Math.round((data[i].LESS_3_ANTIGENS_TOTAL_HF_PER/8.33));
-			datacard += "<div class='col l"+col_to_group.toString()+"'style='line-height:1.5;height:27px;background-color:"
-			+data[i].LESS_3_ANTIGENS_TOTAL_HF_PER_FLAG+";display:inline-block;text-align:center'>"
+			col_to_group=Math.round((data[i].LESS_3_ANTIGENS_TOTAL_HF_PER/100)*100);
+			datacard += "<div style='width:"+col_to_group.toString()+"%;background-color:"
+			+data[i].LESS_3_ANTIGENS_TOTAL_HF_PER_FLAG+";text-align:center;padding-top: 5px;'>"
 			+data[i].LESS_3_ANTIGENS_TOTAL_HF_PER+"%</div>";
 		}
 		if(!data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER=="0"){
-			col_to_group=Math.round((data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER/8.33));
-			datacard += " <div class='col l"+col_to_group.toString()+"' style='line-height:1.5;height:27px;background-color:"
-			+data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER_FLAG+";display:inline-block;text-align:center'>"
+			col_to_group=Math.round((data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER/100)*100);
+			datacard += "<div style='width:"+col_to_group.toString()+"%;background-color:"
+			+data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER_FLAG+";text-align:center;padding-top: 5px;'>"
 			+data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER+"%</div>";	
 		}
 		if(!data[i].SUFFICIENT_STOCK_TOTAL_HF_PER=="0"){
-			col_to_group=Math.round((data[i].SUFFICIENT_STOCK_TOTAL_HF_PER/8.33));
-			datacard += " <div class='col l"+col_to_group.toString()+"' style='line-height:1.5;height:27px;background-color:"
-			+data[i].SUFFICIENT_STOCK_TOTAL_HF_PER_FLAG+";display:inline-block;text-align:center'>"
+			col_to_group=Math.round((data[i].SUFFICIENT_STOCK_TOTAL_HF_PER/100)*100);
+			datacard += "<div style='width:"+col_to_group.toString()+"%;background-color:"
+			+data[i].SUFFICIENT_STOCK_TOTAL_HF_PER_FLAG+";text-align:center;padding-top: 5px;'>"
 			+data[i].SUFFICIENT_STOCK_TOTAL_HF_PER+"%</div>";
 		}
-		datacard +="</div></div><div class='col l1' style='width:42px;border-left:1px solid #000000;'><img style='height:13px;width:25px;margin:7;transform:rotate("+data[i].rotation+"deg)' src='resources/images/Arrow.png'></div></div>";
+		datacard +="</div></td><td><img style='height:7px;width:26px;transform:rotate("+data[i].rotation+"deg)' src='resources/images/Arrow.png'></td></tr>";
 	}
-	document.getElementById("table_div").innerHTML = datacard;
-	$('#table_div .row').css('margin-bottom','0px');
-	$('#table_div .col').css('padding-top','0px');
+	$('#table_div').html(datacard);
+	
 }
 
 function alertBox(message){
@@ -97,7 +96,7 @@ function loaddata3(data) {
 	var datacard = "";
 	for (var i = 0; i < data.length; i++) {
 		datacard += "<tr>";
-		datacard += "<td>" + data[i].LGA_NAME + "</td>";
+		datacard += "<td >" + data[i].LGA_NAME + "</td>";
 		for (var rowid = 1; rowid < headingrow.length; rowid++) {
 			$.each(data[i],function(lgaName, lgaValue) {
 				if (typeof lgaValue == "object") {
@@ -201,39 +200,42 @@ function loaddataNTO(data) {
 	var datacard = "";
 	var stateName="";
 	var stateMatchName="";
+	var datacard = "<table style='width=100%'>";
 	for (var i = 0; i < data.length; i++) {
+		datacard +="<tr>";
 		stateName=data[i].STATE_NAME;
 		if(stateMatchName!=stateName){
-			datacard+="<div class='row' style='line-height:19px; height: 20px; border-bottom: 1px solid #000000;background-color:#eeeeee;text-align:center;margin-bottom:0px'>"+stateName+"</div>";
+			datacard+="<td colspan='3' style='height: 100%;padding: 0px;margin: 0px;'><div class='row' style='line-height:19px; height: 100%;" +
+					" background-color:#eeeeee;text-align:center;" +
+					"margin-bottom:0px'>"+stateName+"</div></td></tr>";
 			stateMatchName=stateName;
 		}
-		datacard += "<div class='row' style='height:27px; border-bottom: 1px solid #000000;margin-bottom:0px'>";
-		datacard += "<div class='col l3' style='height:26px; width:290px; border-right: 1px solid #000000; padding-top: 0px;'><h6 style='margin-top:4px;margin-bottom:3px;margin-left: 6px'>"+data[i].LGA_NAME+"</h6></div>";
-		datacard += "<div class='col l8' style='width:719px; border-right: 1px solid #000000;padding-top: 0px;'><div class='row' style='width:718px; margin-bottom: 0px;'>";
+		datacard += "<tr><td style='width:20%;'><h6 style='margin-top:4px;margin-bottom:3px;margin-left: 6px'>"+data[i].LGA_NAME+"</h6></td>";
+		datacard += "<td style='width:70%;height: 100%;padding: 0px;margin: 0px;'>" +
+				"<div style='display:inline-flex;width:100%;height:100%'>";
 		var percentage;
 		if(!data[i].REORDER_STOCK_COUNT_Y_PER=="0"){
-			percentage=Math.round((data[i].REORDER_STOCK_COUNT_Y_PER/8.33));
-			datacard += "<div class='col l"+percentage.toString()+"'style='line-height:1.5;height:26px;background-color:"
-			+data[i].REORDER_STOCK_COUNT_Y_FLAG+";display:inline-block;text-align:center;padding-top: 0px;'>"
+			percentage=Math.round((data[i].REORDER_STOCK_COUNT_Y_PER));
+			datacard += "<div style='width:"+percentage.toString()+"%;background-color:"
+			+data[i].REORDER_STOCK_COUNT_Y_FLAG+";padding-top: 5px;'>"
 			+data[i].REORDER_STOCK_COUNT_Y_PER+"%</div>";
 		}
 		if(!data[i].INSUFFICIENT_STOCK_COUNT_R_PER=="0"){
-			percentage=Math.round((data[i].INSUFFICIENT_STOCK_COUNT_R_PER/8.33));
-			datacard += " <div class='col l"+percentage.toString()+"' style='line-height:1.5;height:26px;background-color:"
-			+data[i].INSUFFICIENT_STOCK_COUNT_FLAG+";display:inline-block;text-align:center;padding-top: 0px;'>"
+			percentage=Math.round((data[i].INSUFFICIENT_STOCK_COUNT_R_PER));
+			datacard += "<div style='width:"+percentage.toString()+"%;background-color:"
+			+data[i].INSUFFICIENT_STOCK_COUNT_FLAG+";padding-top: 5px;'>"
 			+data[i].INSUFFICIENT_STOCK_COUNT_R_PER+"%</div>";	
 		}
 		if(!data[i].SUFFICIENT_STOCK_COUNT_G_PER=="0"){
-			percentage=Math.round((data[i].SUFFICIENT_STOCK_COUNT_G_PER/8.33));
-			datacard += " <div class='col l"+percentage.toString()+"' style='line-height:1.5;height:26px;background-color:"
-			+data[i].SUFFICIENT_STOCK_COUNT_G_FLAG+";display:inline-block;text-align:center;padding-top: 0px;'>"
+			percentage=Math.round((data[i].SUFFICIENT_STOCK_COUNT_G_PER));
+			datacard += "<div style='width:"+percentage.toString()+"%;background-color:"
+			+data[i].SUFFICIENT_STOCK_COUNT_G_FLAG+";padding-top: 5px;'>"
 			+data[i].SUFFICIENT_STOCK_COUNT_G_PER+"%</div>";
 		}
-		datacard +="</div></div><div class='col l1' style='height: 27px; text-align: center; vertical-align: middle; padding-top: 0px;'><img style='vertical-align:middle;height:12px;width:22px;margin-top:6px;transform:rotate("+data[i].rotation+"deg)' src='resources/images/Arrow.png'></div></div>";
+		datacard +="</div></td><td style='width:1%;'><img style='height:7px;width:26px;" +
+				"transform:rotate("+data[i].rotation+"deg)' src='resources/images/Arrow.png'></td></tr>";
 	}
 	document.getElementById("table_divNTO").innerHTML = datacard;
-	$('#table_divNTO .row').css('margin-bottom','0px');
-	$('#table_divNTO .col').css('padding-top','0px');
 }
 function showTableDataNTO(url) {
 	document.getElementById("loader_div").style.display = "block";
@@ -279,35 +281,35 @@ function loadLgaAggStockDataNTO(url){
 	xhttp.send();	
 }
 function showLgaAggStockDataNTO(data){
-	var datacard = "";
+	var datacard = "<table style='width=100%'>";
 	for (var i = 0; i < data.length; i++) {
-		datacard += "<div class='row' style='height:29px; border: 2px solid #000000;'>";
-		datacard += "<div class='col l3' style='width:338px;height:28px; border-right: 1px solid #000000;'><h6 style='margin-top:2px;margin-bottom:2px;'>"+data[i].STATE_NAME+"</h6></div>";
-		datacard += "<div class='col l8' style='width:731px;border-right: 1px solid #000000;border-left: 1px solid #000000;'><div class='row' style='width:729px;'>";
+		datacard +="<tr>";
+		datacard += "<tr><td style='width:20%;'><h6 style='margin-top:4px;margin-bottom:3px;margin-left: 6px'>"+data[i].STATE_NAME+"</h6></td>";
+		datacard += "<td style='width:70%;height: 100%;padding: 0px;margin: 0px;'>" +
+				"<div style='display:inline-flex;width:100%;height:100%'>";
 		var percentage;
 		if(!data[i].LESS_3_ANTIGENS_TOTAL_HF_PER=="0"){
-			percentage=Math.round((data[i].LESS_3_ANTIGENS_TOTAL_HF_PER/8.33));
-			datacard += "<div class='col l"+percentage.toString()+"'style='line-height:1.5;height:27px;background-color:"
-			+data[i].LESS_3_ANTIGENS_TOTAL_HF_PER_FLAG+";display:inline-block;text-align:center'>"
+			percentage=Math.round((data[i].LESS_3_ANTIGENS_TOTAL_HF_PER));
+			datacard += "<div style='width:"+percentage.toString()+"%;background-color:"
+			+data[i].LESS_3_ANTIGENS_TOTAL_HF_PER_FLAG+";padding-top: 5px;''>"
 			+data[i].LESS_3_ANTIGENS_TOTAL_HF_PER+"%</div>";
 		}
 		if(!data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER=="0"){
-			percentage=Math.round((data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER/8.33));
-			datacard += " <div class='col l"+percentage.toString()+"' style='line-height:1.5;height:27px;background-color:"
-			+data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER_FLAG+";display:inline-block;text-align:center'>"
+			percentage=Math.round((data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER));
+			datacard += "<div style='width:"+percentage.toString()+"%;background-color:"
+			+data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER_FLAG+";padding-top: 5px;'>"
 			+data[i].GREATER_2_ANTIGENS_TOTAL_HF_PER+"%</div>";	
 		}
 		if(!data[i].SUFFICIENT_STOCK_TOTAL_HF_PER=="0"){
-			percentage=Math.round((data[i].SUFFICIENT_STOCK_TOTAL_HF_PER/8.33));
-			datacard += " <div class='col l"+percentage.toString()+"' style='line-height:1.5;height:27px;background-color:"
-			+data[i].SUFFICIENT_STOCK_TOTAL_HF_PER_FLAG+";display:inline-block;text-align:center'>"
+			percentage=Math.round((data[i].SUFFICIENT_STOCK_TOTAL_HF_PER));
+			datacard += "<div style='width:"+percentage.toString()+"%;background-color:"
+			+data[i].SUFFICIENT_STOCK_TOTAL_HF_PER_FLAG+";padding-top: 5px;'>"
 			+data[i].SUFFICIENT_STOCK_TOTAL_HF_PER+"%</div>";
 		}
-		datacard +="</div></div><div class='col l1' style='width:42px;border-left:1px solid #000000;'><img style='height:13px;width:25px;margin:7;transform:rotate("+data[i].rotation+"deg)' src='resources/images/Arrow.png'></div></div>";
+		datacard +="</div></td><td style='width:1%;'><img style='height:7px;width:26px;" +
+		"transform:rotate("+data[i].rotation+"deg)' src='resources/images/Arrow.png'></td></tr>";
 	}
 	document.getElementById("table_divNTO").innerHTML = datacard;
-	$('#table_divNTO .row').css('margin-bottom','0px');
-	$('#table_divNTO .col').css('padding-top','0px');
 }
 function lgaStockAggregatedDataNTO(){
 	document.getElementById("exportLinkBtnNTO").href="get_lga_agg_stock_dashboard_export";

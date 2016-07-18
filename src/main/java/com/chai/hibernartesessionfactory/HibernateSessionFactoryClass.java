@@ -28,8 +28,7 @@ public class HibernateSessionFactoryClass {
 	        }
 	    } 
 	 public static SessionFactory getSessionAnnotationFactory() {
-		 System.out.println("hibernate session factory class getSessionAnnotationFactory()");
-	        if(sessionAnnotationFactory == null) 
+		if (sessionAnnotationFactory == null)
 	        	sessionAnnotationFactory = buildSessionAnnotationFactory();
 	        return sessionAnnotationFactory;
 	    }

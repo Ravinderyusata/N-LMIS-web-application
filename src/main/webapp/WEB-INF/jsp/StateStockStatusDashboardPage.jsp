@@ -27,10 +27,12 @@
 	display: inline-block;
 }
 .yellow-status {
-	width: 10px;
-	height: 10px;
-	background: yellow;
-	display: inline-block;
+	background: yellow none repeat scroll 0 0;
+    display: inline-block;
+    float: left;
+    height: 10px;
+    margin: 13px 0 0 9px;
+    width: 10px;
 }
 .loader_div {
 	height: 100%;
@@ -97,8 +99,9 @@ font-weight: bold;
 			<a id="exportLinkBtnNTO" href="get_state_stock_status_dashboard_export" class="easyui-linkbutton">Export</a>
 		</div>
 		<!-- filters end here -->
+		<hr width="100%;">
 		<div class="row" style="margin-bottom: 0px">
-			<div id="table_divNTO" class="col l10" style="border: 1px solid #000000">
+			<div id="table_divNTO" class="col l10" style="overflow-y:auto;height: 58%;">
 				
 			</div>
 			<div class="col l2">
@@ -128,7 +131,7 @@ font-weight: bold;
 
 					<li>
 						&nbsp; <span class="yellow-status"></span>
-						<span style="text-align: left; float: right; width: 205px; line-height: 34px;">
+						<span style="text-align: left; float: right; width: 197px; line-height: 34px;">
 							% LGA With Antigen that need to re-order Stock 
 						</span>
 					</li>

@@ -68,7 +68,7 @@
 	}
 	.inner_table {
 		height:323px;
-		overflow-y: auto;
+		overflow-y: overlay;
 		overflow-x:auto;
 	}
 </style>
@@ -91,11 +91,11 @@
 			<a id="viewDashboardLinkBtn4" href="#" class="easyui-linkbutton" onclick="filterGridData4(true)">View Dashboard </a>
 			<a id="exportLinkBtn4" href="export_data_grid" class="easyui-linkbutton">Export</a>
 
-			<ul class="status-list">
-				<li><div class="red-status"></div> Antigen Below Minimum Level</li>
-				<li><div class="green-status"></div> Antigen Sufficient</li>
-				<li><div class="yellow-status"></div> Antigen need to be re-orderd</li>
-			</ul>
+			<ul class="status-list" style="margin:0 0;">
+					<li><div><div class="red-status"></div><div>Antigen Below Minimum Level</div></div></li>
+					<li><div><div class="green-status"></div><div>Antigen Sufficient</div></div></li>
+					<li><div><div class="yellow-status"></div> <div>Antigen need to be re-orderd</div></div></li>
+				</ul>
 		</div>
 		<!-- filters end here -->
 

@@ -143,7 +143,7 @@ font-weight: bold;
 	<table id="lgaSoreListTable" class="easyui-datagrid"
 		style="width: 100%; height: 430px;" title="LGA Store"
 		data-options="toolbar:'#table_toolbar', rownumbers:'true', pagination:'true', singleSelect:'true' ,
-		striped:'true', remoteSort:'false'">
+		striped:'true', remoteSort:'false',pageSize:20">
 	</table>
 	</div>
 	 <!-- Lga Store Add/Edit form -->
@@ -230,14 +230,14 @@ font-weight: bold;
             <td>
 	            <div id="start_date_div">
 	             <label id="start_date_label">*Start date:</label>
-                    <f:input id="start_date" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" width="120px" path="x_START_DATE" />
+                    <f:input id="start_date"  class="easyui-datebox" width="120px" path="x_START_DATE" />
                 </div>
             </td>
              <td>
              
-                <div id="end_date">
+                <div id="end_date_div">
                   <label id="end_date_label">End date:</label>
-                    <f:input id="end_date" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" width="120px;" path="x_END_DATE"/>
+                    <f:input id="end_date"  class="easyui-datebox" width="120px;" path="x_END_DATE"/>
                 </div>
              </td>
             </tr>
@@ -302,6 +302,16 @@ font-weight: bold;
 <script src="resources/js/common.js"></script>
 
 <script type="text/javascript">
+hideAfterCurrentDate('#start_date');//for disable after current date 
+hideBeforCurrentDate('#end_date');//for disable before current date 
+$('#start_date').datebox({
+	formatter:myformatter,
+	parser:myparser
+});
+$('#end_date').datebox({
+	formatter:myformatter,
+	parser:myparser
+});
 function doSearch() {
 	if($('#storetype_combobox').combobox('getValue')==''){
 		alertBox("Store Type is Empty!")
@@ -447,13 +457,6 @@ function editLgaStore(buttonId){
     	alertBox("Please Select Record!");
     }   
     
-}
-function formateDate(date){
-	var date=new Date(date);
-	var day = date.getDate();
-	var monthIndex = date.getMonth();
-	var year = date.getFullYear();
-	return day+'-'+(monthIndex<10?('0'+monthIndex):monthIndex)+'-'+year;
 }
 function refreshLgaStoreList(){
 	 $('#storetype_combobox').combobox('clear');
@@ -734,5 +737,7 @@ $('#storetype_combobox').combobox({
 		});
 	}
 });
+//for pageination
+loadPaginationForTable(lgaSoreListTable);
 </script>
 </html>

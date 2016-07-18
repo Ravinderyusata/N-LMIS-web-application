@@ -16,16 +16,19 @@
 		var user = '${userBean.getX_ROLE_NAME()}';
 		switch (user) {
 		case "SCCO":
-
+		$('#state_combobox_div').hide();
+		loadLgaComboboxList('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		case "SIO":
-
+			$('#state_combobox_div').hide();
+			loadLgaComboboxList('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		case "SIFP":
-
+			$('#state_combobox_div').hide();
+			loadLgaComboboxList('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		case "NTO":
-			
+			loadStateComboboxList();
 			break;
 		case "LIO":
 
@@ -46,13 +49,6 @@
 			document.getElementById("warehouse_name").innerHTML ="LGA :"+ '${userBean.getX_WAREHOUSE_NAME()}';
 		}
 
-	}
-	function doSearch() {
-		alert("ok")
-		$('#userListTable').datagrid('load', {
-			itemid : $('#itemid').val(),
-			productid : $('#productid').val()
-		});
 	}
 </script>
 <style>
@@ -76,37 +72,44 @@ font-weight: bold;
 	<!-- button bar -->
 
 	<div id="filters" style="padding: 3px;display: inline-flex;padding-left: 5px;">
+				<div id="state_combobox_div" >
+					<label id="state_label">State Store:</label><br>
+					<input id="state_combobox"  class="easyui-combobox" name="state_combobox"  style="width:120px" >
+				</div>
 			<div id="lga_combobox_div" style="display: inline;">
-				<span>LGA:</span> <select id="lga_combobox" class="easyui-combobox"
+				<span>LGA:</span><br>
+				 <select id="lga_combobox" class="easyui-combobox"
 					name="lga_combobox" style="width:200px;">
 				</select> 
 			</div>&nbsp;&nbsp;
 			<div id="min_max_combobox_div">
-						<span>Min./Max Filter: </span>
+						<span>Min./Max Filter: </span><br>
 						 <select id="min_max_combobox" class="easyui-combobox"
 							name="period_combobox" style="width:130px;">
 						</select> 
 				</div>&nbsp;&nbsp;
 			<div id="period_combobox_div">
-						<span>Period Type: </span>
+						<span>Period Type: </span><br>
 						 <select id="period_combobox" class="easyui-combobox"
 							name="period_combobox" style="width:130px;">
 						</select> 
 				</div>&nbsp;&nbsp;
 			<div id="year_combobox_div">
-					<span>Year:</span> 
+					<span>Year:</span> <br>
 					<select id="year_combobox" class="easyui-combobox"
 						name="year combobox" style="width: 100px;">
 					</select>
 				</div>&nbsp;&nbsp;
 			<div id="week_combobox_div">
-					<span id="week_label">Week</span>
+					<span id="week_label">Week</span><br>
 					 <select id="week_combobox" class="easyui-combobox"
 						name="week_combobox" style="width: 100px;">
 					</select> 
 			</div>&nbsp;&nbsp;&nbsp;
-			<a class="easyui-linkbutton" onclick="showLgaMinMaxData()"> View Report
-			</a>
+			<div style="margin-top: 12px;">
+			<a class="easyui-linkbutton" onclick="showLgaMinMaxData()"> View Report</a>
+			</div>
+			
 	</div>
 	<!-- user table -->
 	<table id="LgaMinMaxTable" class="easyui-datagrid"
@@ -132,7 +135,11 @@ function showLgaMinMaxData(){
 	var message="";
 	var url="";
 	var validate=true;
-	if($('#lga_combobox').combobox('getValue')==''){
+	if($('#state_combobox').combobox('getValue')=='' 
+			&& '${userBean.getX_ROLE_NAME()}'=='NTO'){
+		validate=false;
+		message=("State is Empty");
+	}else if($('#lga_combobox').combobox('getValue')==''){
 		validate=false;
 		message=("LGA is Empty");
 	}else if($('#min_max_combobox').combobox('getValue')==''){
@@ -152,6 +159,7 @@ function showLgaMinMaxData(){
 		alertBox(message);
 	}
 	if(validate){
+		var stateId=$('#state_combobox').combobox('getValue');
 		var lgaId=$('#lga_combobox').combobox('getValue');
 		var minMax=$('#min_max_combobox').combobox('getValue');
 		var perioadType=$('#period_combobox').combobox('getValue');
@@ -169,7 +177,7 @@ function showLgaMinMaxData(){
 			             {field:'MAX_STOCK_BALANCE',title:'MAX_STOCK_QTY',sortable:true},
 			             {field:'DIFFERENCE',title:'DIFFERENCE',sortable:true}
 					 ] ],
-			queryParams:{lgaId:lgaId,minMax:minMax,perioadType:perioadType,year:year,weekOrMonth:weekOrMonth}		 
+			queryParams:{stateId:stateId,lgaId:lgaId,minMax:minMax,perioadType:perioadType,year:year,weekOrMonth:weekOrMonth}		 
 		});
 		if($('#lga_combobox').combobox('getText')=='All'){
 			$('#LgaMinMaxTable').datagrid('hideColumn', 'ITEM_NUMBER');
@@ -193,11 +201,26 @@ function alertBox(message){
 }
 </script>
 <script type="text/javascript">
-$('#lga_combobox').combobox({
-	url : 'getlgalist?option=All',
-	valueField : 'value',
-	textField : 'label'
-});
+var lgaidForProduct="";
+function loadStateComboboxList(){
+	$('#state_combobox').combobox({
+		url:"get_state_store_list?option=notAll",
+		valueField : 'value',
+		textField : 'label' ,
+		onSelect:function(state){
+			loadLgaComboboxList(state.value);
+		}
+	});
+}
+function loadLgaComboboxList(stateId){
+	$('#lga_combobox').combobox({
+		url : 'getlgalistBasedOnStateId?option=All&stateId='+stateId,
+		valueField : 'value',
+		textField : 'label',
+		onSelect : function(lgaId){
+		}
+	});
+}
 $('#min_max_combobox').combobox({
 	valueField : 'value',
 	textField : 'label',

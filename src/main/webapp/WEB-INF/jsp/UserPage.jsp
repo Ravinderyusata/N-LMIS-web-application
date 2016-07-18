@@ -155,13 +155,13 @@ font-weight: bold;
 	<table id="userListTable" class="easyui-datagrid"
 		style="width: 100%; height: 430px;padding-left: 5px;" title="Users"
 		data-options="toolbar:'#table_toolbar', rownumbers:'true',  singleSelect:'true',
-		striped:'true', remoteSort:'false',pagination:'true'">		
+		striped:'true', remoteSort:'false',pagination:'true',pageSize:20">	
 	</table>
 	</div>
 	
 	<!-- add edit form -->
 	
-	 <div id="form_dialog" class="easyui-dialog" style="width:420px;height:470px;padding:10px 20px"
+	 <div id="form_dialog" class="easyui-dialog" style="width:430px;height:470px;padding:10px 20px"
                 closed="true" buttons="#form_buttons">
             <f:form id="add_edit_form" method="post" commandName="beanForUser">
             <table cellspacing="10px;">
@@ -262,14 +262,14 @@ font-weight: bold;
             <td>
 	            <div id="start_date_div">
 	             <label id="start_date_label">*Start date:</label>
-                    <f:input id="start_date" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" width="120px" path="x_START_DATE" />
+                    <f:input id="start_date"  class="easyui-datebox" width="120px" path="x_START_DATE" />
                 </div>
             </td>
              <td>
              
-                <div id="end_date">
-                  <label id="end_date_label">End date:</label>
-                    <f:input id="end_date" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" width="120px;" path="x_END_DATE"/>
+                <div id="end_date_div">
+                  <label id="end_date_label">End date:</label><br>
+                    <f:input id="end_date"  class="easyui-datebox" width="120px;" path="x_END_DATE"/>
                 </div>
              </td>
             </tr>
@@ -752,6 +752,16 @@ $('#userListTable').datagrid({
 	});
 </script>
 <script type="text/javascript">
+hideAfterCurrentDate('#start_date');//for disable after current date 
+hideBeforCurrentDate('#end_date');//for disable before current date 
+$('#start_date').datebox({
+	formatter:myformatter,
+	parser:myparser
+});
+$('#end_date').datebox({
+	formatter:myformatter,
+	parser:myparser
+});
 $('#usertype_combobox').combobox({
 	url : 'getUserTypelist',
 	valueField : 'value',
@@ -784,12 +794,7 @@ $('#usertype_combobox').combobox({
 });
 </script>
  <script type="text/javascript">
-function formateDate(date){
-	var date=new Date(date);
-	var day = date.getDate();
-	var monthIndex = date.getMonth();
-	var year = date.getFullYear();
-	return day+'-'+(monthIndex<10?('0'+monthIndex):monthIndex)+'-'+year;
-}
+loadPaginationForTable(userListTable);
 </script>
+
 </html>

@@ -24,26 +24,28 @@ public class GetComboboxListController {
 	public void getJsonLgaList(HttpServletRequest request,HttpServletResponse respones){
 		System.out.println("in GetComboboxListController.getJsonLgaList()");
 		try{
+			PrintWriter out = respones.getWriter();
+			JSONArray data=new JSONArray();
 			String allOption=request.getParameter("option");
 			AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
-			JSONArray data;
-			if(allOption!=null && allOption.equals("All")){
-				 data=comboboxServices.getComboboxList("lgalistBasedonstate",String.valueOf(userBean.getX_WAREHOUSE_ID()),"All");
+			if (userBean == null) {
+				out.write("sessionOut");
 			}else{
-				 data=comboboxServices.getComboboxList("lgalistBasedonstate",String.valueOf(userBean.getX_WAREHOUSE_ID()));
+				if (allOption != null && allOption.equals("All")) {
+					data = comboboxServices.getComboboxList("lgalistBasedonstate",
+							String.valueOf(userBean.getX_WAREHOUSE_ID()), "All");
+				} else {
+					data = comboboxServices.getComboboxList("lgalistBasedonstate",
+							String.valueOf(userBean.getX_WAREHOUSE_ID()));
+				}
+				out.write(data.toString());
+
 			}
 			
 			// System.out.println("json LGA_List: "+data.toString());
-			PrintWriter out=respones.getWriter();
-			out.write(data.toString());
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			try {
-				respones.sendRedirect("loginPage");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
 		}	
 	}
 	
@@ -166,18 +168,14 @@ public class GetComboboxListController {
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			try {
-				respones.sendRedirect("loginPage");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+
 		}
 	}
 	@RequestMapping(value = "/get_year_list")
 	public void getJsonYearList(HttpServletRequest request,HttpServletResponse respones){
 		try{
 			JSONArray data=new CalendarUtil().getYear();
-			System.out.println("json year_list: "+data.toString());
+			// System.out.println("json year_list: "+data.toString());
 			PrintWriter out=respones.getWriter();
 			out.write(data.toString());
 			out.close();
@@ -255,12 +253,7 @@ public class GetComboboxListController {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			try {
-				respones.sendRedirect("loginPage");
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+
 		} 
 		return null;		
 	}
@@ -281,11 +274,7 @@ public class GetComboboxListController {
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			try {
-				respones.sendRedirect("loginPage");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+
 		}
 	}
 	
@@ -302,11 +291,7 @@ public class GetComboboxListController {
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			try {
-				respones.sendRedirect("loginPage");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+
 		}
 	}
 	@RequestMapping(value = "/getReasonTypelist")
@@ -322,11 +307,7 @@ public class GetComboboxListController {
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			try {
-				respones.sendRedirect("loginPage");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+
 		}
 	}
 

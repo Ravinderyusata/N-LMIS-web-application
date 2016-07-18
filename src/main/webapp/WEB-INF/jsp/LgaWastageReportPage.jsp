@@ -131,7 +131,7 @@
 					 	</div>
 				</li>
 					
-			<li style="list-style-type:none">
+			<li style="list-style-type:none;margin-top: 10px;">
 				<a href="#" id="viewReportLinkBtn" class="easyui-linkbutton" onclick="showLgaWastageReport()"><b>View Report</b></a>
 			</li>
 		</ul>		
@@ -162,6 +162,7 @@ function alertBox(message){
 </script>
 <script type="text/javascript">
 var lgaId="";
+var stateId="";
 function loadStateComboboxList(){
 	$('#state_combobox').combobox({
 		url:"get_state_store_list?option=notAll",
@@ -209,10 +210,14 @@ function showLgaWastageReport(){
 			 if('${userBean.getX_ROLE_NAME()}'=='MOH'
 					|| '${userBean.getX_ROLE_NAME()}'=='LIO'){
 				lgaId='${userBean.getX_WAREHOUSE_ID()}';
-			}
-    $('#LgaWastageTable').datagrid({
+			}else if('${userBean.getX_ROLE_NAME()}'=='NTO'){
+				 stateId=$('#state_combobox').combobox('getValue');
+				  
+			}//fot state id when national login
+	  $('#LgaWastageTable').datagrid({
     	url: 'get_Lga_wsatage_report_grid_data?'
 	   		+'lgaID='+lgaId
+	   		+'&stateId='+stateId
 	   		+'&filterBy='+$('#filterby-combobox').combobox('getValue')
 	   		+'&year='+$('#yearCombobox').combobox('getValue')
 	   		+'&month='+$('#month-combobox').combobox('getValue')

@@ -13,15 +13,16 @@ import com.chai.hibernartesessionfactory.HibernateSessionFactoryClass;
 import com.chai.util.GetJsonResultSet;
 
 public class TransactionServices {
+	SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
 	public  JSONArray getJsonTransacitonRegGridData(String lgaId,String productId,
 							String transactionTypeId,
 							String fromDate,
 							String toDate) {
 		System.out.println("-- LgaStoreService.getLgaStoreListPageData() mehtod called: -- ");
 		JSONArray array=new JSONArray();
+		Session session = sf.openSession();
+
 		try {
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			transactionTypeId=transactionTypeId.length()==0?null:transactionTypeId;
 			productId=productId.length()==0?null:productId;
 			fromDate=fromDate.length()==0?null:fromDate;
@@ -31,8 +32,7 @@ public class TransactionServices {
 					+ " REASON,  TRANSACTION_TYPE_ID,  TRANSACTION_TYPE,  FROM_NAME,  TO_NAME,  TO_SOURCE_ID, "
 					+ " REASON_TYPE,  REASON_TYPE_ID , VVM_STAGE FROM TRANSACTION_REGISTER_VW  WHERE TRANSACTION_TYPE_ID = "
 					+ " IFNULL("+transactionTypeId+", TRANSACTION_TYPE_ID)  AND ITEM_ID=IFNULL("+productId+",ITEM_ID) "
-					+ " AND (TO_SOURCE_ID=IFNULL( " +lgaId+ ",TO_SOURCE_ID)"
-					+ " OR from_SOURCE_ID=IFNULL( " +lgaId+ ",TO_SOURCE_ID)) "
+					+ "  AND WAREHOUSE_ID= " + lgaId
 					+ " AND TRANSACTION_DATE  BETWEEN IFNULL(STR_TO_DATE("+fromDate+", '%m-%d-%Y'), TRANSACTION_DATE)    "
 					+ " AND IFNULL(STR_TO_DATE("+toDate+", '%m-%d-%Y'), TRANSACTION_DATE)";
 			SQLQuery query = session.createSQLQuery(x_query);
@@ -43,6 +43,8 @@ public class TransactionServices {
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return array;
 		}

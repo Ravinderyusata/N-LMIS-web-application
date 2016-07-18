@@ -20,11 +20,11 @@ import com.chai.util.GetJsonResultSet;
 
 public class ItemService {
 	SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-
 	public JSONArray getDeviceAssoGridData(String warehouseId) {
 	System.out.println("in ItemService.getDeviceAssoGridData()");
 	JSONArray array=new JSONArray();
 	SQLQuery query=null;
+		Session session = sf.openSession();
 	try{
 	String x_query = " SELECT ASSOCIATION_ID," + "ITEM_ID, "
 			+ "ITEM_NUMBER, " + "  AD_SYRINGE_ID, "
@@ -39,7 +39,7 @@ public class ItemService {
 			+" AS NO_OF_ASSOCIATE_DEVICE  "
 			+ " FROM SYRINGE_ASSOCIATION_V WHERE WAREHOUSE_ID = "
 					+ warehouseId;
-			query = sf.openSession().createSQLQuery(x_query);
+			query = session.createSQLQuery(x_query);
 	query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 	List resultlist = query.list();
 //System.out.println("result list size"+resultlist.size());
@@ -48,7 +48,7 @@ public class ItemService {
 	// TODO Auto-generated catch block
 	e.printStackTrace();
 }finally {
-	System.out.println("querry"+query.toString());
+			session.close();
 }
 return array;
 }
@@ -57,8 +57,7 @@ public List<LabelValueBean> getDropdownList(String... action){
 	System.out.println("in itemServices.getDropdownList()");
 	String x_QUERY="";
 	SQLQuery query=null;
-	SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-	Session session = sf.openSession();
+		Session session = sf.openSession();
 	if(action[0].equals("device_asso_product")){
 		 x_QUERY = " SELECT ITEM_ID, " + "	ITEM_NUMBER "
 					+ " FROM VIEW_ITEM_MASTERS " + " WHERE STATUS = 'A' "
@@ -89,17 +88,22 @@ public List<LabelValueBean> getDropdownList(String... action){
 					+ " AND UPPER(ITEM_NUMBER) NOT IN ('0.05ML AD SYRINGE (BCG)','0.5ML AD SYRINGE','MUAC STRIPS','SAFETY BOXES') "
 				+ "AND WAREHOUSE_ID = " + action[1];
 	}
-		query = sf.openSession().createSQLQuery(x_QUERY);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
 		//System.out.println("result list size"+resultlist.size());
-		List<LabelValueBean> array=GetJsonResultSet.getdropList(resultlist);
+		List<LabelValueBean> array = null;
+		try {
+			query = session.createSQLQuery(x_QUERY);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getdropList(resultlist);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		 return array;
 }
 public int add_edit_deviceAsso(DeviceAssoiationGridBean bean,AdmUserV userBean){
 	System.out.println("in itemServices.add_edit_deviceAsso()");
-	SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-	Session session = sf.openSession();
+		Session session = sf.openSession();
 	session.beginTransaction();
 	SQLQuery query=null;
 	String x_QUERY="";
@@ -150,20 +154,19 @@ public int add_edit_deviceAsso(DeviceAssoiationGridBean bean,AdmUserV userBean){
 		e.printStackTrace();
 	}
 	finally {
-		System.out.println("query for add device assctioaton :"+query.getNamedParameters());
+			session.close();
 	}
 		return result;
 }
 public String getCategoryID(String itemID) {
 	System.out.println("In getCategoryID() method... ");
 	String x_CAT_ID="";
+		Session session = sf.openSession();
 	if(itemID!=null && itemID.length()>0){
 		String x_QUERY = " SELECT F_GET_CATEGORY_ID("+itemID+") AS CAT_ID";
 		try {
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			SQLQuery query=null;
-				query = sf.openSession().createSQLQuery(x_QUERY);
+				query = session.createSQLQuery(x_QUERY);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List result=query.list();
 			Map row=(Map)result.get(0);
@@ -171,6 +174,8 @@ public String getCategoryID(String itemID) {
 		}catch(Exception e){
 			System.out.println("exception in getcatogary id");
 			e.printStackTrace();
+			} finally {
+				session.close();
 		}
 		return x_CAT_ID;
 	}else{
@@ -181,9 +186,9 @@ public String getCategoryID(String itemID) {
 public  JSONArray getJsonProductMainGridData(String warehouse_id) {
 	System.out.println("-- LgaStoreService.getLgaStoreListPageData() mehtod called: -- ");
 	JSONArray array=new JSONArray();
-	try {
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
 		Session session = sf.openSession();
+
+	try {
 		String x_query="SELECT ITEM_ID,  ITEM_NUMBER, ITEM_NAME, ITEM_DESCRIPTION, UCASE(ITEM_TYPE_CODE) AS ITEM_TYPE_CODE, "
 				+ "		UCASE(ITEM_TYPE_NAME) AS ITEM_TYPE_NAME, ITEM_TYPE_ID, WAREHOUSE_ID,WAREHOUSE_CODE, WAREHOUSE_NAME,  ITEM_SOURCE_TYPE, "
 				+ "		CATEGORY_ID, CATEGORY_CODE, CATEGORY_NAME, CATEGORY_DESCRIPTION, "
@@ -196,7 +201,7 @@ public  JSONArray getJsonProductMainGridData(String warehouse_id) {
 				+ "		DOSES_PER_SCHEDULE, "
 				+ "     WASTAGE_FACTOR,TARGET_COVERAGE "
 				+ " FROM VIEW_ITEM_MASTERS WHERE WAREHOUSE_ID= " + warehouse_id;
-			SQLQuery query = sf.openSession().createSQLQuery(x_query);
+			SQLQuery query = session.createSQLQuery(x_query);
 		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 		List resultlist = query.list();
 //	System.out.println("result list size"+resultlist.size());
@@ -204,6 +209,8 @@ public  JSONArray getJsonProductMainGridData(String warehouse_id) {
 	} catch (HibernateException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
+		} finally {
+			session.close();
 	}
 	return array;
 	}
@@ -214,15 +221,15 @@ public  JSONArray getitemOnHandGridData(AdmUserV userBean,String warehouse_id,St
 	}
 	System.out.println("-- LgaStoreService.getLgaStoreListPageData() mehtod called: -- ");
 	JSONArray array=new JSONArray();
-	try {
 		Session session = sf.openSession();
+	try {
 		String x_query=" SELECT DISTINCT ITEM_ID, ITEM_NUMBER,  ITEM_SAFETY_STOCK,"
 				 + " ONHAND_QUANTITY,  TRANSACTION_UOM, ITEMS_BELOW_SAFETY_STOCK " 
 				 +" FROM ITEM_ONHAND_QUANTITIES_VW "
 				 +" WHERE WAREHOUSE_ID =IFNULL("+warehouse_id+",WAREHOUSE_ID) "
 				 +" AND ITEM_ID = IFNULL("+product_id+", ITEM_ID) "
 				 +"GROUP BY ITEM_ID ";
-			SQLQuery query = sf.openSession().createSQLQuery(x_query);
+			SQLQuery query = session.createSQLQuery(x_query);
 		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 		List resultlist = query.list();
 //	System.out.println("result list size"+resultlist.size());
@@ -230,6 +237,8 @@ public  JSONArray getitemOnHandGridData(AdmUserV userBean,String warehouse_id,St
 	} catch (HibernateException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
+		} finally {
+			session.close();
 	}
 	return array;
 	}
@@ -239,13 +248,20 @@ public  JSONArray getitemOnHandGridData(AdmUserV userBean,String warehouse_id,St
 		String x_QUERY = "";
 		SQLQuery query = null;
 		JSONArray array = new JSONArray();
-
+		Session session = sf.openSession();
 		x_QUERY = "SELECT TYPE_ID,   TYPE_CODE   " + " FROM VIEW_TYPES   WHERE SOURCE_TYPE = 'PRODUCT' "
 				+ " AND TYPE_CODE IN ('DEVICE', 'DILUENT', 'VACCINE')";
-		query = sf.openSession().createSQLQuery(x_QUERY);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-		array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		try {
+			query = session.createSQLQuery(x_QUERY);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 	}
 
@@ -253,21 +269,28 @@ public  JSONArray getitemOnHandGridData(AdmUserV userBean,String warehouse_id,St
 		System.out.println("-- ItemService.getProductCategoryTypeList() mehtod called: -- ");
 		String x_QUERY = "";
 		SQLQuery query = null;
+		Session session = sf.openSession();
 		JSONArray array = new JSONArray();
 		x_QUERY = "SELECT CATEGORY_ID, CATEGORY_CODE  FROM VIEW_CATEGORIES"
 				+ " WHERE CATEGORY_CODE IS NOT NULL AND CATEGORY_CODE <> '' " + " AND CATEGORY_TYPE_ID="
 				+ productTypeid;
-		query = sf.openSession().createSQLQuery(x_QUERY);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-		array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		try {
+			query = session.createSQLQuery(x_QUERY);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 	}
 
 	public int saveAddEditProduct(ProductBean bean, String action, AdmUserV userBean) {
 		int result = 0;
 		String x_QUERY = "";
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
 		Session session = sf.openSession();
 		session.beginTransaction();
 		try {
@@ -367,6 +390,8 @@ public  JSONArray getitemOnHandGridData(AdmUserV userBean,String warehouse_id,St
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return result;
 	}

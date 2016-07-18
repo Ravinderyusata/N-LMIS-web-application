@@ -24,24 +24,19 @@ public class LGAEmergencyStockIssuedReportController {
 	}
 	@RequestMapping(value = "/get_emergency_stock_issue_report_grid_data")
 	public void getLgaStockAdjustmentReportGridData(@RequestParam("lgaID") String lgaID, 
-															@RequestParam("filterBy") String filterBy,
-															@RequestParam("year") String year, 
-															@RequestParam("month") String month, 
-															@RequestParam("week") String week,
-															@RequestParam("dayDate") String dayDate,
-															HttpServletResponse response,
-															HttpServletRequest request){
+			@RequestParam("stateId") String stateId,
+			@RequestParam("filterBy") String filterBy, @RequestParam("year") String year,
+			@RequestParam("month") String month, @RequestParam("week") String week,
+			@RequestParam("dayDate") String dayDate,
+			HttpServletResponse response, HttpServletRequest request) {
 		System.out.println("in LGAEmergencyStockIssuedReportController.getLgaStockAdjustmentReportGridData()");
 		try{
 			AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
+			if (!userBean.getX_ROLE_NAME().equals("NTO")) {
+				stateId = Integer.toString(userBean.getX_WAREHOUSE_ID());
+			}
 		JSONArray data=new ReportServices()
-				.getJsonlgaEmergencyStockIssueReportGridData(Integer.toString(userBean.getX_WAREHOUSE_ID()),
-																									   lgaID,
-																									filterBy,
-																									    year,
-																									   month,
-																									    week,
-																									 dayDate);
+					.getJsonlgaEmergencyStockIssueReportGridData(stateId, lgaID, filterBy, year, month, week, dayDate);
 			// System.out.println("json LGAEmergencyStockIssuedReport:
 			// "+data.toString());
 			PrintWriter out=response.getWriter();

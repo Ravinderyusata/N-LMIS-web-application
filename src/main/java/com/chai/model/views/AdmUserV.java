@@ -40,7 +40,7 @@ public class AdmUserV implements
 	@Column(name="USER_TYPE_ID") private Integer x_USER_TYPE_ID;
 	@Column(name="USER_TYPE_DESCRIPTION") private String x_USER_TYPE_DESCRIPTION;
 	@Column(name="USER_TYPE_CODE") private String x_USER_TYPE_CODE;
-	
+
 	public AdmUserV(){}
 	
 	public Integer getX_USER_ID() {

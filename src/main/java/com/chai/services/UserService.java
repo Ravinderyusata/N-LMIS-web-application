@@ -1,6 +1,7 @@
 package com.chai.services;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +23,12 @@ import com.chai.util.GetJsonResultSet;
 public class UserService {
 	private static Logger logger = Logger.getLogger(UserService.class);
 	String lastInsertUserId="";
-	public static AdmUserV validateUserLogin(String x_LOGIN_NAME, String x_PASSWORD) {
+	SessionFactory sf1 = HibernateSessionFactoryClass.getSessionAnnotationFactory();
+	public static ArrayList<Object> validateUserLogin(String x_LOGIN_NAME, String x_PASSWORD) {
 		System.out.println("-- UserService.validateUserLogin() mehtod called: -- ");
 		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
 		Session session = sf.openSession();
-		String sql = "SELECT USER_ID, "
+		String sql = "SELECT week(date_sub(now(),INTERVAL 1 WEEK)) AS PREVIOUS_WEEK_OF_YEAR, USER_ID, "
 				+ " COMPANY_ID, "
 				+ " FIRST_NAME, "
 				+ " LAST_NAME, "
@@ -43,36 +45,45 @@ public class UserService {
 				+ "   AND STATUS = 'A' "
 				+ " AND UPPER(ROLE_NAME) <> 'CCO' "
 				+ " AND USER_TYPE_ID = F_GET_TYPE('USER TYPES','ADMIN') ";
-		SQLQuery query = session.createSQLQuery(sql);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		query.setParameter("loginName", x_LOGIN_NAME);
-		query.setParameter("password", x_PASSWORD);
-		List<AdmUserV> list = query.list();
-		AdmUserV userData=new AdmUserV();
-		if(list.size()==1){
-			 for(Object object : list)
-	         {
-	            Map row = (Map)object;
-	            userData.setX_USER_ID((Integer)row.get("USER_ID"));
-	            userData.setX_COMPANY_ID((Integer)row.get("COMPANY_ID"));
-	            userData.setX_FIRST_NAME((String)row.get("FIRST_NAME"));
-	            userData.setX_LAST_NAME((String)row.get("LAST_NAME"));
-	            userData.setX_ROLE_ID((Integer)row.get("ROLE_ID"));
-	            userData.setX_ROLE_NAME((String)row.get("ROLE_NAME"));
-	            userData.setX_USER_TYPE_ID((Integer)row.get("USER_TYPE_ID"));
-	            userData.setX_USER_TYPE_CODE((String)row.get("USER_TYPE_CODE"));
-	            userData.setX_USER_TYPE_NAME((String)row.get("USER_TYPE_NAME"));
-	            userData.setX_WAREHOUSE_ID((Integer)row.get("WAREHOUSE_ID"));
-	            userData.setX_WAREHOUSE_NAME((String)row.get("WAREHOUSE_NAME"));
-	         }
+		AdmUserV userData = new AdmUserV();
+		ArrayList<Object> loginListBeanAndTimebean = new ArrayList<>();
+		try {
+			SQLQuery query = session.createSQLQuery(sql);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			query.setParameter("loginName", x_LOGIN_NAME);
+			query.setParameter("password", x_PASSWORD);
+			List<AdmUserV> list = query.list();
+			if(list.size()==1){
+				 for(Object object : list)
+			     {
+			        Map row = (Map)object;
+			        userData.setX_USER_ID((Integer)row.get("USER_ID"));
+			        userData.setX_COMPANY_ID((Integer)row.get("COMPANY_ID"));
+			        userData.setX_FIRST_NAME((String)row.get("FIRST_NAME"));
+			        userData.setX_LAST_NAME((String)row.get("LAST_NAME"));
+			        userData.setX_ROLE_ID((Integer)row.get("ROLE_ID"));
+			        userData.setX_ROLE_NAME((String)row.get("ROLE_NAME"));
+			        userData.setX_USER_TYPE_ID((Integer)row.get("USER_TYPE_ID"));
+			        userData.setX_USER_TYPE_CODE((String)row.get("USER_TYPE_CODE"));
+			        userData.setX_USER_TYPE_NAME((String)row.get("USER_TYPE_NAME"));
+			        userData.setX_WAREHOUSE_ID((Integer)row.get("WAREHOUSE_ID"));
+			        userData.setX_WAREHOUSE_NAME((String)row.get("WAREHOUSE_NAME"));
+					loginListBeanAndTimebean.add(userData);
+					loginListBeanAndTimebean.add(row.get("PREVIOUS_WEEK_OF_YEAR"));
+				}
+			}
+			// System.out.println("list size "+list.size());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
-		System.out.println("list size  "+list.size()); 
-		return userData;
+		return loginListBeanAndTimebean;
 	}
 	public  JSONArray getUserListPageData(AdmUserV userBean) {
 		System.out.println("-- UserService.getUserListPageData mehtod called: -- ");
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-		Session session = sf.openSession();
+		Session session = sf1.openSession();
 		String warehoseRole=userBean.getX_ROLE_NAME();
 		String x_query="";
 		if(warehoseRole.equals("SIO")
@@ -113,19 +124,25 @@ public class UserService {
 						+ " WHERE WHA.USER_ID = USR.USER_ID 	    AND WHA.STATUS = 'A') FACILITY_FLAG "
 						+ "FROM ADM_USERS_V USR ";
 		}
-		
-		SQLQuery query = session.createSQLQuery(x_query);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
+		JSONArray array = null;
+		try {
+			SQLQuery query = session.createSQLQuery(x_query);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getjson(resultlist);
+		} catch (org.hibernate.exception.JDBCConnectionException e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 //		System.out.println("result list size"+resultlist.size());
-		JSONArray array=GetJsonResultSet.getjson(resultlist);
+
 		return array;
 		}
 	public  JSONArray getSearchUserListPageData(String userTypeId,String roleId,
 								String warehouseId,AdmUserV userBean) {
 		System.out.println("-- UserService.getUserListPageData mehtod called: -- ");
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-		Session session = sf.openSession();
+		Session session = sf1.openSession();
 		String x_query="";
 		String whereCondition="";
 		x_query="SELECT USER_ID,	COMPANY_ID,  	FIRST_NAME,	LAST_NAME,	"
@@ -173,20 +190,25 @@ public class UserService {
 					+" AND ROLE_ID <> (SELECT ROLE_ID FROM ADM_ROLES WHERE ROLE_NAME = '"+roleNameForConditon+"')" ;
 		}
 		 x_query+=whereCondition;
-		SQLQuery query = session.createSQLQuery(x_query);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-//		System.out.println("result list size"+resultlist.size());
-		JSONArray array=GetJsonResultSet.getjson(resultlist);
+		JSONArray array = null;
+		try {
+			SQLQuery query = session.createSQLQuery(x_query);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getjson(resultlist);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 		}
 	
 	
 	public  JSONArray getAssignedLgaAccoToRole(String roleId,String userTypeId,AdmUserV userBean) {
 		System.out.println("-- UserService.getUserListPageData mehtod called: -- ");
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-		Session session = sf.openSession();
-		JSONArray array;
+		Session session = sf1.openSession();
+		JSONArray array = new JSONArray();
 		String x_query="";
 		String wareHouseRole=userBean.getX_ROLE_NAME();
 		if(wareHouseRole.equalsIgnoreCase("SCCO")
@@ -218,19 +240,23 @@ public class UserService {
 						+" WHERE STATUS='A' AND  USER_TYPE_ID= "+userTypeId
 					 	+" AND ROLE_ID="+roleId;
 		}
-		SQLQuery query = session.createSQLQuery(x_query);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-//		System.out.println("result list size"+resultlist.size());
-		array=GetJsonResultSet.getjsonCombolist(resultlist,false);
+		try {
+			SQLQuery query = session.createSQLQuery(x_query);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 		}
 	
 	public  JSONArray getAssignedLgaAccoToRoleForForm(String roleId,String userTypeId,AdmUserV userBean) {
 		System.out.println("-- UserService.getUserListPageData mehtod called: -- ");
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-		Session session = sf.openSession();
-		JSONArray array;
+		Session session = sf1.openSession();
+		JSONArray array = new JSONArray();
 		String x_query="";
 		String wareHouseRole=userBean.getX_ROLE_NAME();
 		if(wareHouseRole.equalsIgnoreCase("SCCO")
@@ -263,20 +289,23 @@ public class UserService {
 						+" WHERE STATUS='A' AND  USER_TYPE_ID= "+userTypeId
 					 	+" AND ROLE_ID="+roleId;
 		}
-		SQLQuery query = session.createSQLQuery(x_query);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-//		System.out.println("result list size"+resultlist.size());
-		array=GetJsonResultSet.getjsonCombolist(resultlist,false);
+		try {
+			SQLQuery query = session.createSQLQuery(x_query);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 		}
 	
 	public JSONArray getUserHistory(String user_id) {
 		System.out.println("-- UserService.getUserHistory() mehtod called: -- ");
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-		Session session = sf.openSession();
+		Session session = sf1.openSession();
 		String x_query="";
-		String whereCondition="";
 		x_query="SELECT (SELECT CONCAT(IFNULL(CUSR.FIRST_NAME,'not available'),' ',IFNULL(CUSR.LAST_NAME,'')) "
 				+"FROM ADM_USERS CUSR WHERE CUSR.USER_ID = (SELECT C.CREATED_BY  "
 				+"  FROM ADM_USERS C WHERE C.USER_ID = "+user_id+")) CREATED_BY,  "
@@ -287,16 +316,21 @@ public class UserService {
 				+"        DATE_FORMAT(MNTB.CREATED_ON,'%b %d %Y %h:%i %p') CREATED_ON, "
 				+"         DATE_FORMAT(MNTB.LAST_UPDATED_ON,'%b %d %Y %h:%i %p') LAST_UPDATED_ON  "
 				+"FROM ADM_USERS MNTB  WHERE MNTB.USER_ID =" +user_id;
-		SQLQuery query = session.createSQLQuery(x_query);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-//		System.out.println("result list size"+resultlist.size());
-		JSONArray array=GetJsonResultSet.getjson(resultlist);
+		JSONArray array = null;
+		try {
+			SQLQuery query = session.createSQLQuery(x_query);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getjson(resultlist);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 		}
 	public int passwordChange(String user_id, String newPassword,String oldPassword) {
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-		Session session = sf.openSession();
+		Session session = sf1.openSession();
 		session.beginTransaction();
 		String x_query="";
 		int result=0;
@@ -308,15 +342,19 @@ public class UserService {
 			 result=query.executeUpdate();
 			 session.getTransaction().commit();
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return result;
 	}
 	public int saveUserAddEdit(UserBeanForUserForm bean, String action,AdmUserV userBean) {
-		int result=0;
+		int insertupdateadmUserFlag = 0;
+		int insertupdateRolemapingFlag = 0;
+		int insertupdateWarehouseAssimgmentFlag = 0;
+		int insetUpdateUserFlag = 0;
 		String x_QUERY="";
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-		Session session = sf.openSession();
+		Session session = sf1.openSession();
 		session.beginTransaction();
 		try {
 			if (action.equals("add")) {
@@ -358,20 +396,29 @@ public class UserService {
 			}else{
 				query.setParameter(9, bean.getX_USER_ID());	
 			}
-			 result=query.executeUpdate();
-			 session.getTransaction().commit();
+			insertupdateadmUserFlag = query.executeUpdate();
+			insertupdateRolemapingFlag = saveSetRoleIDMapping(bean, action, userBean, session);
+			insertupdateWarehouseAssimgmentFlag = setWarehouseIdAssingment(bean, action, userBean, session);
+			if (insertupdateadmUserFlag == 1 && insertupdateRolemapingFlag == 1
+					&& insertupdateWarehouseAssimgmentFlag == 1) {
+				session.getTransaction().commit();
+				insetUpdateUserFlag = 1;
+			} else {
+				session.getTransaction().rollback();
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
+			session.getTransaction().rollback();
+		} finally {
+			session.close();
 		}
-		return result;
+		return insetUpdateUserFlag;
 	}
 	
-	public int saveSetRoleIDMapping(UserBeanForUserForm bean, String action,AdmUserV userBean) {
+	public int saveSetRoleIDMapping(UserBeanForUserForm bean, String action, AdmUserV userBean, Session session) {
 		int result=0;
 		String x_QUERY="";
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-		Session session = sf.openSession();
-		session.beginTransaction();
 		try {
 			if (action.equals("add")) {
 				x_QUERY="INSERT INTO ADM_USER_ROLE_MAPPINGS "
@@ -409,19 +456,15 @@ public class UserService {
 				query.setParameter(2, bean.getX_USER_ID());
 			}
 			 result=query.executeUpdate();
-			 session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
 	
-	public int setWarehouseIdAssingment(UserBeanForUserForm bean, String action,AdmUserV userBean) {
+	public int setWarehouseIdAssingment(UserBeanForUserForm bean, String action, AdmUserV userBean, Session session) {
 		int result=0;
 		String x_QUERY="";
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-		Session session = sf.openSession();
-		session.beginTransaction();
 		try {
 			if (action.equals("add")) {
 				x_QUERY="INSERT INTO ADM_USER_WAREHOUSE_ASSIGNMENTS "
@@ -466,7 +509,6 @@ public class UserService {
 			}
 			query.setParameter(2, userBean.getX_USER_ID());
 			 result=query.executeUpdate();
-			 session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -474,10 +516,9 @@ public class UserService {
 	}
 	
 	public String getLastInsertUserID(String user_name,String warehouse_id) {
+		Session session = sf1.openSession();
 		try {
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-
-			SQLQuery query = sf.openSession().createSQLQuery("Select USER_ID from adm_users"
+			SQLQuery query = session.createSQLQuery("Select USER_ID from adm_users"
 					+ " Where LOGIN_NAME='"+user_name+"'  AND WAREHOUSE_ID="+warehouse_id+ " AND STATUS='A'");
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();
@@ -489,6 +530,8 @@ public class UserService {
 				return null;
 		} catch (HibernateException e) {
 			return null;
+		} finally {
+			session.close();
 		}
 	}
 }

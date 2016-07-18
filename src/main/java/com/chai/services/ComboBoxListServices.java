@@ -3,8 +3,11 @@ package com.chai.services;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.json.JSONArray;
 
 import com.chai.hibernartesessionfactory.HibernateSessionFactoryClass;
@@ -12,13 +15,14 @@ import com.chai.model.LabelValueBean;
 import com.chai.util.GetJsonResultSet;
 
 public class ComboBoxListServices {
+	Transaction tx = null;
 	SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-//	Session session = sf.openSession();
 	SQLQuery query=null;
 	public  JSONArray getComboboxList(String... args) {
 		System.out.println("-- ComboboxlistService.getComboboxList() mehtod called: -- ");
 		String x_QUERY="";
 		JSONArray array=new JSONArray();
+		Session session = sf.openSession();
 		if(args[0]!=null){
 			if(args[0].equals("lgalistBasedonstate")){
 			x_QUERY="SELECT WAREHOUSE_ID, WAREHOUSE_NAME "
@@ -84,19 +88,25 @@ public class ComboBoxListServices {
 			}
 			
 		}
-		query = sf.openSession().createSQLQuery(x_QUERY);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-		if(args.length==3){
-			if(args[2]!=null && args[2].equals("All") ){
-				System.out.println("list with alloption");
-				array=GetJsonResultSet.getjsonCombolist(resultlist,true);
+		try {
+			query = session.createSQLQuery(x_QUERY);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			if (args.length == 3) {
+				if (args[2] != null && args[2].equals("All")) {
+					System.out.println("list with alloption");
+					array = GetJsonResultSet.getjsonCombolist(resultlist, true);
+				} else {
+					array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+				}
 			}else{
+				System.out.println("list with Without Alloption");
 				array=GetJsonResultSet.getjsonCombolist(resultlist,false);
 			}
-		}else{
-			System.out.println("list with Without Alloption");
-			array=GetJsonResultSet.getjsonCombolist(resultlist,false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return array;
 	}
@@ -105,6 +115,7 @@ public class ComboBoxListServices {
 		System.out.println("-- Comboboxlistserivces.getProductList() mehtod called: -- ");
 		String x_QUERY="";
 		JSONArray array=new JSONArray();
+		Session session = sf.openSession();
 		if(args[0]!=null){
 			 if(args[0].equals("productlistbassedonlga")){
 				x_QUERY="SELECT ITEM_ID, "
@@ -113,15 +124,22 @@ public class ComboBoxListServices {
 						+ "ORDER BY ITEM_NUMBER";
 			}
 		}
-		query = sf.openSession().createSQLQuery(x_QUERY);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-		array=GetJsonResultSet.getjsonCombolist(resultlist,Boolean.parseBoolean(args[2]));
+		try {
+			query = session.createSQLQuery(x_QUERY);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array=GetJsonResultSet.getjsonCombolist(resultlist,Boolean.parseBoolean(args[2]));
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 	}
 	public  List<LabelValueBean> getProductListInBean(String... args) {
 		System.out.println("-- Comboboxlistserivces.getProductListInBean() mehtod called: -- ");
 		String x_QUERY="";
+		Session session = sf.openSession();
 		List<LabelValueBean> array=null;;
 		if(args[0]!=null){
 			 if(args[0].equals("productlistbassedonlga")){
@@ -132,10 +150,16 @@ public class ComboBoxListServices {
 						+" AND  warehouse_id="+args[1]+"  ORDER BY ITEM_NUMBER ";
 			}
 		}
-		query = sf.openSession().createSQLQuery(x_QUERY);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-		array=GetJsonResultSet.getCombolistInBean(resultlist,Boolean.parseBoolean(args[2]));
+		try {
+			query = sf.openSession().createSQLQuery(x_QUERY);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getCombolistInBean(resultlist, Boolean.parseBoolean(args[2]));
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 	}
 }

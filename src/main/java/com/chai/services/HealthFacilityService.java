@@ -22,6 +22,7 @@ public class HealthFacilityService {
 		JSONArray array=new JSONArray();
 		SQLQuery query=null;
 		String whereCondition = "";
+		Session session = sf.openSession();
 		if (hfId == null || hfId.equals("")) {
 			whereCondition = "WHERE DEFAULT_STORE_ID = " + lgaId + " AND (IFNULL(CUSTOMER_ID,1)= IFNULL(CUSTOMER_ID,1) "
 					+ " OR DB_ID = IFNULL(null,DB_ID)) ORDER BY CUSTOMER_NAME";
@@ -44,7 +45,7 @@ public class HealthFacilityService {
 				+" DATE_FORMAT(EDIT_DATE, '%d-%b-%Y') EDIT_DATE  "
 					+ " FROM VIEW_CUSTOMERS  ";
 			x_query += whereCondition;
-			query = sf.openSession().createSQLQuery(x_query);
+			query = session.createSQLQuery(x_query);
 		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 		List resultlist = query.list();
 	//System.out.println("result list size"+resultlist.size());
@@ -53,7 +54,7 @@ public class HealthFacilityService {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}finally {
-		System.out.println("querry"+query.toString());
+			session.close();
 	}
 	return array;
 	}
@@ -61,6 +62,8 @@ public class HealthFacilityService {
 	public JSONArray getHFHistory(String DB_ID, String DEFAULT_STORE_ID) {
 		System.out.println("-- LgaStoreService.getUserHistory() mehtod called: -- ");
 		String x_query = "";
+		JSONArray array = new JSONArray();
+		Session session = sf.openSession();
 		x_query = "SELECT (SELECT CONCAT(IFNULL(CUSR.FIRST_NAME,'not available')," + " ' ',IFNULL(CUSR.LAST_NAME,'')) "
 				+ "FROM ADM_USERS CUSR WHERE CUSR.USER_ID = (SELECT C.CREATED_BY  "
 				+ "FROM CUSTOMERS C WHERE C.DB_ID = " + DB_ID + " and default_store_id=" + DEFAULT_STORE_ID
@@ -72,18 +75,23 @@ public class HealthFacilityService {
 				+ "DATE_FORMAT(MNTB.CREATED_ON,'%b %d %Y %h:%i %p') CREATED_ON, "
 				+ "DATE_FORMAT(MNTB.LAST_UPDATED_ON,'%b %d %Y %h:%i %p') LAST_UPDATED_ON "
 				+ "FROM CUSTOMERS MNTB  WHERE MNTB.DB_ID = " + DB_ID;
-		SQLQuery query = sf.openSession().createSQLQuery(x_query);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-		// System.out.println("result list size"+resultlist.size());
-		JSONArray array = GetJsonResultSet.getjson(resultlist);
+		try {
+			SQLQuery query = session.createSQLQuery(x_query);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			// System.out.println("result list size"+resultlist.size());
+			array = GetJsonResultSet.getjson(resultlist);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 	}
 
 	public int saveAddEditHF(healthFacilityBean bean, String action, AdmUserV userBean) {
 		int result = 0;
 		String x_QUERY = "";
-		SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
 		Session session = sf.openSession();
 		session.beginTransaction();
 		try {
@@ -159,6 +167,8 @@ public class HealthFacilityService {
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return result;
 	}
@@ -166,27 +176,45 @@ public class HealthFacilityService {
 	public JSONArray getWardListBasedOnLga(String LGA_ID, String option) {
 		System.out.println("-- healthFacilityService.getWardListBasedOnLga() mehtod called: -- ");
 		String x_query = "";
+		JSONArray array = new JSONArray();
+		Session session = sf.openSession();
 		x_query = "SELECT TYPE_ID,  TYPE_CODE     FROM TYPES  " + " WHERE SOURCE_TYPE='CUSTOMER TYPE' AND STATUS='A' "
 				+ " AND WAREHOUSE_ID = " + LGA_ID + "  ORDER BY TYPE_CODE";
-		SQLQuery query = sf.openSession().createSQLQuery(x_query);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-		// System.out.println("result list size"+resultlist.size());
-		JSONArray array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		try {
+			SQLQuery query = session.createSQLQuery(x_query);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			// System.out.println("result list size"+resultlist.size());
+			array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 	}
 
 	public JSONArray getStateStoreIdBasedOnLgaId(String LGA_ID) {
 		System.out.println("-- healthFacilityService.getWardListBasedOnLga() mehtod called: -- ");
 		String x_query = "";
+		JSONArray array = new JSONArray();
+		Session session = sf.openSession();
 		x_query = "select warehouse_id , warehouse_name " + " from inventory_warehouses "
 				+ " where warehouse_id=(select default_ordering_warehouse_id from inventory_warehouses "
 				+ " where warehouse_id=" + LGA_ID + "  )  ";
-		SQLQuery query = sf.openSession().createSQLQuery(x_query);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-		// System.out.println("result list size"+resultlist.size());
-		JSONArray array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		try {
+			SQLQuery query = sf.openSession().createSQLQuery(x_query);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			// System.out.println("result list size"+resultlist.size());
+			array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		} catch (HibernateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 	}
 

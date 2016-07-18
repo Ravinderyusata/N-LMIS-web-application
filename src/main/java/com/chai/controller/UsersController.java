@@ -48,17 +48,17 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value = "/getuserlist")
-	public JSONArray getJsonUserList(HttpServletRequest request,HttpServletResponse respones){
+	public JSONArray getJsonUserList(HttpServletRequest request, HttpServletResponse respones) {
 		System.out.println("list data");
 		try{
 			AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
 		 data=userService.getUserListPageData(userBean);
 			// System.out.println("json ======"+data.toString());
-		
-			PrintWriter out=respones.getWriter();
+
+			PrintWriter out = respones.getWriter();
 			out.write(data.toString());
 			out.close();
-		} catch (IOException e) {
+		} catch (IOException | org.hibernate.exception.JDBCConnectionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -148,26 +148,19 @@ public class UsersController {
 		// System.out.println("CREATED_ON"+bean.getX_CREATED_ON());
 		// System.out.println("PASSWORD"+bean.getX_PASSWORD());
 		// System.out.println("WAREHOUSE_ID"+bean.getX_WAREHOUSE_ID());
-		int insertUsertableFlag=0,insertRoleMapingFlag=0,insertWarehouseAssingmentFlag=0;
+		int insertUpdateUserFlag = 0;
 		try {
 			if(action.equals("add")){
-				insertUsertableFlag=userService.saveUserAddEdit(bean,action,userBean);
-				insertRoleMapingFlag=userService.saveSetRoleIDMapping(bean,action,userBean);
-				insertWarehouseAssingmentFlag=userService.setWarehouseIdAssingment(bean,action,userBean);
-				
+				insertUpdateUserFlag = userService.saveUserAddEdit(bean, action, userBean);
 			}else{
 				String userId=request.getParameter("userId");
 				System.out.println("edit record of user"+userId);
 				bean.setX_USER_ID(userId);
-				insertUsertableFlag=userService.saveUserAddEdit(bean,action,userBean);
-				insertRoleMapingFlag=userService.saveSetRoleIDMapping(bean,action,userBean);
-				insertWarehouseAssingmentFlag=userService.setWarehouseIdAssingment(bean,action,userBean);
+				insertUpdateUserFlag = userService.saveUserAddEdit(bean, action, userBean);
 			}
-			System.out.println("\ninsertUsertableFlag "+insertUsertableFlag+
-					"\ninsertRoleMapingFlag "+insertRoleMapingFlag+
-					"\ninsertWarehouseAssingmentFlag "+insertWarehouseAssingmentFlag);
+			System.out.println("\ninsertUpdateUserFlag " + insertUpdateUserFlag);
 			PrintWriter out = respones.getWriter();
-			if(insertUsertableFlag==1 && insertRoleMapingFlag==1 && insertWarehouseAssingmentFlag==1){
+			if (insertUpdateUserFlag == 1) {
 				out.write("succsess");
 			}else{
 				out.write("fail");

@@ -207,6 +207,7 @@ function showHFBinCarddata(){
 				$('#HFBinCardTable').datagrid('showColumn', 'STOCK_RECEIVED_DATE');
 			}
 			$('#HFBinCardTable').datagrid('showColumn', 'ITEM_NUMBER');
+			$('#HFBinCardTable').datagrid('hideColumn', 'CUSTOMER_NAME');
 		}
 	}
 }

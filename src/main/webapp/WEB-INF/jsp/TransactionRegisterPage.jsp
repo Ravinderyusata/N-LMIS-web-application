@@ -16,22 +16,29 @@
 		var user = '${userBean.getX_ROLE_NAME()}';
 		switch (user) {
 		case "SCCO":
-
+			$('#stateFilter').hide();
+			loadLgaComboboxList('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		case "SIO":
-
+			$('#stateFilter').hide();
+			loadLgaComboboxList('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		case "SIFP":
-
+			$('#stateFilter').hide();
+			loadLgaComboboxList('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		case "NTO":
-			
+			loadStateComboboxList();
 			break;
 		case "LIO":
-
+			$('#stateFilter').hide();
+			$('#lga_filter').hide();
+			loadProductBasedOnLga('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		case "MOH":
-
+			$('#stateFilter').hide();
+			$('#lga_filter').hide();
+			loadProductBasedOnLga('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		}
 		document.getElementById("common_lable").innerHTML = "Transaction History";
@@ -68,7 +75,11 @@
 	
 <!-- filters -->
 		<div id="filters" style="padding: 3px;display: inline-flex;">
-		<div id="lga_filter" >
+		<div id="stateFilter" >
+					<label id="state_label">State Store:</label><br>
+					<input id="state_combobox"  class="easyui-combobox" name="state_combobox"  style="width:120px" >
+				</div>
+		<div id="lga_filter" >&nbsp;&nbsp;
 			<span>LGA:</span><br>
 				 <select id="lga_combobox" class="easyui-combobox"
 					name="lga_combobox" style="width:200px;">
@@ -127,11 +138,17 @@
 <script type="text/javascript">
 function transactionRegisterData(){
 	var url="";
-	if($('#lga_combobox').combobox('getValue')==""){
+	if($('#lga_combobox').combobox('getValue')==""
+			&&!('${userBean.getX_ROLE_NAME()}'=='MOH'
+				|| '${userBean.getX_ROLE_NAME()}'=='LIO')){
 		validate=false;
 		alertBox("LGA is Empty");
 	}else{
 		var lgaId=$('#lga_combobox').combobox('getValue');
+		if('${userBean.getX_ROLE_NAME()}'=='MOH'
+			|| '${userBean.getX_ROLE_NAME()}'=='LIO'){
+		lgaId='${userBean.getX_WAREHOUSE_ID()}';
+		}
 		var productId=$('#product_combobox').combobox('getValue');
 		var transactionTypeId=$('#transaction_combobox').combobox('getValue');
 		var fromDate=$('#from_datePicker').combobox('getValue');
@@ -174,19 +191,35 @@ function alertBox(message){
 }	
 </script>
 <script type="text/javascript">
+function loadLgaComboboxList(stateId){
 	$('#lga_combobox').combobox({
-		url : 'getlgalist',
+		url : 'getlgalistBasedOnStateId?option=NotAll&stateId='+stateId,
 		valueField : 'value',
 		textField : 'label',
-		onSelect : function(rec) {
-			$('#product_combobox').combobox({
-				url : 'getproductlist?lgaid=' + rec.value+'&option=All',
-				valueField : 'value',
-				textField : 'label'
-			});
-
+		onSelect : function(lgaId){
+			$('#product_combobox').combobox('clear');
+			$('#transaction_combobox').combobox('clear');
+			loadProductBasedOnLga(lgaId.value);
 		}
 	});
+}
+function loadStateComboboxList(){
+	$('#state_combobox').combobox({
+		url:"get_state_store_list?option=notAll",
+		valueField : 'value',
+		textField : 'label' ,
+		onSelect:function(state){
+			loadLgaComboboxList(state.value);
+		}
+	});
+}
+	function loadProductBasedOnLga(lgaId){
+		$('#product_combobox').combobox({
+			url : 'getproductlist?lgaid=' +lgaId+'&option=All',
+			valueField : 'value',
+			textField : 'label'
+		});	
+	}
 	$('#transaction_combobox').combobox({
 		url : 'getTransactionlist?option=All',
 		valueField : 'value',

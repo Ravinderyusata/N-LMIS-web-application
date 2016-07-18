@@ -277,7 +277,7 @@ font-weight: bold;
             </td>
              <td>
              
-                <div id="end_date">
+                <div id="end_date_div">
                   <label id="end_date_label">End date:</label><br>
                     <f:input id="end_date" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" width="120px;" path="x_END_DATE"/>
                 </div>
@@ -665,14 +665,6 @@ function getStateStoreBasedOnLgaId(lgaId){
 		});	
 }
 
-function formateDate(date){
-	var date=new Date(date);
-	var day = date.getDate();
-	var monthIndex = date.getMonth();
-	var year = date.getFullYear();
-	return day+'-'+(monthIndex<10?('0'+monthIndex):monthIndex)+'-'+year;
-}
-
 	function loadHfData(url){
 		$('#HFListTable').datagrid({
 			url : url,
@@ -777,6 +769,16 @@ function formateDate(date){
 	}
 </script>
 <script type="text/javascript">
+hideAfterCurrentDate('#start_date');//for disable after current date 
+hideBeforCurrentDate('#end_date');//for disable before current date 
+$('#start_date').datebox({
+	formatter:myformatter,
+	parser:myparser
+});
+$('#end_date').datebox({
+	formatter:myformatter,
+	parser:myparser
+});
 function loadStateList(){
 	$('#state_combobox').combobox({
 		url : 'get_state_store_list',

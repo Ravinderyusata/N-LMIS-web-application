@@ -13,15 +13,15 @@ import com.chai.hibernartesessionfactory.HibernateSessionFactoryClass;
 import com.chai.util.GetJsonResultSet;
 
 public class ReportServices {
-
+	SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
 	public JSONArray getJsonLgaBincardGridData(String lgaId, String year,String month, 
 			String dateType, String transactionType,
 			String productType,String date) {
 		System.out.println("-- Reportservice.getJsonLgaBincardGridData() mehtod called: -- ");
 		JSONArray array = new JSONArray();
+		Session session = sf.openSession();
+
 		try {
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			String x_query = "";
 			String tableCondition="";
 			if (dateType.equals("MONTH/YEAR")) {
@@ -51,17 +51,18 @@ public class ReportServices {
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return array;
 	}
 
-	public JSONArray getJsonLgaMinMaxData(int stateId,String lgaId,
+	public JSONArray getJsonLgaMinMaxData(String stateId, String lgaId,
 			String minMax,String perioadType,String year,String weekOrMonth) {
 		System.out.println("-- LgaStoreService.getLgaStoreListPageData() mehtod called: -- ");
 		JSONArray array = new JSONArray();
+		Session session = sf.openSession();
 		try {
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			String x_query="";
 			String fromTable="";
 			String month="";
@@ -115,6 +116,8 @@ public class ReportServices {
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return array;
 	}
@@ -126,9 +129,8 @@ public class ReportServices {
 		String x_WHERE_WEEK = "";
 		String x_WHERE_MONTH = "";
 		String x_WHERE_YEAR = "";
+		Session session = sf.openSession();
 		try {
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			String x_QUERY = " SELECT TRANSACTION_ID, " + "      STATE_ID, " + "      STATE_NAME, " + "      ITEM_ID, "
 					+ "      ITEM_NUMBER, " + "      LGA_ID, " + "      LGA_NAME, " + "      FROM_SOURCE, "
 					+ "      FROM_SOURCE_ID, " + "      TO_SOURCE, " + "      TO_SOURCE_ID, "
@@ -187,6 +189,8 @@ public class ReportServices {
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return array;
 	}
@@ -198,12 +202,9 @@ public class ReportServices {
 		String x_WHERE_WEEK = "";
 		String x_WHERE_MONTH = "";
 		String x_WHERE_YEAR = "";
-		
-		
-		
+		Session session = sf.openSession();
 		try {
 			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			String x_QUERY = "select LGA_ID,WAREHOUSE_CODE,ITEM_ID,ITEM_NUMBER,"
 					+ " date_format(PHYSICAL_COUNT_DATE,'%d-%m-%Y') AS PHYSICAL_COUNT_DATE,REASON,"
 					+ " STOCK_BALANCE,PHYSICAL_STOCK_COUNT,DIFFERENCE " + " FROM LGA_STOCK_DISPCREPENCIES ";
@@ -257,6 +258,8 @@ public class ReportServices {
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return array;
 	}
@@ -266,9 +269,8 @@ public class ReportServices {
 			String productType,String date) {
 		System.out.println("-- reportService.getJsonLgaStockAdjustmentReportGridData() mehtod called: -- ");
 		JSONArray array = new JSONArray();
+		Session session = sf.openSession();
 		try {
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			String x_query = "";
 			String tableCondition="";
 			if (dateType.equals("MONTH/YEAR")) {
@@ -298,6 +300,8 @@ public class ReportServices {
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return array;
 	}
@@ -306,6 +310,7 @@ public class ReportServices {
 		System.out.println("-- LgaStoreService.getLgaStoreListPageData() mehtod called: -- ");
 		JSONArray array = new JSONArray();
 		String x_QUERY = "";
+		Session session = sf.openSession();
 		try {
 			if (params != null) {
 				String lgaIdCondition = "";
@@ -331,7 +336,8 @@ public class ReportServices {
 				}
 				
 				if((((String)params[0]).equals("null")?null:params[0]) == null){
-					lgaIdCondition = " AND STATE_ID=" + stateID;
+					stateID = stateID.equals("") ? null : stateID;
+					lgaIdCondition = " AND STATE_ID=IFNULL(" + stateID + ",STATE_ID)";
 					x_QUERY = "select DISTINCT LGA_ID, LGA_NAME" + " from lga_emergency_stock_alloc_report_v where "
 							+ andCondition + lgaIdCondition;
 				}else {					
@@ -343,14 +349,14 @@ public class ReportServices {
 							+ " GROUP BY ITEM_ID";
 				}
 			}
-			SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
-			Session session = sf.openSession();
 			SQLQuery query = session.createSQLQuery(x_QUERY);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();
 			array = GetJsonResultSet.getjson(resultlist);
 		} catch (HibernateException e) {
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return array;
 	}

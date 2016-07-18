@@ -25,6 +25,7 @@ import com.chai.util.GetJsonResultSet;
 			JSONArray array=new JSONArray();
 		String x_whereCondition = "";
 		String x_query = "";
+		Session session = sf.openSession();
 		String loginRole = userBean.getX_ROLE_NAME();
 			try {
 			x_query = "SELECT COMPANY_ID,  WAREHOUSE_ID,  WAREHOUSE_CODE, "
@@ -46,7 +47,7 @@ import com.chai.util.GetJsonResultSet;
 				x_whereCondition = "  WHERE  WAREHOUSE_ID =" + userBean.getX_WAREHOUSE_ID();
 			}
 			x_query += x_whereCondition;
-				SQLQuery query = sf.openSession().createSQLQuery(x_query);
+			SQLQuery query = session.createSQLQuery(x_query);
 				query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 				List resultlist = query.list();
 //			System.out.println("result list size"+resultlist.size());
@@ -54,6 +55,8 @@ import com.chai.util.GetJsonResultSet;
 			} catch (HibernateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+		} finally {
+			session.close();
 			}
 			return array;
 			}
@@ -62,6 +65,7 @@ import com.chai.util.GetJsonResultSet;
 			System.out.println("-- LGAStoreService.getLgaStoreComboboxList() mehtod called: -- ");
 			String x_QUERY="";
 			JSONArray array=new JSONArray();
+		Session session = sf.openSession();
 			if(args[0]!=null){
 				if(args[0].equals("LGA_STORE_TYPE")){
 					if(userBean.getX_ROLE_NAME().equals("NTO")){
@@ -82,10 +86,17 @@ import com.chai.util.GetJsonResultSet;
 		
 				}
 			}
-			query = sf.openSession().createSQLQuery(x_QUERY);
+		try {
+			query = session.createSQLQuery(x_QUERY);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();
-			array=GetJsonResultSet.getjsonCombolist(resultlist,false);
+			array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 			return array;
 		}
 		
@@ -93,6 +104,7 @@ import com.chai.util.GetJsonResultSet;
 		System.out.println("-- LGAStoreService.getLgaStoreComboboxListForForm() mehtod called: -- ");
 		String x_QUERY = "";
 		JSONArray array = new JSONArray();
+		Session session = sf.openSession();
 		if (args[0] != null) {
 			if (args[0].equals("LGA_STORE_TYPE")) {
 				if (userBean.getX_ROLE_NAME().equals("NTO")) {
@@ -107,10 +119,17 @@ import com.chai.util.GetJsonResultSet;
 
 			}
 		}
-		query = sf.openSession().createSQLQuery(x_QUERY);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-		array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		try {
+			query = session.createSQLQuery(x_QUERY);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 	}
 
@@ -119,6 +138,7 @@ import com.chai.util.GetJsonResultSet;
 			String x_QUERY="";
 			String role=userBean.getX_ROLE_NAME();
 			JSONArray array=new JSONArray();
+		Session session = sf.openSession();
 			if(userBean.getX_ROLE_NAME().equals("NTO")){
 				x_QUERY="SELECT WAREHOUSE_ID,WAREHOUSE_NAME "
 						+" FROM VIEW_INVENTORY_WAREHOUSES WHERE WAREHOUSE_TYPE_ID="+storeTypeId;
@@ -137,10 +157,17 @@ import com.chai.util.GetJsonResultSet;
 								+ " AND  WAREHOUSE_ID ="+userBean.getX_WAREHOUSE_ID();
 			}
 		
-			query = sf.openSession().createSQLQuery(x_QUERY);
+		try {
+			query = session.createSQLQuery(x_QUERY);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();
-			array=GetJsonResultSet.getjsonCombolist(resultlist,false);
+			array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 			return array;
 		}
 
@@ -149,6 +176,7 @@ import com.chai.util.GetJsonResultSet;
 		String x_QUERY = "";
 		String role = userBean.getX_ROLE_NAME();
 		JSONArray array = new JSONArray();
+		Session session = sf.openSession();
 		if (userBean.getX_ROLE_NAME().equals("NTO")) {
 			if (storeTypeLabel.equals("STATE COLD STORE")) {
 				x_QUERY = "SELECT WAREHOUSE_ID, " + " WAREHOUSE_NAME   FROM VIEW_INVENTORY_WAREHOUSES "
@@ -161,10 +189,17 @@ import com.chai.util.GetJsonResultSet;
 			}
 		}
 
-		query = sf.openSession().createSQLQuery(x_QUERY);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
-		array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		try {
+			query = session.createSQLQuery(x_QUERY);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 	}
 
@@ -172,6 +207,7 @@ import com.chai.util.GetJsonResultSet;
 			String storeTypeName) {
 			System.out.println("-- LgaStoreService.getsearchLgaStoreData() mehtod called: -- ");
 			JSONArray array=new JSONArray();
+		Session session = sf.openSession();
 			String x_QUERY="SELECT COMPANY_ID,  WAREHOUSE_ID,  WAREHOUSE_CODE, "
 						+ "	WAREHOUSE_NAME,  WAREHOUSE_DESCRIPTION,  WAREHOUSE_TYPE_NAME, "
 						+ " WAREHOUSE_TYPE_ID,  ADDRESS1,  STATE_NAME,  COUNTRY_NAME, ADDRESS2,"
@@ -210,7 +246,7 @@ import com.chai.util.GetJsonResultSet;
 					x_whereCondition=" AND WAREHOUSE_ID=IFNULL("+storeNameId+",WAREHOUSE_ID)";
 				}
 				x_QUERY+=x_whereCondition;
-				SQLQuery query = sf.openSession().createSQLQuery(x_QUERY);
+			SQLQuery query = session.createSQLQuery(x_QUERY);
 				query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 				List resultlist = query.list();
 //			System.out.println("result list size"+resultlist.size());
@@ -218,6 +254,8 @@ import com.chai.util.GetJsonResultSet;
 			} catch (HibernateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+		} finally {
+			session.close();
 			}
 			return array;
 		}
@@ -225,6 +263,7 @@ import com.chai.util.GetJsonResultSet;
 		public JSONArray getLgaStoreHistory(String WAREHOUSE_ID) {
 			System.out.println("-- LgaStoreService.getUserHistory() mehtod called: -- ");
 			String x_query="";
+		Session session = sf.openSession();
 			x_query="SELECT (SELECT CONCAT(IFNULL(CUSR.FIRST_NAME,'not available'),' ',IFNULL(CUSR.LAST_NAME,'')) "
 					+" FROM ADM_USERS CUSR WHERE CUSR.USER_ID = (SELECT C.CREATED_BY "
 					+" FROM INVENTORY_WAREHOUSES C WHERE C.WAREHOUSE_ID = "+WAREHOUSE_ID+")) CREATED_BY, "
@@ -234,24 +273,40 @@ import com.chai.util.GetJsonResultSet;
 					+" DATE_FORMAT(MNTB.CREATED_ON,'%b %d %Y %h:%i %p') CREATED_ON, "
 					+" DATE_FORMAT(MNTB.LAST_UPDATED_ON,'%b %d %Y %h:%i %p') LAST_UPDATED_ON  "
 					+" FROM INVENTORY_WAREHOUSES MNTB  WHERE MNTB.WAREHOUSE_ID = "+WAREHOUSE_ID;
-			SQLQuery query = sf.openSession().createSQLQuery(x_query);
+		// System.out.println("result list size"+resultlist.size());
+		JSONArray array = new JSONArray();
+		try {
+			SQLQuery query = session.createSQLQuery(x_query);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();
-//			System.out.println("result list size"+resultlist.size());
-			JSONArray array=GetJsonResultSet.getjson(resultlist);
+			array = GetJsonResultSet.getjson(resultlist);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 			return array;
 			}
 
 	public JSONArray getStateNameListForForm(String countryId) {
 		System.out.println("-- LgaStoreService.getStateNameListForForm() mehtod called: -- ");
 		String x_query = "";
+		Session session = sf.openSession();
 		x_query = "SELECT STATE_ID, STATE_NAME   FROM VIEW_STATES  WHERE STATE_NAME IS NOT NULL  "
 				+ "AND STATE_NAME <> '' AND STATUS='A' AND COUNTRY_ID = " + countryId + " ORDER BY STATE_NAME";
-		SQLQuery query = sf.openSession().createSQLQuery(x_query);
-		query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-		List resultlist = query.list();
 		// System.out.println("result list size"+resultlist.size());
-		JSONArray array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		JSONArray array = new JSONArray();
+		try {
+			SQLQuery query = session.createSQLQuery(x_query);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getjsonCombolist(resultlist, false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return array;
 	}
 
@@ -321,6 +376,8 @@ import com.chai.util.GetJsonResultSet;
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return result;
 	}

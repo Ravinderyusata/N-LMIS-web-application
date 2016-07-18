@@ -74,7 +74,7 @@ display: inline-block;
 
 <div  class="main-header-div">
 	<div class="logodiv" >
-		<img alt="leftimage" src="resources/images/NPHDA_LOGO-1_400x400.png"
+		<img alt="leftimage" src="resources/images/NPHDALOGOFORHOME.png"
 			style="height: 117px; width:142px" >
 	</div>
 	<div class="middle-div">
@@ -92,7 +92,7 @@ display: inline-block;
 			</div>	
 			
 			<div class="logout_div">
-			<a title="Logout" href="loginPage"  id="logout_btn">
+			<a title="Logout" href="logOutPage?logOutFlag=logOut"  id="logout_btn">
 			<img alt="logout-icon" src="resources/images/Logout.png">
 			</a>
 			</div>

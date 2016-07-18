@@ -221,7 +221,7 @@ function alertBox(message){
 </script>
 <script type="text/javascript">
   $('#dateFilter').hide();
-  $('#yearCombobox').hide();
+  $('#yearFilter').hide();
   $('#monthFilter').hide();
   var lgaidForProduct="";
   function loadStateComboboxList(){

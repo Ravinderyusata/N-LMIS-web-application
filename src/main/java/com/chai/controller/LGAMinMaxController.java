@@ -23,7 +23,7 @@ public class LGAMinMaxController {
 		return model;
 	}
 	@RequestMapping(value = "/get_min_max_grid_data")
-	public JSONArray getLgaMinMaxGridData(@RequestParam("lgaId") String lgaId,
+	public JSONArray getLgaMinMaxGridData(@RequestParam("stateId") String stateId, @RequestParam("lgaId") String lgaId,
 										@RequestParam("perioadType") String perioadType,
 										@RequestParam("minMax") String minMax,
 										@RequestParam("year") String year,
@@ -33,7 +33,11 @@ public class LGAMinMaxController {
 		System.out.println("in LGAMinMaxController.getLgaMinMaxGridData()");
 		try{
 			AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
-		JSONArray data=new ReportServices().getJsonLgaMinMaxData(userBean.getX_WAREHOUSE_ID(),lgaId,minMax,perioadType,year,weekOrMonth);
+			if (!userBean.getX_ROLE_NAME().equals("NTO")) {
+				stateId = Integer.toString(userBean.getX_WAREHOUSE_ID());
+			}
+			JSONArray data = new ReportServices().getJsonLgaMinMaxData(stateId, lgaId, minMax, perioadType, year,
+					weekOrMonth);
 			// System.out.println("json ======"+data.toString());
 		
 			PrintWriter out=respones.getWriter();
