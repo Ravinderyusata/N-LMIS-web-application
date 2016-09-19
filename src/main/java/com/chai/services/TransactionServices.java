@@ -33,8 +33,9 @@ public class TransactionServices {
 					+ " REASON_TYPE,  REASON_TYPE_ID , VVM_STAGE FROM TRANSACTION_REGISTER_VW  WHERE TRANSACTION_TYPE_ID = "
 					+ " IFNULL("+transactionTypeId+", TRANSACTION_TYPE_ID)  AND ITEM_ID=IFNULL("+productId+",ITEM_ID) "
 					+ "  AND WAREHOUSE_ID= " + lgaId
-					+ " AND TRANSACTION_DATE  BETWEEN IFNULL(STR_TO_DATE("+fromDate+", '%m-%d-%Y'), TRANSACTION_DATE)    "
-					+ " AND IFNULL(STR_TO_DATE("+toDate+", '%m-%d-%Y'), TRANSACTION_DATE)";
+					+ " AND TRANSACTION_DATE  BETWEEN IFNULL(STR_TO_DATE('" + fromDate
+					+ "', '%d-%m-%Y'), TRANSACTION_DATE)    " + " AND IFNULL(STR_TO_DATE('" + toDate
+					+ "', '%d-%m-%Y'), TRANSACTION_DATE)";
 			SQLQuery query = session.createSQLQuery(x_query);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();

@@ -48,20 +48,22 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value = "/getuserlist")
-	public JSONArray getJsonUserList(HttpServletRequest request, HttpServletResponse respones) {
+	public JSONArray getJsonUserList(HttpServletRequest request, HttpServletResponse respones) throws IOException {
 		System.out.println("list data");
+		PrintWriter out = respones.getWriter();
 		try{
 			AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
 		 data=userService.getUserListPageData(userBean);
 			// System.out.println("json ======"+data.toString());
-
-			PrintWriter out = respones.getWriter();
 			out.write(data.toString());
-			out.close();
-		} catch (IOException | org.hibernate.exception.JDBCConnectionException e) {
-			// TODO Auto-generated catch block
+
+		} catch (NullPointerException | org.hibernate.exception.JDBCConnectionException e) {
+			out.write(data.toString());
 			e.printStackTrace();
+		} finally {
+			out.close();
 		}
+
 		return null;
 		
 	}

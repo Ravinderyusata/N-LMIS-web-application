@@ -135,7 +135,7 @@
 	<!-- user table -->
 	<table id="LgaBinCardTable" class="easyui-datagrid"
 		style="width: 100%; height: 390px" title="LGA Bin Card"
-		toolbar="#tb" rownumbers="true" pagination="true" singleSelect="true"
+		toolbar="#tb" rownumbers="true" pagination="true" pageSize=30 singleSelect="true"
 		striped="true" remoteSort="false">
 
 
@@ -331,5 +331,6 @@ function loadProductLgaBased(lgaId){
 				});
 			}
 		});
+		loadPaginationForTable(LgaBinCardTable);
 </script>
 </html>

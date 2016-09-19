@@ -29,9 +29,7 @@
 .yellow-status {
 	background: yellow none repeat scroll 0 0;
     display: inline-block;
-    float: left;
     height: 10px;
-    margin: 13px 0 0 9px;
     width: 10px;
 }
 .loader_div {
@@ -118,38 +116,44 @@ font-weight: bold;
 <!-- 					<li><img alt="" height="7px;" width="25px" src="resources/images/Arrow.png" class="decres_trend_image">&nbsp;&nbsp;Decreasing Trend</li> -->
 <!-- 					<li><img alt="" height="7px" width="25px" src="resources/images/Arrow.png" class="incres_trend_image">&nbsp;&nbsp;Increasing Trend</li> -->
 <!-- 				</ul> -->
-				<ul style="line-height: 35px; margin-top: 0">
-					<li>
-						&nbsp; <span class="red-status"></span> 
-						<span>% LGA	With &gt;3 Antigen in red</span>
-					</li>
-
-					<li>
-						&nbsp; <span class="green-status"></span> 
-						<span> % LGA With no Antigen in red</span>
-					</li>
-
-					<li>
-						&nbsp; <span class="yellow-status"></span>
-						<span style="text-align: left; float: right; width: 197px; line-height: 34px;">
-							% LGA With Antigen that need to re-order Stock 
-						</span>
-					</li>
-					<li>
-						<span style="padding-left: 13px;">
-							<img width="30px;" height="7px;" alt="" src="resources/images/Arrow.png" class="same_trend_image">
-						</span>
-						<span> Trend is the same</span>
-					</li>
-					<li>
-						<img width="25px" height="7px;" class="decres_trend_image" src="resources/images/Arrow.png" alt="">
-						&nbsp;&nbsp;Decreasing Trend
-					</li>
-					<li>
-						<img width="25px" height="7px" class="incres_trend_image" src="resources/images/Arrow.png" alt="">
-						&nbsp;&nbsp;Increasing Trend
-					</li>
-				</ul>
+				<ul style="line-height: 35px; margin-top: 0;">
+						<li>
+							 <div>
+							 <span class="red-status"></span> 
+							<span>% LGA	With &gt;3 Antigen in red</span>
+							 </div>
+						</li>
+	
+						<li>
+							<div>
+							 <span class="green-status"></span> 
+							<span> % LGA With no Antigen in red</span>
+							</div>
+						</li>
+	
+						<li>
+							<div>
+							 <span class="yellow-status"></span>
+							<span >
+								% LGA With Antigen that need to re-order Stock 
+							</span>
+							</div>
+						</li>
+						<li>
+							<span style="padding-left: 13px;">
+								<img width="30px;" height="7px;" alt="" src="resources/images/Arrow.png" class="same_trend_image">
+							</span>
+							<span> Trend is the same</span>
+						</li>
+						<li>
+							<img width="25px" height="7px;" class="decres_trend_image" src="resources/images/Arrow.png" alt="">
+							&nbsp;&nbsp;Decreasing Trend
+						</li>
+						<li>
+							<img width="25px" height="7px" class="incres_trend_image" src="resources/images/Arrow.png" alt="">
+							&nbsp;&nbsp;Increasing Trend
+						</li>
+					</ul>
 			</div>
 		</div>
 	</div>

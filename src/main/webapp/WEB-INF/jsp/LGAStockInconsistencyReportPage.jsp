@@ -142,7 +142,7 @@
 			<div id="dateFilter">
 				<li>
 					<label id="data-label">Date:</label>
-					<input id="datePicker" type="text" class="easyui-datebox">
+					<input id="datePicker" type="text" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser">
 				</li>
 			</div>
 			<div id="yearFilter">
@@ -247,7 +247,7 @@
 	<!-- user table -->
 	<table id="LgaStockInconsistencyTable" class="easyui-datagrid"
 		style="width: 100%; height: 410px" title="LGA Stock Inconsistenccy"
-		toolbar="#tb" rownumbers="true" pagination="true" singleSelect="true"
+		toolbar="#tb" rownumbers="true" pagination="true" pageSize=30 singleSelect="true"
 		striped="true" remoteSort="false">
 
 
@@ -268,5 +268,6 @@ $("#filterby-combobox").attr("selectedIndex", -1);
 function alertBox(message){
     $.messager.alert('Warning!',message,'warning');
 }
+loadPaginationForTable(LgaStockInconsistencyTable);
 </script>
 </html>

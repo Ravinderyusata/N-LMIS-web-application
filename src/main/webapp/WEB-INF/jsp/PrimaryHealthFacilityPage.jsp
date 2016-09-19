@@ -398,6 +398,7 @@ function handleHistory(){
 			  type: "post", //send it through post method
 			  data: {DB_ID: row.DB_ID,DEFAULT_STORE_ID: row.DEFAULT_STORE_ID},
 			  dataType:'json',
+			  async:false,
 			  success: function(response) {
 				  if(response[0].CREATED_BY=='' || response[0].CREATED_BY==null){
 					  $('#createdBylabel').text("<Not Available>");
@@ -408,7 +409,6 @@ function handleHistory(){
 				  $('#updatedBylabel').text(response[0].UPDATED_BY);
 				  $('#updatedOnlabel').text(response[0].LAST_UPDATED_ON);
 				  $('#history_dialog').dialog('open').dialog('center').dialog('setTitle','User Record History');  
-				  document.getElementById("loader_div").style.display = "none";
 			  },
 			  error: function(xhr) {
 				  document.getElementById("loader_div").style.display = "none";
@@ -417,6 +417,7 @@ function handleHistory(){
 			});
 		
 	 }
+	 document.getElementById("loader_div").style.display = "none";
 }
 function addHfForm(){
 	submitType="add";
@@ -824,5 +825,6 @@ function loadHfDrpdn(lga){
 		}
 	});
 }
+loadPaginationForTable(HFListTable);
 </script>
 </html>

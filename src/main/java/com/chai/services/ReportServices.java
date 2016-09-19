@@ -38,7 +38,7 @@ public class ReportServices {
 						+"LGA_NAME,FROM_SOURCE,TRANSACTION_TYPE_ID,TYPE_CODE,"
 						+" TRANSACTION_QUANTITY,date_format(TRANSACTION_DATE,'%d-%m-%Y') as TRANSACTION_DATE,"
 						+" REASON,REASON_TYPE,ONHAND_QUANTITY_BEFOR_TRX,ONHAND_QUANTITY_AFTER_TRX"
-						+"   FROM LGA_BIN_CARD_DAY_V  where date_format(TRANSACTION_DATE,'%m/%d/%Y')='"+date+"'"
+						+ "   FROM LGA_BIN_CARD_DAY_V  where date_format(TRANSACTION_DATE,'%d-%m-%Y')='" + date + "'"
 						+" AND TRANSACTION_TYPE_ID=IFNULL("+transactionType+",TRANSACTION_TYPE_ID) "
 						+" AND ITEM_ID IN (IFNULL("+productType+",ITEM_ID),F_GET_DILUENT(IFNULL("+productType+",0))) "
 						+ " AND LGA_ID="+lgaId;
@@ -142,7 +142,7 @@ public class ReportServices {
 			if (params != null) {
 				if((((String)params[0]).equals("null")?null:params[0]) == null){
 					x_QUERY = "select DISTINCT LGA_ID ,LGA_NAME FROM  LGA_WASTAGE_REPORT_V ";
-					x_WHERE_DAY = "Where DATE_FORMAT(TRANSACTION_DATE,'%m/%d/%Y') = '" + params[5] + "' "
+					x_WHERE_DAY = "Where DATE_FORMAT(TRANSACTION_DATE,'%d-%m-%Y') = '" + params[5] + "' "
 							+ "  AND STATE_ID=IFNULL(" + stateId + ",STATE_ID)";
 					x_WHERE_WEEK = "WHERE DATE_FORMAT(TRANSACTION_DATE,'%Y-%v') = '" + params[2] + "-" + params[4]
 							+ "' " + "  AND STATE_ID=IFNULL(" + stateId + ",STATE_ID)";
@@ -152,7 +152,7 @@ public class ReportServices {
 							+ "  AND STATE_ID=IFNULL(" + stateId + ",STATE_ID)";
 				} else {
 					x_WHERE_DAY = " WHERE LGA_ID = IFNULL(" + params[0]
-							+ ",LGA_ID) AND DATE_FORMAT(TRANSACTION_DATE,'%m/%d/%Y') = '" + params[5] + "' ";
+							+ ",LGA_ID) AND DATE_FORMAT(TRANSACTION_DATE,'%d-%m-%Y') = '" + params[5] + "' ";
 					x_WHERE_WEEK = " WHERE LGA_ID = IFNULL(" + params[0]
 							+ ",LGA_ID) AND DATE_FORMAT(TRANSACTION_DATE,'%Y-%v') = '" + params[2] + "-" + params[4]
 							+ "' ";
@@ -211,7 +211,7 @@ public class ReportServices {
 			if (params != null) {
 				if((((String)params[0]).equals("null")?null:params[0]) == null){
 					x_QUERY = "select DISTINCT LGA_ID ,WAREHOUSE_CODE FROM  LGA_STOCK_DISPCREPENCIES ";
-					x_WHERE_DAY = "Where DATE_FORMAT(PHYSICAL_COUNT_DATE,'%m/%d/%Y') = '" + params[5] + "' "
+					x_WHERE_DAY = "Where DATE_FORMAT(PHYSICAL_COUNT_DATE,'%d-%m-%Y') = '" + params[5] + "' "
 							+ "  AND STATE_ID=IFNULL(" + stateId + ",STATE_ID)";
 					x_WHERE_WEEK = "WHERE DATE_FORMAT(PHYSICAL_COUNT_DATE,'%Y-%v') = '" + params[2] + "-" + params[4]
 							+ "' " + "  AND STATE_ID=IFNULL(" +stateId + ",STATE_ID)";
@@ -221,7 +221,7 @@ public class ReportServices {
 							+ "  AND STATE_ID=IFNULL(" + stateId + ",STATE_ID)";
 				} else {
 					x_WHERE_DAY = " WHERE LGA_ID = IFNULL(" + params[0]
-							+ ",LGA_ID) AND DATE_FORMAT(PHYSICAL_COUNT_DATE,'%m/%d/%Y') = '" + params[5] + "' ";
+							+ ",LGA_ID) AND DATE_FORMAT(PHYSICAL_COUNT_DATE,'%d-%m-%Y') = '" + params[5] + "' ";
 					x_WHERE_WEEK = " WHERE LGA_ID = IFNULL(" + params[0]
 							+ ",LGA_ID) AND DATE_FORMAT(PHYSICAL_COUNT_DATE,'%Y-%v') = '" + params[2] + "-" + params[4]
 							+ "' ";
@@ -287,7 +287,7 @@ public class ReportServices {
 				x_query="SELECT ITEM_ID,ITEM_NUMBER, LGA_ID , LGA_NAME,REASON_TYPE,REASON_TYPE_ID,"
 							+"TRANSACTION_QUANTITY,date_format(TRANSACTION_DATE,'%d-%m-%Y') as TRANSACTION_DATE "
 							+"FROM lga_stock_adjustments_day_report_v  "
-							+"where date_format(TRANSACTION_DATE,'%m/%d/%Y')='"+date+"'"
+						+ "where date_format(TRANSACTION_DATE,'%d-%m-%Y')='" + date + "'"
 							+" AND REASON_TYPE_ID=IFNULL("+reasonType+",REASON_TYPE_ID)"
 							+" AND ITEM_ID IN (IFNULL("+productType+",ITEM_ID),F_GET_DILUENT(IFNULL("+productType+",0)))"
 							+" AND LGA_ID=IFNULL("+lgaId+",LGA_ID)";
@@ -320,7 +320,7 @@ public class ReportServices {
 				// param[1]=filterbyfiltervalue
 				switch (params[1]) {
 					case "DAY":
-						andCondition = " date_format(ALLOCATION_DATE,'%m/%d/%Y')='" + params[5] + "'";
+					andCondition = " date_format(ALLOCATION_DATE,'%d-%m-%Y')='" + params[5] + "'";
 						break;
 					case "WEEK":
 						andCondition = " date_format(ALLOCATION_DATE,'%Y-%v')='" + params[2] + "-" + params[4] + "'";

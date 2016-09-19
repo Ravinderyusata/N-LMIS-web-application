@@ -15,39 +15,70 @@ function hideAfterCurrentDate(dateBoxId){
 	
 }
 function myformatter(date){
+	//alert("in formate input data"+date)
 	if(date!=null && date!=''){
 	 var y = date.getFullYear();
 	 var m = date.getMonth()+1;
 	 var d = date.getDate();
+	// alert("in my formater"+d+" "+m+" "+y)
 	 return (d<10?('0'+d):d)+'-'+(m<10?('0'+m):m)+'-'+y;
 	}
 }
-function myparser(s){
-    if (!s) return new Date();
+	function myparser(s){
+	var months=[
+			'Jan',
+			'Feb',
+			'Mar',
+			'Apr',
+			'May',
+			'Jun',
+			'Jul',
+			'Aug',
+			'Sep',
+			'Oct',
+			'Nov',
+			'Dec'
+			];
+	//alert("parser input date"+s)
+	if(s instanceof Date){
+		return s;
+	}
     var ss = (s.split('-'));
-    var y = parseInt(ss[0],10);
-    var m = parseInt(ss[1],10);
-    var d = parseInt(ss[2],10);
+	var m;
+    var d = parseInt(ss[0],10);
+    if(typeof ss[1]=='string'){
+    	//alert("month in string")
+    	//alert("month in string"+ss[1])
+    	 for (var i = 0; i < months.length; i++) {
+			if(months[i]==ss[1]){
+				m=i;
+				break;
+			}
+		}
+    	if(m==undefined){
+    		 m =parseInt(ss[1],10);	
+    		 m=m-1;
+    	}
+    }else{
+    	alert("month in interger")
+    	 m =parseInt(ss[1],10);
+    	alert("month in intert"+m)
+    	 m=m-1;
+    }
+    var y = parseInt(ss[2],10);
+  //  alert("calculated"+d+" "+m+" "+y)
     if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
-        return new Date(d,m-1,y);
+    	// alert(d+" "+m+" "+y)
+        return new Date(y,m,d);
     } else {
         return new Date();
     }
 }
-function formateDate(date){
-	var day;
-	var monthIndex;
-	var year;
-	if(!(date instanceof Date)){
-		date=date.replace(/-/g," ");
-		date=new Date(date);
-	}
-	 day = date.getDate();
-	 monthIndex = date.getMonth()+1;
-	 year = date.getFullYear();
-	return day+'-'+(monthIndex<10?('0'+monthIndex):monthIndex)+'-'+year;
+	function formateDate(date){
+
+	return date;
 }
-function isEmail(email) {
+	function isEmail(email) {
   var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
   return regex.test(email);
 }
@@ -107,14 +138,14 @@ function isEmail(email) {
 			});
 		},
         loadData: function(jq, data){
-            jq.each(function(){
+        	jq.each(function(){
                 $(this).data('datagrid').allRows = null;
             });
             return loadDataMethod.call($.fn.datagrid.methods, jq, data);
         },
       
         getAllRows: function(jq){
-        	return jq.data('datagrid').allRows;
+        	return $(this).datagrid('getRows');
         }
 	})
 })(jQuery);
@@ -123,4 +154,4 @@ function loadPaginationForTable(tableId){
 	$(function(){
 		$(tableId).datagrid('clientPaging');
 	});
-}
+}	

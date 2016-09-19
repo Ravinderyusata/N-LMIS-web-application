@@ -450,6 +450,7 @@ function editLgaStore(buttonId){
         if(!isNaN(dates=formateDate(row.END_DATE))){
         	$('#end_date').datebox('setValue',dates);
         }
+        alert(row.MONTHLY_TARGET_POPULATION)
         $('#mtp_textbox').textbox('setValue',row.MONTHLY_TARGET_POPULATION);
         $('#mtp_textbox').textbox('setText',row.MONTHLY_TARGET_POPULATION);
         $('#add_edit_form').attr('action','save_addedit_lgastore?action=edit&warehouseId='+row.WAREHOUSE_ID);
@@ -477,6 +478,7 @@ function handleHistory(){
 			  type: "post", //send it through post method
 			  data:{WAREHOUSE_ID: row.WAREHOUSE_ID},
 			  dataType:'json',
+			  async:false,
 			  success: function(response) {
 				  if(response[0].CREATED_BY=='' || response[0].CREATED_BY==null){
 					  $('#createdBylabel').text("<Not Available>");
@@ -487,7 +489,6 @@ function handleHistory(){
 				  $('#updatedBylabel').text(response[0].UPDATED_BY);
 				  $('#updatedOnlabel').text(response[0].LAST_UPDATED_ON);
 				  $('#history_dialog').dialog('open').dialog('center').dialog('setTitle','User Record History');  
-				  document.getElementById("loader_div").style.display = "none";
 			  },
 			  error: function(xhr) {
 			   alert("error in get history data");
@@ -495,6 +496,7 @@ function handleHistory(){
 			});
 		
 	 }
+	 document.getElementById("loader_div").style.display = "none";
 }
 function alertBox(message){
 	  $.messager.alert('Warning!',message,'warning');

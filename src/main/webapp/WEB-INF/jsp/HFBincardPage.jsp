@@ -116,7 +116,7 @@
 	<!-- user table -->
 	<table id="HFBinCardTable" class="easyui-datagrid"
 		style="width: 100%; height: 390px" data-options="title:'HF Bin Card',
-		toolbar:'#tb',rownumbers:'true',pagination:'true',singleSelect:'true',
+		toolbar:'#tb',rownumbers:'true',pagination:'true',pageSize:30,singleSelect:'true',
 		striped:'true',remoteSort:'false'">
 	</table>
 
@@ -296,5 +296,6 @@ function loadHfDrpdn(lgaId){
 		    });
 		   }
 		  });
+		  loadPaginationForTable(HFBinCardTable);
 </script>
 </html>

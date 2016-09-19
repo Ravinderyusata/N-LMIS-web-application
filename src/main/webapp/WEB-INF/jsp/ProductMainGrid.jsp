@@ -174,7 +174,7 @@ font-weight: bold;
 	<!-- user table -->
 	<table id="productOverViewTable" class="easyui-datagrid"
 		style="width: 100%; height: 430px" title="Product Overview"
-		data-options="toolbar:'#tb', rownumbers:'true', pagination:'true', singleSelect:'true',
+		data-options="toolbar:'#tb', rownumbers:'true', pagination:'true',pageSize:30, singleSelect:'true',
 		striped:'true', remoteSort:'false'">
 	</table>
 	
@@ -804,5 +804,6 @@ function loadListDeviceAssociationForm(productName){
 		textField : 'label'
 	});
 }
+loadPaginationForTable(productOverViewTable);
 </script>
 </html>

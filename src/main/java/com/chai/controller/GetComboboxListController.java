@@ -81,7 +81,7 @@ public class GetComboboxListController {
 	@RequestMapping(value = "/getUserTypelist")
 	public void getUserTypelist(HttpServletRequest request,HttpServletResponse respones){
 		System.out.println("in GetComboboxListController.getUserTypelist()");
-		try{
+		try{ 
 			JSONArray data;
 			 data=comboboxServices.getComboboxList("USER_TYPE",null);
 			

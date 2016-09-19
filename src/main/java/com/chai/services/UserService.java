@@ -74,7 +74,7 @@ public class UserService {
 			}
 			// System.out.println("list size "+list.size());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			loginListBeanAndTimebean = null;
 			e.printStackTrace();
 		} finally {
 			session.close();

@@ -106,9 +106,9 @@
 		</ul>
 	</div>
 	<!-- user table -->
-	<table id="HFBinCardTable" class="easyui-datagrid"
+	<table id="hfEmergencyAllocationReportTable" class="easyui-datagrid"
 		style="width: 100%; height: 390px" data-options="title:'HF Bin Card',
-		toolbar:'#tb',rownumbers:'true',pagination:'true',singleSelect:'true',
+		toolbar:'#tb',rownumbers:'true',pagination:'true',pageSize:30,singleSelect:'true',
 		striped:'true',remoteSort:'false'">
 	</table>
 
@@ -153,7 +153,7 @@ function showHFBinCarddata(){
 		var month=$('#month_combobox').combobox('getValue');
 		var quarter=$('#month_combobox').combobox('getValue');
 		var day=$('#datePicker').combobox('getValue');
-		$('#HFBinCardTable').datagrid({
+		$('#hfEmergencyAllocationReportTable').datagrid({
 			url : 'get_hf_emargency_allocation_report_grid_data',
 			remoteSort : false,
 			queryParams:{hfId:hfId,	filterBy:filterBy,year:year,
@@ -169,15 +169,15 @@ function showHFBinCarddata(){
 	 ] ]
 		});
 		if($('#hf_combobox').combobox('getText')=='All'){
-			$('#HFBinCardTable').datagrid('showColumn', 'CUSTOMER_NAME');
-			$('#HFBinCardTable').datagrid('hideColumn', 'ITEM_NAME');
-			$('#HFBinCardTable').datagrid('hideColumn', 'ALLOCATION');
-			$('#HFBinCardTable').datagrid('hideColumn', 'ALLOCATION_DATE');
+			$('#hfEmergencyAllocationReportTable').datagrid('showColumn', 'CUSTOMER_NAME');
+			$('#hfEmergencyAllocationReportTable').datagrid('hideColumn', 'ITEM_NAME');
+			$('#hfEmergencyAllocationReportTable').datagrid('hideColumn', 'ALLOCATION');
+			$('#hfEmergencyAllocationReportTable').datagrid('hideColumn', 'ALLOCATION_DATE');
 		}else{
-			$('#HFBinCardTable').datagrid('hideColumn', 'CUSTOMER_NAME');
-			$('#HFBinCardTable').datagrid('showColumn', 'ITEM_NAME');
-			$('#HFBinCardTable').datagrid('showColumn', 'ALLOCATION');
-			$('#HFBinCardTable').datagrid('showColumn', 'ALLOCATION_DATE');
+			$('#hfEmergencyAllocationReportTable').datagrid('hideColumn', 'CUSTOMER_NAME');
+			$('#hfEmergencyAllocationReportTable').datagrid('showColumn', 'ITEM_NAME');
+			$('#hfEmergencyAllocationReportTable').datagrid('showColumn', 'ALLOCATION');
+			$('#hfEmergencyAllocationReportTable').datagrid('showColumn', 'ALLOCATION_DATE');
 		}
 	}
 }
@@ -250,5 +250,6 @@ function loadHfDrpdn(lgaId){
 		    });
 		   }
 		  });
+		  loadPaginationForTable(hfEmergencyAllocationReportTable);
 </script>
 </html>

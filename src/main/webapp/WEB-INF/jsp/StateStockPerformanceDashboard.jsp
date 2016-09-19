@@ -73,14 +73,10 @@ h6 {
 				<a id="exportLinkBtn" class="easyui-linkbutton" href="get_state_stock_perfo_dashboard_export">Export</a>
 				<!-- filters end here -->
 			</div>
-			<div style="margin-bottom: 0px; text-align: center; display: none;font-size: 16px; font-family: sans-serif; color: green; font-weight:bold" 
-				id="lgaStockPerformanceDashboardHeaderDiv">
-				LGA Stock Performance Dashboard				
-			</div>
 			<div class="row" style="margin-bottom: 0px">
 				<!-- FOR TEST : border color of table_div - #95d0b7 -->
-				<hr style="width: 100%;">
-				<div id="table_div" class="col l10" style="overflow-y:auto;height:60%; ">
+				<hr style="width: 100%;float: left;color: #f8f8f8;">
+				<div id="table_div" class="col l10" style="overflow-y:auto;height:57%; ">
 					<!-- dynamic row created and inserted here... -->
 				</div>
 			

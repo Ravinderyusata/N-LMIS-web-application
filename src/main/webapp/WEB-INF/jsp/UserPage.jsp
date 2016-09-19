@@ -100,10 +100,7 @@ font-weight: bold;
 </head>
 <body style="margin: 0px;" onload="setRole()">
 <!-- to check seesoin is null or not -->
-		<%if(request.getSession().getAttribute("userBean")==null){
-		response.sendRedirect("loginPage");
-		} 
-		%>
+		
 	<!-- headr of page -->
 	<jsp:include page="headerforpages.jsp"></jsp:include>
 
@@ -622,6 +619,7 @@ function handleHistory(){
 			  type: "post", //send it through post method
 			  data:{user_id: row.USER_ID},
 			  dataType:'json',
+			  async:false,
 			  success: function(response) {
 				  if(response[0].CREATED_BY=='' || response[0].CREATED_BY==null){
 					  $('#createdBylabel').text("<Not Available>");
@@ -632,7 +630,7 @@ function handleHistory(){
 				  $('#updatedBylabel').text(response[0].UPDATED_BY);
 				  $('#updatedOnlabel').text(response[0].LAST_UPDATED_ON);
 				  $('#history_dialog').dialog('open').dialog('center').dialog('setTitle','User Record History');  
-				  document.getElementById("loader_div").style.display = "none";
+				 // document.getElementById("loader_div").style.display = "none";
 			  },
 			  error: function(xhr) {
 			   alert("error in get history data");
@@ -640,6 +638,7 @@ function handleHistory(){
 			});
 		
 	 }
+	 document.getElementById("loader_div").style.display = "none";
 }
 function handleChangePassword(){
 	 var row = $('#userListTable').datagrid('getSelected');

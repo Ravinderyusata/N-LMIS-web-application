@@ -45,6 +45,14 @@ public class PrimaryHealthFacilityPageController {
 	public void getPrimaryHfListData(HttpServletRequest request, HttpServletResponse respones) {
 	System.out.println("in PrimaryHealthFacilityPage.getPrimaryHfListData()");
 	try{
+			/*
+			 * when remote sort is true then it works System.out.println("page:"
+			 * + request.getParameter("page")); System.out.println("rows:" +
+			 * request.getParameter("rows")); System.out.println("order:" +
+			 * request.getParameter("order")); System.out.println("sort:" +
+			 * request.getParameter("sort"));
+			 */
+
 		String state_id=request.getParameter("state_id");
 		AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
 		System.out.println("warehouse id"+request.getParameter("warehouse_id"));

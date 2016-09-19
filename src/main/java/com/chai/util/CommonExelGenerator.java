@@ -41,7 +41,7 @@ public class CommonExelGenerator extends AbstractExcelView {
 			}
 			int i=0;
 			for (i = 0; i < data.length(); i++) {
-				System.out.println("row" + i);
+				// System.out.println("row" + i);
 				HSSFRow row = worksheet.createRow(i+1);
 				JSONObject rowObject = (JSONObject) data.get(i);
 				cellCount=0;
@@ -56,7 +56,7 @@ public class CommonExelGenerator extends AbstractExcelView {
 					 cellCount++;
 				}
 			}	
-			System.out.println("leaving... excel builder");
+			System.out.println("now of row writed" + i);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

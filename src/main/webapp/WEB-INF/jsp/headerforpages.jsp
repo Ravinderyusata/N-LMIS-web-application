@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <head>
+<link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico" />
 <link rel="  stylesheet" href="resources/easyui/themes/default/easyui.css" type="text/css">
 <link rel=" stylesheet" href="resources/css/w3css.css" type="text/css">
 <link rel="stylesheet" href="resources/easyui/themes/icon.css" type="text/css">

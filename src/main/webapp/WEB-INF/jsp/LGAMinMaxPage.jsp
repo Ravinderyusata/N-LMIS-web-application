@@ -129,7 +129,7 @@ font-weight: bold;
 <script type="text/javascript" src="resources/js/jquery-2.2.3.min.js"></script>
 <script type="text/javascript"
 	src="resources/easyui/jquery.easyui.min.js"></script>
-<script src="resources/js/materialize.min.js" type="text/javascript"></script>
+<script src="resources/js/common.js" type="text/javascript"></script>
 <script type="text/javascript">
 function showLgaMinMaxData(){
 	var message="";
@@ -260,5 +260,6 @@ $('#year_combobox').combobox({
 		});
 	}
 });
+loadPaginationForTable(LgaMinMaxTable);
 </script>
 </html>

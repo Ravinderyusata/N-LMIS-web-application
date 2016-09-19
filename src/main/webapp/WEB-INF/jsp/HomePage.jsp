@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html id="homepageHtmlElement">
 <head>
+<link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <link rel="stylesheet" href="resources/css/materialize.min.css"	type="text/css">
@@ -68,6 +69,11 @@ nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
 -ms-transform: rotate(270deg); /* IE 9 */
     -webkit-transform: rotate(270deg); /* Safari */
     transform: rotate(270deg);
+}
+#license_modal p{
+line-height: 1;
+font-family: arial;
+font-stretch: expanded;
 }
 </style>
 <script type="text/javascript">
@@ -434,6 +440,10 @@ $(document).ready(function(){
 			}		    
 		});		
 	});
+	
+	function showLicense(){
+		 $('#license_modal').openModal();
+	}
 </script>
 </head>
 
@@ -512,6 +522,11 @@ $(document).ready(function(){
 		<li><a id="11" href="hf_stock_summary_sheet_page" name="stockDashboardTab3View">HF Stock Summary Sheet</a></li>
 	</ul>
 	
+	<!--SCCO - About - Dropdown Structure -->
+	<ul id="aboutDropdown" class="dropdown-content">
+		<li id="0"><a href="#" name="stockDashboardTab1View" onclick="showLicense()">License</a></li>
+	</ul>
+	
 	<nav class="#1b5e20 green darken-1">
 		<div class="nav-wrapper">
 			<!-- <a href="#!" class="brand-logo">Logo</a> -->
@@ -546,6 +561,7 @@ $(document).ready(function(){
 						Stock Dashboard<i class="material-icons right">arrow_drop_down</i>
 					</a>
 				</li>
+				
 			</ul>
 		</div>
 	</nav>
@@ -591,6 +607,32 @@ $(document).ready(function(){
 	<div style="display: none;" id="loader_div" class="loader_div">
 		<div class="loader" id="loader_show"></div>
 	</div>
+	
+	<!-- Modal Structure For license -->
+  <div id="license_modal" class="modal modal-fixed-footer" >
+    <div class="modal-content" >
+      <p><i>Copyright (c) <2016>, National Primary Health Care Development Agency, Nigeria
+		All rights reserved.</i></p>
+		
+		<p><i>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following 
+		conditions are met:</i></p>
+		 
+		<p><i>1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</i></p>
+		
+		<p><i>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in
+		 the documentation and/or other materials provided with the distribution.</i></p>
+        
+		 <p><i>
+		  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
+		  BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+		  EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+		  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+		  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, 
+		  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+		  POSSIBILITY OF SUCH DAMAGE.</i></p>
+    </div>
+    
+  </div>
 </body>
 
 <style>

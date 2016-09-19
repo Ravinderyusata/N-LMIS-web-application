@@ -106,7 +106,7 @@
 				<li>
 				<div id="dateFilter">
 					<label id="data-label">Date:</label><br>
-					<input id="datePicker" type="text" class="easyui-datebox">
+					<input id="datePicker" type="text" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox">
 					</div>
 				</li>
 				<li>
@@ -152,7 +152,6 @@
 </body>
 <script src="resources/js/jquery-2.2.3.min.js"></script>
 <script src="resources/easyui/jquery.easyui.min.js"></script>
-<script src="resources/js/materialize.min.js" type="text/javascript"></script>
 <script src="resources/js/common.js"></script>
 <script>
 $("#filterby-combobox").attr("selectedIndex", -1);
@@ -319,6 +318,6 @@ $('#yearCombobox').combobox({
 		}
 });
 
-
+loadPaginationForTable(LgaWastageTable);
 </script>
 </html>

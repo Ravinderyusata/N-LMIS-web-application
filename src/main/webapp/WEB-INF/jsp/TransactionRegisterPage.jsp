@@ -97,11 +97,11 @@
 		</div>&nbsp;&nbsp;
 		<div id="from_dateFilter">
 			<label id="from_date_label">From Date:</label><br>
-					<input id="from_datePicker" type="text" class="easyui-datebox" style="width: 120px;" >
+					<input id="from_datePicker" type="text" data-options="formatter:myformatter,parser:myparser"  class="easyui-datebox" style="width: 120px;" >
 		</div>&nbsp;&nbsp;
 		<div id="to_dateFilter">
 			<label id="to_date_label">To Date:</label><br>
-					<input id="to_datePicker" type="text" class="easyui-datebox" style="width: 120px;">
+					<input id="to_datePicker" type="text" data-options="formatter:myformatter,parser:myparser"  class="easyui-datebox" style="width: 120px;">
 		</div>&nbsp;&nbsp;
 		<div id="refresh_button" style="margin-top: 12px;">
 			 	<a href="#" class="easyui-linkbutton" 
@@ -109,7 +109,7 @@
 				 </a>
 		</div>&nbsp;&nbsp;
 		<div id="export_button" style="margin-top: 12px;">
-			<a href="#" class="easyui-linkbutton" 
+			<a href="#" class="easyui-linkbutton" onclick="handleExport()"
 				>Export
 			</a>
 		</div>
@@ -120,7 +120,7 @@
 	<div id="transation_reg_table_div" style="margin-left: 5px">
 	<table id="transactionRegisterTable" class="easyui-datagrid"
 		style="width: 100%; height: 450px;" title="Transaction History"
-		data-options="toolbar:'#tb', rownumbers:'true', pagination:'true', singleSelect:'true',
+		data-options="toolbar:'#tb', rownumbers:'true', pagination:'true',pageSize:50, singleSelect:'true',
 		striped:'true', remoteSort:'false'">
 	</table>
 	</div>
@@ -155,7 +155,6 @@ function transactionRegisterData(){
 		var toDate=$('#to_datePicker').combobox('getValue');
 		$('#transactionRegisterTable').datagrid({
 			url : 'get_transaction_register_grid_data',
-			remoteSort : false,
 			queryParams :{lgaId:lgaId,productId:productId,transactionTypeId:transactionTypeId,fromDate:fromDate,toDate:toDate},
 			columns : [ [{field:'TRANSACTION_ID',title:'TRANSACTION_ID',sortable:true,hidden:true},
 			             {field:'ITEM_ID',title:'ITEM_ID',sortable:true,hidden:true},
@@ -225,5 +224,13 @@ function loadStateComboboxList(){
 		valueField : 'value',
 		textField : 'label'
 	});
+	function handleExport(){
+		if($('#transactionRegisterTable').datagrid('getRows').length>0){
+			window.location.href="transition_register_export";
+		}else{
+			alertBox("Table is Empty")
+		}
+	}
+	loadPaginationForTable(transactionRegisterTable);
 </script>
 </html>

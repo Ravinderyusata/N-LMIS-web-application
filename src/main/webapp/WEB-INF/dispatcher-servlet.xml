@@ -28,5 +28,10 @@
 	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	<mvc:annotation-driven />
-
+ <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/*" />
+			<bean class="com.chai.util.SessionManagement" />
+		</mvc:interceptor>
+	</mvc:interceptors> 
 </beans>

@@ -73,7 +73,8 @@
 	<div style="margin-left: 5px;">
 	<table id="itemOnHandTable" class="easyui-datagrid"
 		style="width: 100%; height: 470px;"
-		data-options="title:'Product Stock Balance',toolbar:'#filters', rownumbers:'true', pagination:'true', singleSelect:'true',
+		data-options="title:'Product Stock Balance',toolbar:'#filters', rownumbers:'true',
+		 pagination:'true', singleSelect:'true',pageSize:30,
 		striped:'true', remoteSort:'false'">
 	</table>
 	</div>
@@ -112,7 +113,7 @@
 <script type="text/javascript" src="resources/js/jquery-2.2.3.min.js"></script>
 <script type="text/javascript"
 	src="resources/easyui/jquery.easyui.min.js"></script>
-<script src="resources/js/materialize.min.js" type="text/javascript"></script>
+	<script src="resources/js/common.js" type="text/javascript"></script>
 <script type="text/javascript">
 function filterGridData(lga_id,product_id){
 	var warehouse_id="";
@@ -197,5 +198,6 @@ function loadLgaComboboxList(stateId){
 			}
 		});
 	}
+	loadPaginationForTable(itemOnHandTable);
 </script>
 </html>

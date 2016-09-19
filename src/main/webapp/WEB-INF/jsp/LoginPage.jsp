@@ -6,29 +6,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico" />
 <link rel="stylesheet" href="resources/css/login.css" type="text/css">
 <link rel="stylesheet" href="resources/css/materialize.min.css" type="text/css">
 <title>Login Page</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<style type="text/css">
-</style>
+
 <script type="text/javascript">
-function showMessage() {
-	var message='${errormessage}';
-	if(message==''){
-		$('#message').text("Enter UserName And Password");
-	}else{
-		$('#message').css('color','red');
-		$('#message').text(message);
-	}
-}
 history.pushState(null, null, "loginPage");
 window.addEventListener('popstate', function () {
     history.pushState(null, null, "loginPage");
 });
 </script>
 </head>
-<body style="background-color: #ebeff9;" onload="showMessage()">
+<body style="background-color: #ebeff9;" ">
 
 	<div id="mainDiv" class="row" >
 		<div id="logindiv" style="size:auto; margin: 2%;padding-left: 10%;" class="row">
@@ -41,7 +32,7 @@ window.addEventListener('popstate', function () {
 					<h4>Logistics Stock Management Information System</h4>
 					<hr style="width: inherit;">
 				</div>
-				<f:form class="col s12" action="login" method="post" modelAttribute="userBean"  onsubmit="return validate()">
+				<f:form id="loginForm" class="col s12" action="login" method="post" modelAttribute="userBean" >
 					<div class="row">
 						<div class="input-field ">
 							<f:input type="text" id="username" cssClass="validate" path="x_LOGIN_NAME" /> 
@@ -54,21 +45,93 @@ window.addEventListener('popstate', function () {
 							 <label for="password">*Password</label>
 						</div>
 						<div >
-						<h6 id="message"></h6>
+						<h6 id="message">Enter UserName And Password</h6>
 						</div>
 					</div>
 					<div  class="center">
-					<button type="submit" class="btn waves-effect waves-light" value="Login"  >Login</button>
+							<div id="loader_div"style="display: none">
+			<div class="preloader-wrapper small active" >
+			      <div class="spinner-layer spinner-blue">
+			        <div class="circle-clipper left">
+			          <div class="circle"></div>
+			        </div><div class="gap-patch">
+			          <div class="circle"></div>
+			        </div><div class="circle-clipper right">
+			          <div class="circle"></div>
+			        </div>
+			      </div>
+			
+			      <div class="spinner-layer spinner-red">
+			        <div class="circle-clipper left">
+			          <div class="circle"></div>
+			        </div><div class="gap-patch">
+			          <div class="circle"></div>
+			        </div><div class="circle-clipper right">
+			          <div class="circle"></div>
+			        </div>
+			      </div>
+			
+			      <div class="spinner-layer spinner-yellow">
+			        <div class="circle-clipper left">
+			          <div class="circle"></div>
+			        </div><div class="gap-patch">
+			          <div class="circle"></div>
+			        </div><div class="circle-clipper right">
+			          <div class="circle"></div>
+			        </div>
+			      </div>
+			
+			      <div class="spinner-layer spinner-green">
+			        <div class="circle-clipper left">
+			          <div class="circle"></div>
+			        </div><div class="gap-patch">
+			          <div class="circle"></div>
+			        </div><div class="circle-clipper right">
+			          <div class="circle"></div>
+			        </div>
+			      </div>
+    </div>
+	</div>
+	<br>
+					<button  class="btn waves-effect waves-light" value="Login" onclick="userLogin()"  >Login</button>
 					</div>
 				</f:form>
+		
 			</div>
+			
 		</div>
 		<jsp:include page="footer.jsp"></jsp:include>
 	</div>
+	
 </body>
 <script src="resources/js/jquery-2.2.3.min.js" type="text/javascript"></script>
 <script src="resources/js/materialize.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+function userLogin(){
+	 $("#loginForm").submit(function(event) {
+			event.preventDefault();
+			 /* get the action attribute from the <form action=""> element */
+	      var $form = $( this ),
+	          url = $form.attr( 'action' );
+			 /* Send the data using post with element id name and name2*/
+	     if(validate()){
+	    	 $('#loader_div').show();
+	    	 var posting = $.post( url+"?userName="+$('#username').val()+"&password="+$('#password').val());
+
+		      /* Alerts the results */
+		      posting.done(function( data ) {
+		    	  if (data.toString()=='succsess'){
+		                window.location.href="homepage";
+		           	 } else {
+		           		$('#message').css('color','red');
+		        		$('#message').text(data.toString());
+		           }
+		    	  $('#loader_div').hide();
+		      });
+	     }
+	    });
+}
+
 function validate(){
 	$('#message').css('color','red');
 	if($('#password').val()=='' && $('#username').val()==''){

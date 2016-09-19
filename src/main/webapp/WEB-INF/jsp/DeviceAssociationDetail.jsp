@@ -102,7 +102,7 @@
 	<!-- user table -->
 	<table id="deviceAssociationTable" class="easyui-datagrid"
 		style="width: 100%; height: 430px" title="Device Association Details"
-		toolbar="#tb" rownumbers="true" pagination="true" singleSelect="true"
+		toolbar="#tb" rownumbers="true" pagination="true" pageSize=30 singleSelect="true"
 		striped="true" remoteSort="false">
 
 
@@ -166,7 +166,7 @@
 </body>
 <script type="text/javascript" src="resources/js/jquery-2.2.3.min.js"></script>
 <script type="text/javascript" src="resources/easyui/jquery.easyui.min.js"></script>
-
+<script src="resources/js/common.js" type="text/javascript"></script>
 <script type="text/javascript">
 	function addDeviceAssociation() {
 		 $('#add_edit_form').form('clear');
@@ -328,5 +328,6 @@ $('#lga_combobox').combobox({
 	}
 
 });
+loadPaginationForTable(deviceAssociationTable);
 </script>
 </html>

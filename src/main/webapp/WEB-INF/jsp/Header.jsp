@@ -1,3 +1,4 @@
+
  <!-- style="border: 1px solid #d32f2f" -->
 <div class="row" style="margin-bottom: 0px;">
 	<div class="col l1" style="height:118px; width:142px">
@@ -13,6 +14,9 @@
 	</div>
     <div class="col l2 valign-wrapper" style="height: 118px; width:214px; line-height:25px">      	
 		<div class="row valign valign-wrapper logout_div">			
+			<a id="About_btn" href="#" title="About license">
+				<img src="resources/images/About.png" alt="AboutLicenset-icon" onclick="showLicense()">
+			</a>&nbsp;&nbsp;&nbsp;&nbsp;
 			<a id="logout_btn" href="logOutPage?logOutFlag=logOut" title="Logout">
 				<img src="resources/images/Logout.png" alt="logout-icon">
 			</a>

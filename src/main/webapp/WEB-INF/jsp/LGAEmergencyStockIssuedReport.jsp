@@ -101,7 +101,7 @@
 				<li>
 				<div id="dateFilter">
 					<label id="data-label">Date:</label><br>
-					<input id="datePicker" type="text" class="easyui-datebox">
+					<input id="datePicker" type="text" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser">
 					</div>
 				</li>
 				<li>
@@ -134,7 +134,7 @@
 	<!-- user table -->
 	<table id="lGAEmergencyStockIssueTable" class="easyui-datagrid"
 		style="width: 100%; height: 410px" title="LGA Emergency Report"
-		 rownumbers="true" pagination="true" singleSelect="true"
+		 rownumbers="true" pagination="true" pageSize=30 singleSelect="true"
 		striped="true" remoteSort="false">
 	</table>
 		
@@ -300,5 +300,7 @@ $('#yearCombobox').combobox({
 											  
 		}
 });
+
+loadPaginationForTable(lGAEmergencyStockIssueTable);
 </script>
 </html>
