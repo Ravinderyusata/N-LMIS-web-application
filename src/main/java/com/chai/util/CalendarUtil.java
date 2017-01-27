@@ -192,7 +192,7 @@ public class CalendarUtil {
 				weeks.put(obj);
 			}
 		}else{
-			for(int i=1;i<Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);i++ ){
+			for(int i=(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR));i>0;i-- ){
 				JSONObject obj=new JSONObject();
 				if(i<10){
 					obj.put("value", "0"+Integer.toString(i));

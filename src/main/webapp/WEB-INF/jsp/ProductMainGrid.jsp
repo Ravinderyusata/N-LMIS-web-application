@@ -10,7 +10,11 @@
 <title>Product Overview Page</title>
 <link rel="stylesheet" href="resources/css/buttontoolbar.css"
 	type="text/css">
+<link rel=" stylesheet" href="resources/css/w3css.css" type="text/css">
 <link rel="stylesheet" href="resources/css/table.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/demo/demo.css">
 <script type="text/javascript">
 	function setRole() {
 		var user = '${userBean.getX_ROLE_NAME()}';
@@ -55,7 +59,7 @@
 			loadProductOverViewData('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		}
-		document.getElementById("common_lable").innerHTML = "Product Overview";
+		/* document.getElementById("common_lable").innerHTML = "Product Overview";
 		if(user=="NTO"){
 			document.getElementById("user").innerHTML = "User: National Admin";
 			document.getElementById("warehouse_name").innerHTML ="National: "+ '${userBean.getX_WAREHOUSE_NAME()}';
@@ -65,7 +69,7 @@
 		}else if(user=="LIO" || user=="MOH"){
 			document.getElementById("user").innerHTML = "User: "+user+'${userBean.getX_WAREHOUSE_NAME()}' ;
 			document.getElementById("warehouse_name").innerHTML ="LGA :"+ '${userBean.getX_WAREHOUSE_NAME()}';
-		}
+		} */
 
 	}
 </script>
@@ -113,14 +117,9 @@ font-weight: bold;
 </head>
 <body style="margin: 0px;" onload="setRole()">
 
-		<!--  for check seesion is null on not -->
-
-		<%if(request.getSession().getAttribute("userBean")==null){
-		response.sendRedirect("loginPage");
-		} 
-		%>
+	
 	<!-- headr of page -->
-	<jsp:include page="headerforpages.jsp"></jsp:include>
+	<%-- <jsp:include page="headerforpages.jsp"></jsp:include> --%>
 									<!-- status dialog -->
 	<div id="stutus_dialog" ></div>
 	<!-- button bar -->
@@ -183,7 +182,7 @@ font-weight: bold;
 	
 	<!--  footer page -->
 
-	<jsp:include page="footer-for-page.jsp"></jsp:include>
+	<%-- <jsp:include page="footer-for-page.jsp"></jsp:include> --%>
 	
 	<!-- Product Add/Edit form -->
 	
@@ -389,6 +388,7 @@ font-weight: bold;
 <script type="text/javascript"
 	src="resources/easyui/jquery.easyui.min.js"></script>
 <script src="resources/js/common.js" type="text/javascript"></script>
+<script src="resources/js/datagrid_agination.js" type="text/javascript"></script>
 <script type="text/javascript">
 function oncheckStateCheckBox(){
 if($('#lga_combobox').combobox('getValue')!="" && $('#state_checkbox').is(':checked'))	{

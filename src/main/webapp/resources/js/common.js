@@ -25,20 +25,7 @@ function myformatter(date){
 	}
 }
 	function myparser(s){
-	var months=[
-			'Jan',
-			'Feb',
-			'Mar',
-			'Apr',
-			'May',
-			'Jun',
-			'Jul',
-			'Aug',
-			'Sep',
-			'Oct',
-			'Nov',
-			'Dec'
-			];
+	var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 	//alert("parser input date"+s)
 	if(s instanceof Date){
 		return s;
@@ -60,9 +47,9 @@ function myformatter(date){
     		 m=m-1;
     	}
     }else{
-    	alert("month in interger")
+    	//alert("month in interger")
     	 m =parseInt(ss[1],10);
-    	alert("month in intert"+m)
+    	//alert("month in intert"+m)
     	 m=m-1;
     }
     var y = parseInt(ss[2],10);
@@ -83,75 +70,84 @@ function myformatter(date){
   return regex.test(email);
 }
 
-//for pagination enable
-(function($){
-	function pagerFilter(data){
-		if ($.isArray(data)){	// is array
-			data = {
-				total: data.length,
-				rows: data
-			}
-		}
-		var target = this;
-		var dg = $(target);
-		var state = dg.data('datagrid');
-		var opts = dg.datagrid('options');
-		if (!state.allRows){
-			state.allRows = (data.rows);
-		}
+
+
+//Ajax request by GET method with request header for ajax
+function ajaxGetRequest(url, callFunction) {
+	$.ajax({
+		url: url, 
+		type:'GET',
+		beforeSend: function(xhr){
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.setRequestHeader("X-Requested-With", "ajax");
+			},
+		success: function(result){
+			callFunction(result);
 		
-		var start = (opts.pageNumber-1)*parseInt(opts.pageSize);
-		var end = start + parseInt(opts.pageSize);
-		data.rows = state.allRows.slice(start, end);
-		return data;
-	}
-
-	var loadDataMethod = $.fn.datagrid.methods.loadData;
-	$.extend($.fn.datagrid.methods, {
-		clientPaging: function(jq){
-			return jq.each(function(){
-				var dg = $(this);
-                var state = dg.data('datagrid');
-                var opts = state.options;
-                opts.loadFilter = pagerFilter;
-                var onBeforeLoad = opts.onBeforeLoad;
-                opts.onBeforeLoad = function(param){
-                    state.allRows = null;
-                    return onBeforeLoad.call(this, param);
-                }
-                var pager = dg.datagrid('getPager');
-				pager.pagination({
-					onSelectPage:function(pageNum, pageSize){
-						opts.pageNumber = pageNum;
-						opts.pageSize = pageSize;
-						pager.pagination('refresh',{
-							pageNumber:pageNum,
-							pageSize:pageSize
-						});
-						dg.datagrid('loadData',state.allRows);
-					},
-					onRefresh:function(){
-						dg.datagrid('reload');
-					}
-				});
-               
-			});
 		},
-        loadData: function(jq, data){
-        	jq.each(function(){
-                $(this).data('datagrid').allRows = null;
-            });
-            return loadDataMethod.call($.fn.datagrid.methods, jq, data);
-        },
-      
-        getAllRows: function(jq){
-        	return $(this).datagrid('getRows');
-        }
-	})
-})(jQuery);
-
-function loadPaginationForTable(tableId){
-	$(function(){
-		$(tableId).datagrid('clientPaging');
+	error: function(xhr,status,error){
+		parent.window.location.href = 'logOutPage';
+		}
 	});
-}	
+}
+
+//Ajax request by POST method with request header for ajax
+function ajaxPostRequest(url, queryString, callFunction) {
+	$.ajax({
+		url: url, 
+		type:'POST',
+		data:queryString,
+		beforeSend: function(xhr){
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.setRequestHeader("X-Requested-With", "ajax");
+			},
+		success: function(result){
+			callFunction(result);
+		
+		},
+	error: function(xhr,status,error){
+		parent.window.location.href = 'logOutPage';
+		}
+	});
+}
+
+
+//Ajax request by GET method with request header for ajax synchronous
+function ajaxGetRequestSync(url, callFunction) {
+	$.ajax({
+		url: url, 
+		type:'GET',
+		async:false,
+		beforeSend: function(xhr){
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.setRequestHeader("X-Requested-With", "ajax");
+			},
+		success: function(result){
+			callFunction(result);
+		
+		},
+	error: function(xhr,status,error){
+		parent.window.location.href = 'logOutPage';
+		}
+	});
+}
+//Ajax request by Post method with request header for ajax synchronous
+function ajaxPostRequestSync(url,queryString, callFunction) {
+	$.ajax({
+		url:url, 
+		type:'POST',
+		data:queryString,
+		async:false,
+		beforeSend: function(xhr){
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.setRequestHeader("X-Requested-With", "ajax");
+			},
+		success: function(result){
+			callFunction(result);
+		
+		},
+		error: function(xhr,status,error){
+		parent.window.location.href = 'logOutPage';
+		}
+	});
+}

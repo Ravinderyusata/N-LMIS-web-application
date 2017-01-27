@@ -10,7 +10,11 @@
 <title>LGA Wastage Report</title>
 <link rel="stylesheet" href="resources/css/buttontoolbar.css"
 	type="text/css">
+<link rel=" stylesheet" href="resources/css/w3css.css" type="text/css">
 <link rel="stylesheet" href="resources/css/table.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/demo/demo.css">
 <script>
 	function setRole() {
 		var user = '${userBean.getX_ROLE_NAME()}';
@@ -61,23 +65,13 @@
 			$('#yearFilter').hide();
 			break;
 		}
-		document.getElementById("common_lable").innerHTML = "Reports";
-		document.getElementById("user").innerHTML = "User: " + user + " "
-				+ '${userBean.getX_WAREHOUSE_NAME()}';
-		document.getElementById("warehouse_name").innerHTML = '${userBean.getX_WAREHOUSE_NAME()}';
-
+	
 	}		
 </script>
 </head>
 <body style="margin: 0px;" onload="setRole()">
-<!-- to check seesoin is null or not -->
-		<%if(request.getSession().getAttribute("userBean")==null){
-		response.sendRedirect("loginPage");
-		} 
-		%>
-	<!-- headr of page -->
-	<jsp:include page="headerforpages.jsp"></jsp:include>
-									<!-- status dialog -->
+
+							<!-- status dialog -->
 	<div id="stutus_dialog" ></div>
 	<div class="report_title" style="text-align: center;font-size: 15px;">LGA Wastage Report</div>
 	
@@ -146,13 +140,11 @@
 
 	</table>
 	
-	
-	<!--  footer page -->
-	<jsp:include page="footer-for-page.jsp"></jsp:include>
 </body>
 <script src="resources/js/jquery-2.2.3.min.js"></script>
 <script src="resources/easyui/jquery.easyui.min.js"></script>
 <script src="resources/js/common.js"></script>
+<script src="resources/js/datagrid_agination.js" type="text/javascript"></script>
 <script>
 $("#filterby-combobox").attr("selectedIndex", -1);
 function alertBox(message){

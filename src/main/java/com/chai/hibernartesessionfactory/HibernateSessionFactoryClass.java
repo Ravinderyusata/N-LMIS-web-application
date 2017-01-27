@@ -3,33 +3,25 @@ package com.chai.hibernartesessionfactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-
 public class HibernateSessionFactoryClass {
 	//Annotation based configuration
-	private static SessionFactory sessionAnnotationFactory=buildSessionAnnotationFactory();
-	 private static SessionFactory buildSessionAnnotationFactory() {
-	        try {
-	            // Create the SessionFactory from hibernate.cfg.xml
-	            Configuration configuration = new Configuration();
-	            configuration.configure("hibernate.cfg.xml");
-	            System.out.println("Hibernate Annotation Configuration loaded");
-	             
-//	            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-//	            System.out.println("Hibernate Annotation serviceRegistry created");
-	             
-	            SessionFactory sessionFactory = configuration.buildSessionFactory();
-	             
-	            return sessionFactory;
-	        }
-	        catch (Throwable ex) {
-	            // Make sure you log the exception, as it might be swallowed
-	            System.err.println("Initial SessionFactory creation failed." + ex);
-	            throw new ExceptionInInitializerError(ex);
-	        }
-	    } 
+	 private static String dbConfigXMLNameWithExtensionMYSQL = "hibernate.cfg.xml";
+
+	 private static SessionFactory buildSessionFactory(String dbConfigXMLNameWithExtension) {
+	  try {
+	   System.out.println("Hibernate Configuration load");
+	   return new Configuration().configure(dbConfigXMLNameWithExtension).buildSessionFactory();
+	  } catch (Throwable ex) {
+	   System.err.println(".Initial SessionFactory creation failed" + ex);
+	   throw new ExceptionInInitializerError(ex);
+	  }
+	 }
+
+	 private static final SessionFactory sessionFactoryMSSQL = buildSessionFactory(dbConfigXMLNameWithExtensionMYSQL);
+
 	 public static SessionFactory getSessionAnnotationFactory() {
-		if (sessionAnnotationFactory == null)
-	        	sessionAnnotationFactory = buildSessionAnnotationFactory();
-	        return sessionAnnotationFactory;
-	    }
+	  System.out.println("-- HibernateSessionFactoryClass.getSessionFactory() method called --");
+	  return sessionFactoryMSSQL;
+	 }
+	
 }

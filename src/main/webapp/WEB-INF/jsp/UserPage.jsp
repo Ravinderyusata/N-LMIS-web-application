@@ -10,10 +10,11 @@
 <title>User Page</title>
 <link rel="stylesheet" href="resources/css/buttontoolbar.css"
 	type="text/css">
+<link rel=" stylesheet" href="resources/css/w3css.css" type="text/css">
 <link rel="stylesheet" href="resources/css/table.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="resources/easyui/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="resources/easyui/themes/icon.css">
-	<link rel="stylesheet" type="text/css" href="resources/easyui/demo/demo.css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/demo/demo.css">
 <script type="text/javascript">
 	function setRole() {
 		var user = '${userBean.getX_ROLE_NAME()}';
@@ -39,7 +40,7 @@
 			$('#addBtn').hide();
 			break;
 		}
-		document.getElementById("common_lable").innerHTML = "Users";
+		/* document.getElementById("common_lable").innerHTML = "Users";
 		if(user=="NTO"){
 			document.getElementById("user").innerHTML = "User: National Admin";
 			document.getElementById("warehouse_name").innerHTML ="National: "+ '${userBean.getX_WAREHOUSE_NAME()}';
@@ -49,7 +50,7 @@
 		}else if(user=="LIO" || user=="MOH"){
 			document.getElementById("user").innerHTML = "User: "+user+'${userBean.getX_WAREHOUSE_NAME()}' ;
 			document.getElementById("warehouse_name").innerHTML ="LGA :"+ '${userBean.getX_WAREHOUSE_NAME()}';
-		}
+		} */
 
 	}
 </script>
@@ -101,8 +102,8 @@ font-weight: bold;
 <body style="margin: 0px;" onload="setRole()">
 <!-- to check seesoin is null or not -->
 		
-	<!-- headr of page -->
-	<jsp:include page="headerforpages.jsp"></jsp:include>
+	<%-- <!-- headr of page -->
+	<jsp:include page="headerforpages.jsp"></jsp:include> --%>
 
 	<!-- button bar -->
 
@@ -336,7 +337,7 @@ font-weight: bold;
         </div>
         
 	
-	<jsp:include page="footer-for-page.jsp"></jsp:include>
+	<%-- <jsp:include page="footer-for-page.jsp"></jsp:include> --%>
 	  <!-- loder div -->
 		<div style="display: none;" id="loader_div" class="loader_div">
 			<div class="loader" id="loader_show">
@@ -347,6 +348,7 @@ font-weight: bold;
 <script type="text/javascript"
 	src="resources/easyui/jquery.easyui.min.js"></script>
 <script src="resources/js/common.js"></script>
+<script src="resources/js/datagrid_agination.js" type="text/javascript"></script>
 <script type="text/javascript">
 var submitType;
 function doSearch(){
@@ -614,28 +616,19 @@ function handleHistory(){
 	 if(row==null){
 		 alertBox("Please Select Record From Table")
 	 }else{
-		 $.ajax({
-			  url: "get_history_user",
-			  type: "post", //send it through post method
-			  data:{user_id: row.USER_ID},
-			  dataType:'json',
-			  async:false,
-			  success: function(response) {
-				  if(response[0].CREATED_BY=='' || response[0].CREATED_BY==null){
-					  $('#createdBylabel').text("<Not Available>");
-				  }else{
-					  $('#createdBylabel').text(response[0].CREATED_BY); 
-				  }
-				  $('#createdOnlabel').text(response[0].CREATED_ON);
-				  $('#updatedBylabel').text(response[0].UPDATED_BY);
-				  $('#updatedOnlabel').text(response[0].LAST_UPDATED_ON);
-				  $('#history_dialog').dialog('open').dialog('center').dialog('setTitle','User Record History');  
-				 // document.getElementById("loader_div").style.display = "none";
-			  },
-			  error: function(xhr) {
-			   alert("error in get history data");
-			  }
-			});
+		 ajaxPostRequestSync("get_history_user", {user_id: row.USER_ID},
+				 function(response) {
+					  if(response[0].CREATED_BY=='' || response[0].CREATED_BY==null){
+						  $('#createdBylabel').text("<Not Available>");
+					  }else{
+						  $('#createdBylabel').text(response[0].CREATED_BY); 
+					  }
+					  $('#createdOnlabel').text(response[0].CREATED_ON);
+					  $('#updatedBylabel').text(response[0].UPDATED_BY);
+					  $('#updatedOnlabel').text(response[0].LAST_UPDATED_ON);
+					  $('#history_dialog').dialog('open').dialog('center').dialog('setTitle','User Record History');  
+					 // document.getElementById("loader_div").style.display = "none";
+				  });
 		
 	 }
 	 document.getElementById("loader_div").style.display = "none";
@@ -667,23 +660,17 @@ function changePasswordActionOk(){
 		$('#change_password_dialog').dialog('close');
 		var newPassword=$('#new_password').val();
 		var oldPassword=$('#old_password').val();
-		$.ajax({
-			  url: "change_user_password?user_id="+row.USER_ID+"&oldPassword="+oldPassword+"&newPassword="+newPassword,
-			  type: "post", //send it through post method
-			  dataType:'text',
-			  success: function(response) {
-				 document.getElementById("loader_div").style.display = "none";
- 					if(response=='succsess'){
- 						 alertBox(" Password Updated Succesufully");
- 							refreshData();
-				  	}else{
-				  		alertBox(" Old Password Is Not Correct");
-				  	}
-				},
-			  error: function(xhr) {
-			   alert("Error in change password");
-			  }
+		ajaxPostRequestSync("change_user_password", {user_id:row.USER_ID,oldPassword:oldPassword,newPassword:newPassword},
+				function(response) {
+			 document.getElementById("loader_div").style.display = "none";
+				if(response=='succsess'){
+					 alertBox(" Password Updated Succesufully");
+						refreshData();
+			  	}else{
+			  		alertBox(" Old Password Is Not Correct");
+			  	}
 			});
+		
 	}
 }
 </script>

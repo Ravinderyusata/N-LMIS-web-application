@@ -4,73 +4,85 @@
 <script type="text/javascript" src="resources/easyui/jquery.easyui.min.js"></script>
 <style>
 	.status-list {
-		display: inline-block;
+		display: inline-flex;
 	}
-	.status-list li {
-		display: inline;
+	.status-list li div {
+		display: inline-flex;
+		padding-left:2px; 
 	}
 	.red-status {
 		width: 10px;
 		height: 10px;
 		background: red;
 		display: inline-block;
+		margin-top: 6px;
 	}
 	.green-status {
 		width: 10px;
 		height: 10px;
 		background: green;
 		display: inline-block;
+		margin-top: 6px;
 	}
 	.yellow-status {
 		width: 10px;
 		height: 10px;
 		background: yellow;
 		display: inline-block;
+		margin-top: 6px;
 	}
-	.table_div{
-		overflow-x:scroll;
-		overflow-y:scroll;
+	.blue-status{
+	width: 10px;
+		height: 10px;
+		background:  #8e84fb;
+		display: inline-block;
+		margin-top: 6px;
 	}
-	.wrap {
-		width: 100%;
-	}
-	.wrap table {
-		width: 100%;
-		table-layout: fixed;
-		border-collapse: collapse;
-	}
-	.wrap table tr th {
-		border: 1px solid black;
-		background-color: #e7f0ff;
-		padding: 5px 0px 5px 0px;
-	}
-	table tr td {
-		padding: 5px;
-		border: 1px solid black;
-		width: 100px;
-		word-wrap: break-word;
-	}
-	table tr td {
-		padding: 5px;
-		border: 1px solid black;
-		width: 100px;
-		text-align:center;
-		word-wrap: break-word;
-	}
-	table tr td:FIRST-CHILD {
-		padding: 5px;
-		border: 1px solid black;
-		width: 200px;
-		word-wrap: break-word;
-	}
-	table.head tr td {
-		background: #eee;
-	}
-	.inner_table {
-		height:323px;
-		overflow-y: overlay;
-		overflow-x:auto;
-	}
+	.table_div4{
+	overflow:hidden;
+	width: 100%;
+	height: 60%;
+}
+.wrap4 {
+	width: 100%;
+}
+.headingTable4 table{
+	width: 98.8%;
+	border-collapse: collapse;
+	font-size:12px;
+}
+
+.headingTable4 table tr td {
+	border: 1px solid black;
+	background-color: #e7f0ff;
+	padding: 6px;
+	width: 7.8%;
+	text-align: center;
+}
+.inner_table4 table tr td {
+	padding: 5px;
+	border: 1px solid black;
+	width: 7.8%;
+	word-wrap: break-word;
+	text-align: center;
+}
+
+.inner_table4 table tr td:FIRST-CHILD ,.headingTable4 tr td:FIRST-CHILD  {
+	padding: 5px;
+	border: 1px solid black;
+	width: 200px;
+	word-wrap: break-word;
+	text-align: left;
+}
+
+.inner_table4 table{
+font-size: 12px;
+}
+.inner_table4 {
+	height:86%;
+	overflow-y: scroll;
+}
+
 </style>
 </head>
 <body>
@@ -89,22 +101,26 @@
 			<select id="week_combobox4" class="easyui-combobox" name="week_combobox4" style="width: 100px;">
 			</select> 
 			<a id="viewDashboardLinkBtn4" href="#" class="easyui-linkbutton" onclick="filterGridData4(true)">View Dashboard </a>
-			<a id="exportLinkBtn4" href="export_data_grid" class="easyui-linkbutton">Export</a>
-
+			<a id="exportLinkBtn4" href="hf_stock_summary_export_data" class="easyui-linkbutton">Export</a>
+			&nbsp;&nbsp;
 			<ul class="status-list" style="margin:0 0;">
 					<li><div><div class="red-status"></div><div>Antigen Below Minimum Level</div></div></li>
 					<li><div><div class="green-status"></div><div>Antigen Sufficient</div></div></li>
 					<li><div><div class="yellow-status"></div> <div>Antigen need to be re-orderd</div></div></li>
+					<li><div><div class="blue-status"></div> <div>Over Stock</div></div></li>
 				</ul>
 		</div>
 		<!-- filters end here -->
 
-		<div id="table_div4" class="table_div">
-			<div class="wrap">
-				<table class="head" id="heading_table4">
+		<div  class="table_div4">
+			<div class="wrap4">
+			<div class="headingTable4">
+			<table  id="heading_table4">
 					<!-- DYNAMICALLY ROWS WILL GENERATE HERE... -->			
 				</table>
-				<div class="inner_table">
+			</div>
+				
+				<div class="inner_table4">
 					<table id="table_body4">
 						<!-- DYNAMICALLY ROWS WILL GENERATE HERE... -->
 					</table>

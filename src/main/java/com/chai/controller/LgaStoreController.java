@@ -21,60 +21,62 @@ import com.chai.model.LgaStoreBeanForForm;
 import com.chai.model.views.AdmUserV;
 import com.chai.services.LgaStoreService;
 
-
 @Controller
 public class LgaStoreController {
 	JSONArray data;
-	LgaStoreService lgaStoreService=new LgaStoreService();
-@RequestMapping(value="/lgastorepage",method = RequestMethod.GET)
-public ModelAndView getLgaStore(HttpServletRequest request,HttpServletResponse respones,
+	LgaStoreService lgaStoreService = new LgaStoreService();
+
+	@RequestMapping(value = "/lgastorepage", method = RequestMethod.GET)
+	public ModelAndView getLgaStore(HttpServletRequest request, HttpServletResponse response,
 			@ModelAttribute("lgaStoreFormBean") LgaStoreBeanForForm bean) {
-	System.out.println("in LgaStoreController.getLgaStore()");
-	ModelAndView lgaStoreModel=new ModelAndView("LgaStorePage");
-	HttpSession session=request.getSession();
-	AdmUserV userBean=(AdmUserV)session.getAttribute("userBean");
-	lgaStoreModel.addObject("userBean", userBean);
-	return lgaStoreModel;
-}
-@RequestMapping(value = "/getlgastorelist")
-public JSONArray getJsonLgaStoreList(HttpServletRequest request,HttpServletResponse respones){
-	System.out.println("in LgaStoreController.getJsonLgaStoreList()");
-	try{
-		AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
-	 data=lgaStoreService.getLgaStoreListPageData(userBean);
-			// System.out.println("json ======"+data.toString());
-	
-		PrintWriter out=respones.getWriter();
-		out.write(data.toString());
-		out.close();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		try {
-			respones.sendRedirect("loginPage");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		System.out.println("in LgaStoreController.getLgaStore()");
+		ModelAndView lgaStoreModel = new ModelAndView("LgaStorePage");
+		HttpSession session = request.getSession();
+		AdmUserV userBean = (AdmUserV) session.getAttribute("userBean");
+		lgaStoreModel.addObject("userBean", userBean);
+		return lgaStoreModel;
 	}
-	return null;
-	
-}
-@RequestMapping(value="/get_Store_type_list",method = RequestMethod.POST)
-public void getStoreTypeList(HttpServletRequest request,HttpServletResponse respones){
-	System.out.println("in LGAlistController.getStoreTypeList()");
-	try{
-		AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
-		 JSONArray storeTypeList=lgaStoreService.getLgaStoreComboboxList(userBean,"LGA_STORE_TYPE",null);
+
+	@RequestMapping(value = "/getlgastorelist")
+	public JSONArray getJsonLgaStoreList(HttpServletRequest request, HttpServletResponse respones) {
+		System.out.println("in LgaStoreController.getJsonLgaStoreList()");
+		try {
+			AdmUserV userBean = (AdmUserV) request.getSession().getAttribute("userBean");
+			data = lgaStoreService.getLgaStoreListPageData(userBean);
+			// System.out.println("json ======"+data.toString());
+
+			PrintWriter out = respones.getWriter();
+			out.write(data.toString());
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			try {
+				respones.sendRedirect("loginPage");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		return null;
+
+	}
+
+	@RequestMapping(value = "/get_Store_type_list", method = RequestMethod.POST)
+	public void getStoreTypeList(HttpServletRequest request, HttpServletResponse respones) {
+		System.out.println("in LGAlistController.getStoreTypeList()");
+		try {
+			AdmUserV userBean = (AdmUserV) request.getSession().getAttribute("userBean");
+			JSONArray storeTypeList = lgaStoreService.getLgaStoreComboboxList(userBean, "LGA_STORE_TYPE", null);
 			// System.out.println("json LgaStoreComboboxList:
 			// "+data.toString());
-		PrintWriter out=respones.getWriter();
-		out.write(storeTypeList.toString());
-		out.close();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}	
-}
+			PrintWriter out = respones.getWriter();
+			out.write(storeTypeList.toString());
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@RequestMapping(value = "/get_Store_type_list_for_form", method = RequestMethod.POST)
 	public void getStoreTypeListForForm(HttpServletRequest request, HttpServletResponse respones) {
@@ -92,23 +94,23 @@ public void getStoreTypeList(HttpServletRequest request,HttpServletResponse resp
 		}
 	}
 
-@RequestMapping(value="/get_storename_acco_storetype_list",method = RequestMethod.POST)
-public void getStoreNameAccoToStoreNameList(HttpServletRequest request,HttpServletResponse respones,
-		@RequestParam("storeTypeId") String storeTypeId){
-	System.out.println("in LGAlistController.getStoreTypeList()");
-	try{
-		AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
-		JSONArray storeNameAccoToStoreType;
-		storeNameAccoToStoreType=lgaStoreService.getStoreNameAccoToStore(userBean,storeTypeId);
+	@RequestMapping(value = "/get_storename_acco_storetype_list", method = RequestMethod.POST)
+	public void getStoreNameAccoToStoreNameList(HttpServletRequest request, HttpServletResponse respones,
+			@RequestParam("storeTypeId") String storeTypeId) {
+		System.out.println("in LGAlistController.getStoreTypeList()");
+		try {
+			AdmUserV userBean = (AdmUserV) request.getSession().getAttribute("userBean");
+			JSONArray storeNameAccoToStoreType;
+			storeNameAccoToStoreType = lgaStoreService.getStoreNameAccoToStore(userBean, storeTypeId);
 			// System.out.println("json StoreNameAccoToStoreNameList:
 			// "+data.toString());
-		PrintWriter out=respones.getWriter();
-		out.write(storeNameAccoToStoreType.toString());
-		out.close();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}	
-}
+			PrintWriter out = respones.getWriter();
+			out.write(storeNameAccoToStoreType.toString());
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@RequestMapping(value = "/get_storename_acco_storetype_list_for_form", method = RequestMethod.POST)
 	public void getStoreNameAccoToStoreNameListForForm(HttpServletRequest request, HttpServletResponse respones,
@@ -145,37 +147,38 @@ public void getStoreNameAccoToStoreNameList(HttpServletRequest request,HttpServl
 		}
 	}
 
-@RequestMapping(value="/search_lga_store_list",method = RequestMethod.POST)
-public void searchLgaStoreList(HttpServletRequest request,HttpServletResponse respones,
-		@RequestParam("storeTypeId") String storeTypeId,
-			@RequestParam("storeNameId") String storeNameId, @RequestParam("storeTypeName") String storeTypeName) {
-	System.out.println("in LGAStoreController.searchLgaStoreList()");
-	try{
-		AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
+	@RequestMapping(value = "/search_lga_store_list", method = RequestMethod.POST)
+	public void searchLgaStoreList(HttpServletRequest request, HttpServletResponse respones,
+			@RequestParam("storeTypeId") String storeTypeId, @RequestParam("storeNameId") String storeNameId,
+			@RequestParam("storeTypeName") String storeTypeName) {
+		System.out.println("in LGAStoreController.searchLgaStoreList()");
+		try {
+			AdmUserV userBean = (AdmUserV) request.getSession().getAttribute("userBean");
 			data = lgaStoreService.getsearchLgaStoreData(userBean, storeTypeId, storeNameId, storeTypeName);
 			// System.out.println("json searchLgaStoreList: "+data.toString());
-		PrintWriter out=respones.getWriter();
-		out.write(data.toString());
-		out.close();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}	
-}
-@RequestMapping(value = "/get_LgaStore_history")
-public void getHistoryOfUser(HttpServletRequest request,HttpServletResponse respones,
-		@RequestParam("WAREHOUSE_ID") String WAREHOUSE_ID){
-	System.out.println("in LgaStoreController.getHistoryOfUser()");
-	try {
-		PrintWriter out = respones.getWriter();
-		JSONArray historyOfLgaStore=lgaStoreService.getLgaStoreHistory(WAREHOUSE_ID);
+			PrintWriter out = respones.getWriter();
+			out.write(data.toString());
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@RequestMapping(value = "/get_LgaStore_history")
+	public void getHistoryOfUser(HttpServletRequest request, HttpServletResponse respones,
+			@RequestParam("WAREHOUSE_ID") String WAREHOUSE_ID) {
+		System.out.println("in LgaStoreController.getHistoryOfUser()");
+		try {
+			PrintWriter out = respones.getWriter();
+			JSONArray historyOfLgaStore = lgaStoreService.getLgaStoreHistory(WAREHOUSE_ID);
 			// System.out.println("history of lga
 			// json"+historyOfLgaStore.toString());
-		out.write(historyOfLgaStore.toString());
-		out.close();
-	} catch (IOException e) {
-		e.printStackTrace();
+			out.write(historyOfLgaStore.toString());
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-}
 
 	@RequestMapping(value = "/save_addedit_lgastore", method = RequestMethod.POST)
 	public void saveAddEditLgaStore(HttpServletRequest request, HttpServletResponse respones,
@@ -224,25 +227,26 @@ public void getHistoryOfUser(HttpServletRequest request,HttpServletResponse resp
 			// TODO: handle exception
 		}
 	}
-@RequestMapping(value = "/lga_store_list_export")
-public ModelAndView getLgaStoreListExport(HttpServletRequest request,HttpServletResponse respones){
-	System.out.println("in LgaStoreController.getLgaStoreListExport()");
-	ModelAndView model=new ModelAndView("CommonExelGenerator");
-	ArrayList<LabelValueBean> headerOfTableList=new ArrayList<>();
+
+	@RequestMapping(value = "/lga_store_list_export")
+	public ModelAndView getLgaStoreListExport(HttpServletRequest request, HttpServletResponse respones) {
+		System.out.println("in LgaStoreController.getLgaStoreListExport()");
+		ModelAndView model = new ModelAndView("CommonExelGenerator");
+		ArrayList<LabelValueBean> headerOfTableList = new ArrayList<>();
 		headerOfTableList.add(new LabelValueBean("WAREHOUSE_NAME", "STORE NAME"));
 		headerOfTableList.add(new LabelValueBean("WAREHOUSE_TYPE_NAME", "STORE NAME"));
 		headerOfTableList.add(new LabelValueBean("MONTHLY_TARGET_POPULATION", "MTP"));
-	headerOfTableList.add(new LabelValueBean("TELEPHONE_NUMBER", "TELEPHONE NUMBER"));
-	headerOfTableList.add(new LabelValueBean("DEFAULT_ORDERING_WAREHOUSE_CODE", "DEFAULT ORDERING WAREHOUSE CODE"));
-	headerOfTableList.add(new LabelValueBean("STATUS", "STATUS"));
-	headerOfTableList.add(new LabelValueBean("START_DATE", "START DATE"));
-	headerOfTableList.add(new LabelValueBean("END_DATE", "END DATE"));
-	try{
-		model.addObject("export_data",data);
-		model.addObject("headerOfTable", headerOfTableList);
-	} catch (NullPointerException e) {
-		e.printStackTrace();
+		headerOfTableList.add(new LabelValueBean("TELEPHONE_NUMBER", "TELEPHONE NUMBER"));
+		headerOfTableList.add(new LabelValueBean("DEFAULT_ORDERING_WAREHOUSE_CODE", "DEFAULT ORDERING WAREHOUSE CODE"));
+		headerOfTableList.add(new LabelValueBean("STATUS", "STATUS"));
+		headerOfTableList.add(new LabelValueBean("START_DATE", "START DATE"));
+		headerOfTableList.add(new LabelValueBean("END_DATE", "END DATE"));
+		try {
+			model.addObject("export_data", data);
+			model.addObject("headerOfTable", headerOfTableList);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		return model;
 	}
-	return model;
-}
 }

@@ -5,6 +5,11 @@
 <style>
 #table_div table{
 border-collapse: inherit;
+border: 1px solid black;
+}
+#table_div table tr td{
+border: 1px solid black;
+padding: 0px;
 }
 .l-btn {
     background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #ffffff 0px, #eeeeee 100%) repeat-x scroll 0 0;
@@ -76,7 +81,7 @@ h6 {
 			<div class="row" style="margin-bottom: 0px">
 				<!-- FOR TEST : border color of table_div - #95d0b7 -->
 				<hr style="width: 100%;float: left;color: #f8f8f8;">
-				<div id="table_div" class="col l10" style="overflow-y:auto;height:57%; ">
+				<div id="table_div" class="col l10" style="overflow-y:auto;height:61%; ">
 					<!-- dynamic row created and inserted here... -->
 				</div>
 			
@@ -107,14 +112,14 @@ h6 {
 						<li>
 							 <div>
 							 <span class="red-status"></span> 
-							<span>% LGA	With &gt;3 Antigen in red</span>
+							<span>% of Antigens below minimum level in LGA</span>
 							 </div>
 						</li>
 	
 						<li>
 							<div>
 							 <span class="green-status"></span> 
-							<span> % LGA With no Antigen in red</span>
+							<span> % of Sufficient Antigens in LGA</span>
 							</div>
 						</li>
 	
@@ -122,7 +127,7 @@ h6 {
 							<div>
 							 <span class="yellow-status"></span>
 							<span >
-								% LGA With Antigen that need to re-order Stock 
+								% of Antigens at reorder level in LGA 
 							</span>
 							</div>
 						</li>

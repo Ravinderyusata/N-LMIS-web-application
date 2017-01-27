@@ -79,6 +79,12 @@
 #filters span {
 font-weight: bold;
 }
+#table_divNTO table {
+border: 1px solid black;
+}
+#table_divNTO table tr td{
+border: 3px solid black;
+}
 </style>
 </head>
 <body>

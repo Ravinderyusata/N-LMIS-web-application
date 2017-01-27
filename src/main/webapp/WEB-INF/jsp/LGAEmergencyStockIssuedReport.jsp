@@ -9,8 +9,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>LGA Emergency Stock Issued Report</title>
 
-<link rel="stylesheet" href="resources/css/buttontoolbar.css" type="text/css">
+<link rel="stylesheet" href="resources/css/buttontoolbar.css"
+	type="text/css">
+<link rel=" stylesheet" href="resources/css/w3css.css" type="text/css">
 <link rel="stylesheet" href="resources/css/table.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/demo/demo.css">
 
 <script type="text/javascript">
 	function setRole() {
@@ -51,29 +56,12 @@
 
 			break;
 		}
-		document.getElementById("common_lable").innerHTML = "Reports";
-		if(user=="NTO"){
-			document.getElementById("user").innerHTML = "User: National Admin";
-			document.getElementById("warehouse_name").innerHTML ="National: "+ '${userBean.getX_WAREHOUSE_NAME()}';
-		}else if(user=="SIO" || user=="SCCO" || user=="SIFP"){
-			document.getElementById("user").innerHTML = "User: "+user+" "+'${userBean.getX_WAREHOUSE_NAME()}' ;
-			document.getElementById("warehouse_name").innerHTML ="State :"+ '${userBean.getX_WAREHOUSE_NAME()}';
-		}else if(user=="LIO" || user=="MOH"){
-			document.getElementById("user").innerHTML = "User: "+user+'${userBean.getX_WAREHOUSE_NAME()}' ;
-			document.getElementById("warehouse_name").innerHTML ="LGA :"+ '${userBean.getX_WAREHOUSE_NAME()}';
-		}
 	}	
 </script>
 </head>
 <body style="margin: 0px;" onload="setRole()">
-<!-- to check seesoin is null or not -->
-		<%if(request.getSession().getAttribute("userBean")==null){
-		response.sendRedirect("loginPage");
-		} 
-		%>
-	<!-- header of page -->
-	<jsp:include page="headerforpages.jsp"></jsp:include>
-	<!-- status dialog -->
+
+		<!-- status dialog -->
 	<div id="stutus_dialog" ></div>
 	<div class="report_title" style="text-align: center;font-size: 15px;">LGA Emergency Stock Issued Report</div>
 	
@@ -134,16 +122,15 @@
 	<!-- user table -->
 	<table id="lGAEmergencyStockIssueTable" class="easyui-datagrid"
 		style="width: 100%; height: 410px" title="LGA Emergency Report"
-		 rownumbers="true" pagination="true" pageSize=30 singleSelect="true"
-		striped="true" remoteSort="false">
+		 data-options="rownumbers:'true', pagination:'true', pageSize:30, singleSelect:'true', 	striped:'true', remoteSort:'false'">
 	</table>
 		
-	<!--  footer page -->
-	<jsp:include page="footer-for-page.jsp"></jsp:include>
+	
 </body>
 <script src="resources/js/jquery-2.2.3.min.js"></script>
 <script src="resources/easyui/jquery.easyui.min.js"></script>
 <script src="resources/js/common.js"></script>
+<script src="resources/js/datagrid_agination.js" type="text/javascript"></script>
 <script type="text/javascript">
 function alertBox(message){
 	  $.messager.alert('Warning!',message,'warning');

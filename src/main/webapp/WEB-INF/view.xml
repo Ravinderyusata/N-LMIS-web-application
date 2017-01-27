@@ -4,9 +4,11 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
    
-    <bean id="excelLgaStockSummry" class="com.chai.util.LgaStockPerformanceExelGen" />
-     <bean id="excelStatestockPerformanceDashboard" class="com.chai.util.StateStockPerformanceDashboardExelGen" />
-      <bean id="excelLgaAggstockeDashboard" class="com.chai.util.LGAAggStockDashboardExelGen" />
-    <bean id="excelStatestockStatusDashboard" class="com.chai.util.StatestockStatusDashboardExelGen" /> 
-    <bean id="CommonExelGenerator" class="com.chai.util.CommonExelGenerator" /> 
+    <bean id="excelLgaStockSummry" class="com.chai.util.LgaStockPerformanceExcelGen" />
+     <bean id="excelStatestockPerformanceDashboard" class="com.chai.util.StateStockPerformanceDashboardExcelGen" />
+      <bean id="excelLgaAggstockeDashboard" class="com.chai.util.LGAAggStockDashboardExcelGen" />
+    <bean id="excelStatestockStatusDashboard" class="com.chai.util.StatestockStatusDashboardExcelGen" /> 
+    <bean id="CommonExelGenerator" class="com.chai.util.CommonExcelGenerator" /> 
+      <bean id="hfStockSummarySheetExelView" class="com.chai.util.HFStockSummarySheetExcelGen" /> 
+   
  </beans>

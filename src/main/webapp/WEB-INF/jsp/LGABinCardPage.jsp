@@ -10,7 +10,11 @@
 <title>LGA Bincard Page</title>
 <link rel="stylesheet" href="resources/css/buttontoolbar.css"
 	type="text/css">
+<link rel=" stylesheet" href="resources/css/w3css.css" type="text/css">
 <link rel="stylesheet" href="resources/css/table.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="resources/easyui/demo/demo.css">
 <script type="text/javascript">
 	function setRole() {
 		var user = '${userBean.getX_ROLE_NAME()}';
@@ -49,30 +53,15 @@
 			loadProductLgaBased('${userBean.getX_WAREHOUSE_ID()}');
 			break;
 		}
-		document.getElementById("common_lable").innerHTML = "Reports";
-		if(user=="NTO"){
-			document.getElementById("user").innerHTML = "User: National Admin";
-			document.getElementById("warehouse_name").innerHTML ="National: "+ '${userBean.getX_WAREHOUSE_NAME()}';
-		}else if(user=="SIO" || user=="SCCO" || user=="SIFP"){
-			document.getElementById("user").innerHTML = "User: "+user+" "+'${userBean.getX_WAREHOUSE_NAME()}' ;
-			document.getElementById("warehouse_name").innerHTML ="State :"+ '${userBean.getX_WAREHOUSE_NAME()}';
-		}else if(user=="LIO" || user=="MOH"){
-			document.getElementById("user").innerHTML = "User: "+user+'${userBean.getX_WAREHOUSE_NAME()}' ;
-			document.getElementById("warehouse_name").innerHTML ="LGA :"+ '${userBean.getX_WAREHOUSE_NAME()}';
-		}
-
+		
 	}
 	
 </script>
 </head>
 <body style="margin: 0px;" onload="setRole()">
-<!-- to check seesoin is null or not -->
-		<%if(request.getSession().getAttribute("userBean")==null){
-		response.sendRedirect("loginPage");
-		} 
-		%>
+
 	<!-- headr of page -->
-	<jsp:include page="headerforpages.jsp"></jsp:include>
+	<%-- <jsp:include page="headerforpages.jsp"></jsp:include> --%>
 									<!-- status dialog -->
 	<div id="stutus_dialog" ></div>
 	<div class="report_title" style="text-align: center;font-size: 15px;">LGA BinCard Report</div>
@@ -140,17 +129,13 @@
 
 
 	</table>
-
 	
-	
-	<!--  footer page -->
-
-	<jsp:include page="footer-for-page.jsp"></jsp:include>
-</body>
+	</body>
 <script type="text/javascript" src="resources/js/jquery-2.2.3.min.js"></script>
 <script type="text/javascript"
 	src="resources/easyui/jquery.easyui.min.js"></script>
 	<script src="resources/js/common.js"></script>
+	<script src="resources/js/datagrid_agination.js" type="text/javascript"></script>
 <script type="text/javascript">
 function showLgaBinCarddata(){
 	var message="";

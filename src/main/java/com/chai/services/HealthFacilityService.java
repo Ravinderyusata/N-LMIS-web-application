@@ -10,7 +10,7 @@ import org.hibernate.SessionFactory;
 import org.json.JSONArray;
 
 import com.chai.hibernartesessionfactory.HibernateSessionFactoryClass;
-import com.chai.model.healthFacilityBean;
+import com.chai.model.HealthFacilityBean;
 import com.chai.model.views.AdmUserV;
 import com.chai.util.CalendarUtil;
 import com.chai.util.GetJsonResultSet;
@@ -89,7 +89,7 @@ public class HealthFacilityService {
 		return array;
 	}
 
-	public int saveAddEditHF(healthFacilityBean bean, String action, AdmUserV userBean) {
+	public int saveAddEditHF(HealthFacilityBean bean, String action, AdmUserV userBean) {
 		int result = 0;
 		String x_QUERY = "";
 		Session session = sf.openSession();

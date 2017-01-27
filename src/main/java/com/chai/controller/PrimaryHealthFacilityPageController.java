@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.chai.model.HealthFacilityBean;
 import com.chai.model.LabelValueBean;
-import com.chai.model.healthFacilityBean;
 import com.chai.model.views.AdmUserV;
 import com.chai.services.HealthFacilityService;
 
@@ -28,7 +28,7 @@ public class PrimaryHealthFacilityPageController {
 	HealthFacilityService hfService = new HealthFacilityService();
 @RequestMapping(value="/primaryhealthfacilitypage",method = RequestMethod.GET)
 	public ModelAndView getHFGridData(HttpServletRequest request, HttpServletResponse respones,
-			@ModelAttribute("hfBean") healthFacilityBean bean) {
+			@ModelAttribute("hfBean") HealthFacilityBean bean) {
 	System.out.println("in PrimaryHealthFacilityPage.getHFGridData()");
 	ModelAndView primaryHFGridPage= new ModelAndView("PrimaryHealthFacilityPage");
 	try {
@@ -36,7 +36,6 @@ public class PrimaryHealthFacilityPageController {
 		AdmUserV userBean=(AdmUserV)session.getAttribute("userBean");
 		primaryHFGridPage.addObject("userBean", userBean);
 	} catch (Exception e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 	return primaryHFGridPage;
@@ -45,14 +44,6 @@ public class PrimaryHealthFacilityPageController {
 	public void getPrimaryHfListData(HttpServletRequest request, HttpServletResponse respones) {
 	System.out.println("in PrimaryHealthFacilityPage.getPrimaryHfListData()");
 	try{
-			/*
-			 * when remote sort is true then it works System.out.println("page:"
-			 * + request.getParameter("page")); System.out.println("rows:" +
-			 * request.getParameter("rows")); System.out.println("order:" +
-			 * request.getParameter("order")); System.out.println("sort:" +
-			 * request.getParameter("sort"));
-			 */
-
 		String state_id=request.getParameter("state_id");
 		AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
 		System.out.println("warehouse id"+request.getParameter("warehouse_id"));
@@ -80,8 +71,6 @@ public class PrimaryHealthFacilityPageController {
 		try {
 			PrintWriter out = respones.getWriter();
 			JSONArray historyOfHF = hfService.getHFHistory(DB_ID, DEFAULT_STORE_ID);
-			// System.out.println("history of lga json" +
-			// historyOfHF.toString());
 			out.write(historyOfHF.toString());
 			out.close();
 		} catch (IOException e) {
@@ -97,7 +86,6 @@ public class PrimaryHealthFacilityPageController {
 		try {
 			PrintWriter out = respones.getWriter();
 			JSONArray wardList = hfService.getWardListBasedOnLga(LGA_ID, option);
-			// System.out.println("history of lga json" + wardList.toString());
 			out.write(wardList.toString());
 			out.close();
 		} catch (IOException e) {
@@ -107,33 +95,11 @@ public class PrimaryHealthFacilityPageController {
 
 	@RequestMapping(value = "/save_addedit_hf", method = RequestMethod.POST)
 	public void saveAddEditLgaStore(HttpServletRequest request, HttpServletResponse respones,
-			@ModelAttribute("hfBean") healthFacilityBean bean) {
+			@ModelAttribute("hfBean") HealthFacilityBean bean) {
 		AdmUserV userBean = (AdmUserV) request.getSession().getAttribute("userBean");
 		System.out.println("in UserController.saveAddEditUser()");
 		String action = request.getParameter("action");
 		System.out.println("aciton------" + action);
-		// System.out.println("CUSTOMER_NUMBER" + bean.getX_HF_NUMBER());
-		// System.out.println("CUSTOMER_NAME " + bean.getX_HF_NAME());
-		// System.out.println("CUSTOMER_DESCRIPTION " +
-		// bean.getX_HF_DESCRIPTION());
-		// System.out.println("X_WARD_ID " + bean.getX_WARD_ID());
-		// System.out.println("EMAIL_ADDRESS " + bean.getX_EMAIL_ADDRESS());
-		// System.out.println("COUNTRY_ID " + bean.getX_COUNTRY_ID());
-		// System.out.println("STATE_ID " + bean.getX_STATE_ID());
-		// System.out.println("TELEPHONE_NUMBER " +
-		// bean.getX_TELEPHONE_NUMBER());
-		// System.out.println("STATUS" + bean.getX_STATUS());
-		// System.out.println("START_DATE " + bean.getX_START_DATE());
-		// System.out.println("END_DATE " + bean.getX_END_DATE());
-		// System.out.println("DEFAULT_STORE_ID " +
-		// bean.getX_DEFAULT_STORE_ID());
-		// System.out.println("TARGET_POPULATION " +
-		// bean.getX_TARGET_POPULATION());
-		// System.out.println("UPDATED_BY " + bean.getX_UPDATED_BY());
-		// System.out.println("CREATED_BY " + bean.getX_CREATED_BY());
-		// System.out.println("CREATED_ON " + bean.getX_CREATED_ON());
-		// System.out.println("LAST_UPDATED_ON " + bean.getX_LAST_UPDATED_ON());
-		// System.out.println("VACCINE_FLAG " + bean.getX_VACCINE_FLAG());
 		if (!bean.getX_TARGET_POPULATION().equals("") || bean.getX_TARGET_POPULATION() != null) {
 			bean.setX_EDIT_DATE(LocalDate.now().toString());
 		} else {
@@ -160,7 +126,7 @@ public class PrimaryHealthFacilityPageController {
 			}
 			out.close();
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 
@@ -172,8 +138,6 @@ public class PrimaryHealthFacilityPageController {
 		try {
 			PrintWriter out = respones.getWriter();
 			JSONArray statestoreidjson = hfService.getStateStoreIdBasedOnLgaId(LGA_ID);
-			// System.out.println("history of lga json" +
-			// statestoreidjson.toString());
 			out.write(statestoreidjson.toString());
 			out.close();
 		} catch (IOException e) {

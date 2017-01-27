@@ -1,7 +1,6 @@
 package com.chai.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -24,7 +22,7 @@ import com.chai.model.views.AdmUserV;
 import com.chai.services.UserService;
 
 @Controller
-public class LoginController {
+	public class LoginController {
 	@RequestMapping(value = "/loginPage", method = RequestMethod.GET)
 	public ModelAndView getForm(@ModelAttribute("userBean") UserBean userBean, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -33,20 +31,21 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public void login(@RequestParam("userName") String userName, @RequestParam("password") String password,
+	public String login(@ModelAttribute("userBean") UserBean userBean,
 			HttpServletRequest request, HttpServletResponse respones,
 			RedirectAttributes redirectAttributes) throws IOException {
 		Logger logger=Logger.getLogger(LoginController.class);
 		logger.info("ok");
+		String page="";
 		System.out.println("in LoginController action login");
-		System.out.println("login Name:   " + userName);
-		System.out.println("password:   " + password);
-		PrintWriter out = respones.getWriter();
-		  ArrayList<Object> userdataList =
-				UserService.validateUserLogin(userName, password);
+		System.out.println("login Name:   " + userBean.getX_LOGIN_NAME());
+		System.out.println("password:   " + userBean.getX_PASSWORD());
 		try {
+			 ArrayList<Object> userdataList =
+						UserService.validateUserLogin(userBean.getX_LOGIN_NAME(), userBean.getX_PASSWORD());
 			if (userdataList == null) {
-				out.write("No internet Connectivity or Database Server not responding.");
+				redirectAttributes.addFlashAttribute("message", "No internet Connectivity or Database Server not responding.");
+				page="redirect:loginPage";
 			} else {
 				if (userdataList.size() == 2) {
 					AdmUserV userdata = (AdmUserV) userdataList.get(0);
@@ -58,17 +57,17 @@ public class LoginController {
 					Date login_time = new Date();
 					SimpleDateFormat ft = new SimpleDateFormat("E dd MM yyyy, hh:mm:ss a ");
 					session.setAttribute("login_time", ft.format(login_time));
-					out.write("succsess");
+					page="redirect:homepage";
 				} else {
-					out.write("Wrong UserName Or Password");
+					page="redirect:loginPage";
+					redirectAttributes.addFlashAttribute("message", "Wrong UserName Or Password");
 				}
 			}
-		} catch (Exception e) {
+		} catch (org.hibernate.exception.JDBCConnectionException | NullPointerException e) {
+			page="redirect:loginPage";			
 			e.printStackTrace();
-		} finally {
-			out.close();
-			out.flush();
+			return page;
 		}
-		 
+		return page;
     }	
 }

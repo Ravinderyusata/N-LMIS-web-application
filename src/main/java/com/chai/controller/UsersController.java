@@ -38,7 +38,7 @@ public class UsersController {
 //				List<AdmUserV> list=userService.getUserListPageData();
 //				System.out.println("user list sizse"+list.size());
 //				modelAndView.addObject("userListtableData",list);
-				System.out.println("name............"+userBean.getX_WAREHOUSE_NAME());
+				System.out.println("name..: "+userBean.getX_WAREHOUSE_NAME());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -1,5 +1,4 @@
 package com.chai.controller;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
@@ -11,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.chai.model.LabelValueBean;
@@ -23,57 +22,27 @@ import com.chai.services.ComboBoxListServices;
 import com.chai.services.DashboardServices;
 
 @Controller
-public class LGAStockSummaryPageController {
+public class LgaStockbalanceDashboardController {
 	List<LabelValueBean> productList=new LinkedList<LabelValueBean>();
 	JSONArray griddata=new JSONArray();
 	
-	@RequestMapping(value="/lga_stock_summary_grid")
+	@RequestMapping(value="/lga_stock_balance_dashboard_page")
 	public ModelAndView showLgaStockSummGrid(HttpServletRequest request,HttpServletResponse respones){
-		ModelAndView model=new ModelAndView("LGAStockSummaryPage");
+		ModelAndView model=new ModelAndView("LgaStockbalanceDashboard");
 		try{
 			AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
 		} catch (Exception e) {
 			e.printStackTrace();
-			try {
-				respones.sendRedirect("loginPage");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+			
 		}		
 		return model;
 	}
-	@RequestMapping(value = "/getheadingTable")
-	public void getheadingData( HttpServletRequest request,HttpServletResponse respones){
-		AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
-		try {
-			if(userBean.getX_ROLE_NAME().equals("NTO")){
-				productList=new ComboBoxListServices().getProductListInBean("productlistbassedonlga",
-						request.getParameter("lgaId"),"false");
-				//System.out.println("product list for:"+request.getParameter("lgaId"));
-				productList.add(0, new LabelValueBean(null, request.getParameter("lgaName")));
-			}else{
-				 productList=new ComboBoxListServices().getProductListInBean("productlistbassedonlga",
-							String.valueOf(userBean.getX_WAREHOUSE_ID()),"false");
-					productList.add(0, new LabelValueBean(null, userBean.getX_WAREHOUSE_NAME()));
-			}
-			JSONArray array=new JSONArray();
-				for (LabelValueBean object : productList) {
-					array.put(new JSONObject().put("product_name", object.getLabel()));
-				}
-			// System.out.println("heading data:"+array.toString());
-				PrintWriter out=respones.getWriter();
-				out.write(array.toString());
-				out.close();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	@RequestMapping(value = "/get_lga_stock_summary_grid_data")
-	public JSONArray getLgaStockSummGridData(HttpServletRequest request,HttpServletResponse respones){
+
+	@RequestMapping(value = "/get_lga_stock_balance_dashbaord_data")
+	public JSONArray getLgaStockBalanceDashboardData(HttpServletRequest request
+			,HttpServletResponse respones
+			,@RequestParam(value="stateId",required=false) String stateId,
+			@RequestParam(value="stateName",required=false) String stateName ){
 		JSONArray arrayforjsp=new JSONArray();
 		//System.out.println("in ProductMainController.getJsonitemOnHandGridData()");
 		System.out.println("year"+request.getParameter("year"));
@@ -83,13 +52,20 @@ public class LGAStockSummaryPageController {
 		try{
 			AdmUserV userBean=(AdmUserV)request.getSession().getAttribute("userBean");
 			JSONArray data;
-			if(request.getParameter("stateId")!=null){
-				data=new DashboardServices().getLgaStockSummaryGridData(userBean,year,week,request.getParameter("stateId"));
+			if(stateId!=null && !stateId.equals("")){
+				 productList=new ComboBoxListServices().getProductListInBean("productlistbassedonlga",
+						 stateId,"false");
+					productList.add(0, new LabelValueBean(null, stateName));
+				data=new DashboardServices().getLgaStockBalanceDashboardData(userBean,year,week,request.getParameter("stateId"));
 				System.out.println("select id: "+request.getParameter("stateId"));
 			}else{
-				 data=new DashboardServices().getLgaStockSummaryGridData(userBean,year,week,null);
+				productList=new ComboBoxListServices().getProductListInBean("productlistbassedonlga",
+						String.valueOf(userBean.getX_WAREHOUSE_ID()),"false");
+				//System.out.println("product list for:"+request.getParameter("lgaId"));
+				productList.add(0, new LabelValueBean(null, String.valueOf(userBean.getX_WAREHOUSE_ID())));
+				 data=new DashboardServices().getLgaStockBalanceDashboardData(userBean,year,week,null);
 			}	
-	//	System.out.println("get_lga_stock_summary_grid_data : "+data.toString());
+		System.out.println("getLgaStockBalanceDashboardData : "+data.toString());
 		SortedSet<String> lgaNameList=new TreeSet<String>();
 		for (Object obj : data) {
 			JSONObject griobject=(JSONObject)obj;
@@ -126,22 +102,18 @@ public class LGAStockSummaryPageController {
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			try {
-				respones.sendRedirect("loginPage");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+			
 		}
 		return null;		
 	}
 	
-	@RequestMapping(value="/export_data_grid")
-	public ModelAndView export_data_grid(HttpServletRequest request,HttpServletResponse respones) throws IOException{
+	@RequestMapping(value="/lga_Stock_balance_dashboard_export")
+	public ModelAndView lgaStockDashboardDataExport(HttpServletRequest request,HttpServletResponse respones) throws IOException{
 //		String export_data=request.getParameter("export_data");
-		//System.out.println("export_data_grid in lgastocksummdrypagecont ");
 		ModelAndView model=new ModelAndView("excelLgaStockSummry");
 		model.addObject("productlistwithstatename", productList);
 		model.addObject("export_data", griddata);
 		 return model;
 	}
+	
 }

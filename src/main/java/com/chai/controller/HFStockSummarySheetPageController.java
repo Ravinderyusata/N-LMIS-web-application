@@ -80,6 +80,7 @@ public class HFStockSummarySheetPageController {
 			int i = 0;
 			int j = 0;
 //			System.out.println("get_hf_stock_summary_grid_data hf name list: " + hfNameList.toString());
+			LabelValueBean lgaNameBeen=productList.get(0);
 			productList.remove(0);// for remove lga from product name field
 			for (String hf : hfNameList) {
 				JSONObject rowObject = new JSONObject();
@@ -101,14 +102,14 @@ public class HFStockSummarySheetPageController {
 
 					} else {
 //						System.out.println("col" + j++);
-						colObject.put("STOCK_BALANCE", 0);
+						colObject.put("STOCK_BALANCE", "0");
 						colObject.put("LEGEND_COLOR", "red");
 					}
 					rowObject.put(bean.getLabel(), colObject);
 				}
 				arrayforjsp.put(rowObject);
 			}
-
+			productList.add(0, lgaNameBeen);//for add again lga Name
 			griddata = arrayforjsp;// for global
 //			System.out.println("get_hf_stock_summary_grid_data jsonforjsp ======" + arrayforjsp.toString());
 			PrintWriter out = respones.getWriter();
@@ -124,8 +125,8 @@ public class HFStockSummarySheetPageController {
 	public ModelAndView export_data_grid(HttpServletRequest request, HttpServletResponse respones) throws IOException {
 		// String export_data=request.getParameter("export_data");
 		System.out.println("export_data_grid in lgastocksummdrypagecont ");
-		ModelAndView model = new ModelAndView("excelLgaStockSummry");
-		model.addObject("productlistwithstatename", productList);
+		ModelAndView model = new ModelAndView("hfStockSummarySheetExelView");
+		model.addObject("productListWithCustomerName", productList);
 		model.addObject("export_data", griddata);
 		return model;
 	}

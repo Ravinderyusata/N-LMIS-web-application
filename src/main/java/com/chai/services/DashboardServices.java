@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
@@ -18,35 +19,35 @@ import com.chai.model.views.AdmUserV;
 import com.chai.util.GetJsonResultSet;
 
 public class DashboardServices {
+	Logger logger=Logger.getLogger(DashboardServices.class);
 	SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
+
 	public JSONArray getLgaStockSummaryGridData(AdmUserV userBean, String year, String week, String lgaID) {
 		System.out.println("-- DashboardServices.getLgaStockSummaryGridData() mehtod called: -- ");
-		JSONArray array=new JSONArray();
+		JSONArray array = new JSONArray();
 		Session session = sf.openSession();
 		try {
-			String x_query="";
-			if(userBean.getX_ROLE_NAME().equals("NTO")){
-			 x_query="select STATE_ID,STATE_NAME,LGA_ID, LGA_NAME,ITEM_ID , "
+			String x_query = "";
+			if (userBean.getX_ROLE_NAME().equals("NTO")) {
+				x_query = "select STATE_ID,STATE_NAME,LGA_ID, LGA_NAME,ITEM_ID , "
 						+ " ITEM_NUMBER, YEAR ,WEEK,ONHAND_QUANTITY AS ONHAND_QUANTITY,LEGEND_FLAG ,LEGEND_COLOR"
-						+" from STATE_LCCO_stock_performance_dashbord_v "
-						+" where year="+year+" and week="+week+" AND STATE_ID="+lgaID
-						+" ORDER BY LGA_NAME, ITEM_NUMBER";
-			}else{
-				 x_query="select STATE_ID,STATE_NAME,LGA_ID, LGA_NAME,ITEM_ID , "
+						+ " from STATE_LCCO_stock_performance_dashbord_v " + " where year=" + year + " and week=" + week
+						+ " AND STATE_ID=" + lgaID + " ORDER BY LGA_NAME, ITEM_NUMBER";
+			} else {
+				x_query = "select STATE_ID,STATE_NAME,LGA_ID, LGA_NAME,ITEM_ID , "
 						+ " ITEM_NUMBER, YEAR ,WEEK,ONHAND_QUANTITY AS ONHAND_QUANTITY,LEGEND_FLAG ,LEGEND_COLOR"
-						+" from STATE_LCCO_stock_performance_dashbord_v "
-						+" where year="+year+" and week="+week+" AND STATE_ID="+userBean.getX_WAREHOUSE_ID()
-						+" ORDER BY LGA_NAME, ITEM_NUMBER";
+						+ " from STATE_LCCO_stock_performance_dashbord_v " + " where year=" + year + " and week=" + week
+						+ " AND STATE_ID=" + userBean.getX_WAREHOUSE_ID() + " ORDER BY LGA_NAME, ITEM_NUMBER";
 			}
 			SQLQuery query = session.createSQLQuery(x_query);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();
 			array = GetJsonResultSet.getjson(resultlist);
-	}catch (HibernateException e) {
-		e.printStackTrace();
+		} catch (HibernateException e) {
+			e.printStackTrace();
 		} finally {
 			session.close();
-	}
+		}
 		return array;
 	}
 	
@@ -59,27 +60,31 @@ public class DashboardServices {
 			x_query = "SELECT  LGA_ID,	LGA_NAME, CUSTOMER_ID, CUSTOMER_NAME, ITEM_ID, "
 					+ " ITEM_NUMBER, STOCK_RECEIVED_DATE, STOCK_BALANCE, MIN_STOCK, MAX_STOCK, "
 					+ " LEGEND_FLAG, LEGEND_COLOR FROM hf_stock_performance_dashbord_v "
-					+ " WHERE DATE_FORMAT(STOCK_RECEIVED_DATE,'%Y-%v') = '"+year+"-"+week+"' "+" AND LGA_ID="+lgaID
-					+" union select default_store_id, '' LGA_NAME, "
-					+ " CUSTOMER_ID,  CUSTOMER_NAME, '' ITEM_ID,'' ITEM_NUMBER,'' STOCK_RECEIVED_DATE, "
-					+ " 0 STOCK_BALANCE, 0 MIN_STOCK, 0 MAX_STOCK, 'R' LEGEND_FLAG, 'red' LEGEND_COLOR"
-					+ " from customers where customer_id not in( SELECT CUSTOMER_ID "
-					+ " FROM hf_stock_performance_dashbord_v WHERE DATE_FORMAT(STOCK_RECEIVED_DATE,'%Y-%v')='"+year+"-"+week+"' "
-					+ " AND LGA_ID="+lgaID+") "
-					+ " AND default_store_id="+lgaID
-					+ " AND STATUS='A'";
+					+ " WHERE DATE_FORMAT(STOCK_RECEIVED_DATE,'%Y-%v') = '"+year+"-"+week+"' "+" AND LGA_ID="+lgaID;
+					
+//					+" union select default_store_id, '' LGA_NAME, "
+//					+ " CUSTOMER_ID,  CUSTOMER_NAME, '' ITEM_ID,'' ITEM_NUMBER,'' STOCK_RECEIVED_DATE, "
+//					+ " 0 STOCK_BALANCE, 0 MIN_STOCK, 0 MAX_STOCK, 'R' LEGEND_FLAG, 'red' LEGEND_COLOR"
+//					+ " from customers where customer_id not in( SELECT CUSTOMER_ID "
+//					+ " FROM hf_stock_performance_dashbord_v WHERE DATE_FORMAT(STOCK_RECEIVED_DATE,'%Y-%v')='"+year+"-"+week+"' "
+//					+ " AND LGA_ID="+lgaID+") "
+//					+ " AND default_store_id="+lgaID
+//					+ " AND STATUS='A'";
 
 			Transaction tx = null;
 			tx = session.beginTransaction();
 			SQLQuery query = session.createSQLQuery(x_query);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			logger.info(x_query.toString());
 			List resultlist = query.list();
 			array = GetJsonResultSet.getjson(resultlist);
 		} catch (HibernateException e) {
 			e.printStackTrace();
 		} finally {
 			session.close();
+			
 		}
+		
 		return array;
 	}
 	public JSONArray getStateStockPerfDashboard(AdmUserV userBean,String year,String week,String lgaid){
@@ -122,6 +127,7 @@ public class DashboardServices {
 					+" AND STOCK_RECEIVED_WEEK="+week
 					+" AND LGA_ID=IFNULL("+lgaid+",LGA_ID) AND STATE_ID=IFNULL("+passNullAsStateIdIfLIOMOH+",STATE_ID)";
 			SQLQuery query = session.createSQLQuery(x_query);
+			System.out.println("QUERY1: "+x_query);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist1 = query.list();
 			String x_query2="SELECT STATE_ID,"
@@ -139,6 +145,7 @@ public class DashboardServices {
 					+" WHERE STOCK_RECEIVED_YEAR="+previousyear
 					+" AND STOCK_RECEIVED_WEEK="+previousWeek
 					+" AND LGA_ID=IFNULL("+lgaid+",LGA_ID) AND STATE_ID=IFNULL("+passNullAsStateIdIfLIOMOH+",STATE_ID)";
+			System.out.println("QUERY2: "+x_query2);
 			SQLQuery query1 = session.createSQLQuery(x_query2);
 			query1.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist2 = query1.list();
@@ -439,6 +446,37 @@ public class DashboardServices {
 		e.printStackTrace();
 	} finally {
 		session.close();
+	}
+		return array;
+	}
+	
+	public JSONArray getLgaStockBalanceDashboardData(AdmUserV userBean, String year, String week, String lgaID) {
+		System.out.println("-- DashboardServices.getLgaStockBalanceDashboardData() mehtod called: -- ");
+		JSONArray array=new JSONArray();
+		Session session = sf.openSession();
+		try {
+			String x_query="";
+			if(userBean.getX_ROLE_NAME().equals("NTO")){
+			 x_query="select STATE_ID,STATE_NAME,LGA_ID, LGA_NAME,ITEM_ID , "
+						+ " ITEM_NUMBER, YEAR ,WEEK,ONHAND_QUANTITY AS ONHAND_QUANTITY,LEGEND_FLAG ,LEGEND_COLOR"
+						+" from STATE_LGA_STOCK_BALANCE_ONLY_FOR_DASHBOARD_V "
+						+" where year="+year+" and week="+week+" AND STATE_ID="+lgaID
+						+" ORDER BY LGA_NAME, ITEM_NUMBER";
+			}else{
+				 x_query="select STATE_ID,STATE_NAME,LGA_ID, LGA_NAME,ITEM_ID , "
+						+ " ITEM_NUMBER, YEAR ,WEEK,ONHAND_QUANTITY AS ONHAND_QUANTITY,LEGEND_FLAG ,LEGEND_COLOR"
+						+" from STATE_LGA_STOCK_BALANCE_ONLY_FOR_DASHBOARD_V "
+						+" where year="+year+" and week="+week+" AND STATE_ID="+userBean.getX_WAREHOUSE_ID()
+						+" ORDER BY LGA_NAME, ITEM_NUMBER";
+			}
+			SQLQuery query = session.createSQLQuery(x_query);
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			List resultlist = query.list();
+			array = GetJsonResultSet.getjson(resultlist);
+	}catch (HibernateException e) {
+		e.printStackTrace();
+		} finally {
+			session.close();
 	}
 		return array;
 	}

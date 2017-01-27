@@ -33,50 +33,62 @@
  	display: inline-block; 
  	margin-top: 6px;
 }
+.mediumpurple-status {
+	width: 10px;
+	height: 10px;
+	background:  #8e84fb;
+ 	display: inline-block; 
+ 	margin-top: 6px;
+}
 .table_div3{
-	overflow-x:auto;
-	overflow-y:auto;
+	overflow:hidden;
+	width: 100%;
+	height: 61%;
 }
-.wrap {
+.wrap3 {
 	width: 100%;
 }
-.wrap table {
-	width: 100%;
-	table-layout: fixed;
+.headingTable3 table{
+	width: 98.8%;
 	border-collapse: collapse;
 	font-size:12px;
 }
-.wrap table tr th {
+
+.headingTable3 table tr td {
 	border: 1px solid black;
 	background-color: #e7f0ff;
-	padding: 5px 0px 5px 0px;
+	padding: 5px;
+	width: 106px;
+	text-align: center;
 }
-table tr td {
+.inner_table3 table tr td {
 	padding: 5px;
 	border: 1px solid black;
-	width: 100px;
+	width: 106px;
 	word-wrap: break-word;
+	text-align: center;
 }
-table tr td {
+
+.inner_table3 table tr td:FIRST-CHILD {
 	padding: 5px;
 	border: 1px solid black;
-	width: 100px;
-	text-align:center;
-	word-wrap: break-word;
-}
-table tr td:FIRST-CHILD {
-	padding: 5px;
-	border: 1px solid black;
-	width: 200px;
+	width: 219px;
 	word-wrap: break-word;
 	text-align: left;
 }
-table.head tr td {
-	background: #eee;
+.headingTable3 tr td:FIRST-CHILD  {
+	padding: 5px;
+	border: 1px solid black;
+	width: 226px;
+	word-wrap: break-word;
+	text-align: left;
 }
-.inner_table {
-	height:410px;
-	overflow-y: overlay;
+.inner_table3 table{
+font-size: 12px;
+}
+.inner_table3 {
+	height:93%;
+	overflow-y: scroll;
 	overflow-x: auto;
 }
 </style>
@@ -89,7 +101,7 @@ table.head tr td {
 				<span>State Store Filter:</span>
 				<select id="state_combobox3" class="easyui-combobox" name="state_combobox" style="width: 150px;"></select>
 			</div>
-			<div class="col l9" style="height:24px">
+			<div class="col l12" style="height:24px">
 				<span>Year:</span> 				
 				<select id="year_combobox3" class="easyui-combobox" name="year_combobox" style="width: 80px;"></select>				
 				<span>Week</span> 				
@@ -100,6 +112,7 @@ table.head tr td {
 					<li><div><div class="red-status"></div><div>Antigen Below Minimum Level</div></div></li>
 					<li><div><div class="green-status"></div><div>Antigen Sufficient</div></div></li>
 					<li><div><div class="yellow-status"></div> <div>Antigen need to be re-orderd</div></div></li>
+					<li><div><div class="mediumpurple-status"></div> <div>Over Stock</div></div></li>					
 				</ul>				
 			</div>	
 		</div>
@@ -107,15 +120,17 @@ table.head tr td {
 		<!-- filters ends here -->
 		
 		<div id="table_div3" class="table_div3">
-			<div class="wrap">
-				<table class="head" id="heading_table3">
-					<!-- DYNAMICALLY ROWS ADDED HERE! -->
+			<div class="wrap3">
+			<div class="headingTable3">
+				<table  id="heading_table3">
+						<!-- DYNAMICALLY ROWS ADDED HERE! -->
 				</table>
-				<div class="inner_table">
+			</div>
+			<div class="inner_table3">
 					<table id="table_body3">
 						<!-- Some more tr's -->
 					</table>
-				</div>
+			</div>
 			</div>
 		</div>
 	</div>
@@ -193,8 +208,3 @@ $('#viewDashboardLinkBtn3').linkbutton({});
 $('#exportLinkBtn3').linkbutton({});
 $('#state_combobox3').combobox({});
 </script>
-	<!-- /* Do not delete below code - IMPORTANT */
-	$('#year_combobox').combobox({}); */
-	$('#week_combobox').combobox({});
-	$('#viewDashboardLinkBtn').linkbutton({});
-	$('#exportLinkBtn').linkbutton({}); */ -->
