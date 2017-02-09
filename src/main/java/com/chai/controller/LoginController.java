@@ -44,10 +44,12 @@ import com.chai.services.UserService;
 			 ArrayList<Object> userdataList =
 						UserService.validateUserLogin(userBean.getX_LOGIN_NAME(), userBean.getX_PASSWORD());
 			if (userdataList == null) {
+				System.out.println("login list is null");
 				redirectAttributes.addFlashAttribute("message", "No internet Connectivity or Database Server not responding.");
 				page="redirect:loginPage";
 			} else {
 				if (userdataList.size() == 2) {
+					System.out.println("userdataList.size() == 2");
 					AdmUserV userdata = (AdmUserV) userdataList.get(0);
 					HttpSession session = request.getSession();
 					session.setMaxInactiveInterval(1200);// 20 minute
@@ -59,6 +61,7 @@ import com.chai.services.UserService;
 					session.setAttribute("login_time", ft.format(login_time));
 					page="redirect:homepage";
 				} else {
+					System.out.println("userdataList.size() != 2");
 					page="redirect:loginPage";
 					redirectAttributes.addFlashAttribute("message", "Wrong UserName Or Password");
 				}

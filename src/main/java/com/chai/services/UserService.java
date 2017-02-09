@@ -1,6 +1,5 @@
 package com.chai.services;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -211,6 +210,9 @@ public class UserService {
 		JSONArray array = new JSONArray();
 		String x_query="";
 		String wareHouseRole=userBean.getX_ROLE_NAME();
+		System.out.println("roleId: "+roleId);
+		System.out.println("userTypeId: "+userTypeId);
+		System.out.println("userBean: "+userBean.getX_ROLE_NAME());
 		if(wareHouseRole.equalsIgnoreCase("SCCO")
 				|| wareHouseRole.equalsIgnoreCase("SIO")
 				|| wareHouseRole.equalsIgnoreCase("SIFP")){
@@ -253,41 +255,41 @@ public class UserService {
 		return array;
 		}
 	
-	public  JSONArray getAssignedLgaAccoToRoleForForm(String roleId,String userTypeId,AdmUserV userBean) {
-		System.out.println("-- UserService.getUserListPageData mehtod called: -- ");
+	public JSONArray getAssignedLgaAccoToRoleForForm(String roleId, String userTypeId, AdmUserV userBean) {
+		System.out.println("-- UserService.getAssignedLgaAccoToRoleForForm mehtod called: -- ");
+		System.out.println("roleId: " + roleId);
+		System.out.println("userTypeId: " + userTypeId);
+		System.out.println("userBean: " + userBean.getX_ROLE_NAME());
 		Session session = sf1.openSession();
 		JSONArray array = new JSONArray();
-		String x_query="";
-		String wareHouseRole=userBean.getX_ROLE_NAME();
-		if(wareHouseRole.equalsIgnoreCase("SCCO")
-				|| wareHouseRole.equalsIgnoreCase("SIO")
-				|| wareHouseRole.equalsIgnoreCase("SIFP")){
-			 if( roleId.equals("5004")
-					|| roleId.equals("5005")){
-				x_query="  SELECT WAREHOUSE_ID, WAREHOUSE_NAME  "
-						+ " FROM INVENTORY_WAREHOUSES  "
-						+ " WHERE DEFAULT_ORDERING_WAREHOUSE_ID = "+userBean.getX_WAREHOUSE_ID();
-	
-			}else if(roleId.equals("5002")){
-				x_query="SELECT WAREHOUSE_ID, WAREHOUSE_NAME  FROM INVENTORY_WAREHOUSES  "
-				+" WHERE DEFAULT_ORDERING_WAREHOUSE_ID = "+userBean.getX_WAREHOUSE_ID()
-				+" AND WAREHOUSE_ID NOT IN (SELECT DISTINCT WAREHOUSE_ID FROM ADM_USERS) ";
-			}else if(roleId.equals("5006") ||
-					roleId.equals("5007") ||
-					roleId.equals("5003")){
-				x_query="  SELECT WAREHOUSE_ID, WAREHOUSE_NAME  "
-						+ " FROM INVENTORY_WAREHOUSES  "
-						+ " WHERE WAREHOUSE_ID = "+userBean.getX_WAREHOUSE_ID();
+		String x_query = "";
+		String wareHouseRole = userBean.getX_ROLE_NAME();
+		if (wareHouseRole.equalsIgnoreCase("SCCO") || wareHouseRole.equalsIgnoreCase("SIO")
+				|| wareHouseRole.equalsIgnoreCase("SIFP")) {
+			if (roleId.equals("5004") || roleId.equals("5005")) {
+				x_query = "  SELECT WAREHOUSE_ID, WAREHOUSE_NAME  " + " FROM INVENTORY_WAREHOUSES  "
+						+ " WHERE DEFAULT_ORDERING_WAREHOUSE_ID = " + userBean.getX_WAREHOUSE_ID();
+
+			} else if (roleId.equals("5002")) {
+				x_query = "SELECT WAREHOUSE_ID, WAREHOUSE_NAME  FROM INVENTORY_WAREHOUSES  "
+						+ " WHERE DEFAULT_ORDERING_WAREHOUSE_ID = " + userBean.getX_WAREHOUSE_ID()
+						+ " AND WAREHOUSE_ID NOT IN (SELECT DISTINCT WAREHOUSE_ID FROM ADM_USERS WHERE ACTIVATED IS NULL) ";
+			} else if (roleId.equals("5006") || roleId.equals("5007") || roleId.equals("5003")) {
+				x_query = "  SELECT WAREHOUSE_ID, WAREHOUSE_NAME  " + " FROM INVENTORY_WAREHOUSES  "
+						+ " WHERE WAREHOUSE_ID = " + userBean.getX_WAREHOUSE_ID();
 			}
-		}else if(wareHouseRole.equalsIgnoreCase("LIO")
-				|| wareHouseRole.equalsIgnoreCase("MOH")){
-				x_query=" SELECT  	WAREHOUSE_ID,WAREHOUSE_NAME FROM ADM_USERS_V "
-						 +" WHERE STATUS='A' AND user_type_id="+userTypeId+" and role_id="+roleId
-						 +" AND WAREHOUSE_ID="+userBean.getX_WAREHOUSE_ID();
-		}else if(wareHouseRole.equalsIgnoreCase("NTO")){
-			 x_query=" SELECT distinct 	WAREHOUSE_ID,WAREHOUSE_NAME FROM ADM_USERS_V "
-						+" WHERE STATUS='A' AND  USER_TYPE_ID= "+userTypeId
-					 	+" AND ROLE_ID="+roleId;
+		} else if (wareHouseRole.equalsIgnoreCase("LIO") || wareHouseRole.equalsIgnoreCase("MOH")) {
+			x_query = " SELECT  	WAREHOUSE_ID,WAREHOUSE_NAME FROM ADM_USERS_V "
+					+ " WHERE STATUS='A' AND user_type_id=" + userTypeId + " and role_id=" + roleId
+					+ " AND WAREHOUSE_ID=" + userBean.getX_WAREHOUSE_ID();
+		} else if (wareHouseRole.equalsIgnoreCase("NTO")) {
+			if(userTypeId.equals("148433") && (roleId.equals("5003") || roleId.equals("5006") || roleId.equals("5007"))){
+				x_query = " SELECT WAREHOUSE_ID, WAREHOUSE_NAME FROM VIEW_INVENTORY_WAREHOUSES"
+						+ " WHERE STATUS='A' AND WAREHOUSE_TYPE_ID = F_GET_TYPE('WAREHOUSE TYPES','STATE COLD STORE') ";
+			}else{
+				x_query = " SELECT distinct WAREHOUSE_ID,WAREHOUSE_NAME FROM ADM_USERS_V "
+				+ " WHERE STATUS='A' AND  USER_TYPE_ID= " + userTypeId + " AND ROLE_ID=" + roleId;
+			}			
 		}
 		try {
 			SQLQuery query = session.createSQLQuery(x_query);
@@ -300,8 +302,8 @@ public class UserService {
 			session.close();
 		}
 		return array;
-		}
-	
+	}
+
 	public JSONArray getUserHistory(String user_id) {
 		System.out.println("-- UserService.getUserHistory() mehtod called: -- ");
 		Session session = sf1.openSession();
@@ -362,9 +364,9 @@ public class UserService {
 						+ "		 (COMPANY_ID, FIRST_NAME, LAST_NAME, LOGIN_NAME, "
 						+ "		 	EMAIL, TELEPHONE_NUMBER,START_DATE, "
 						+ "		 	END_DATE, UPDATED_BY, LAST_UPDATED_ON,"
-						+ "  USER_TYPE_ID,SYNC_FLAG, STATUS,   CREATED_BY,"
-						+ " 		CREATED_ON, PASSWORD,  WAREHOUSE_ID) "
-						+ " VALUES (?,?,?,?,?,?,?,?,?,NOW(),?,'N','A',?,NOW(),?,?)";
+						+ "  USER_TYPE_ID, SYNC_FLAG, STATUS, CREATED_BY,"
+						+ " 		CREATED_ON, PASSWORD, WAREHOUSE_ID, ACTIVATED) "
+						+ " VALUES (?,?,?,?,?,?,?,?,?,NOW(),?,'N','A',?,NOW(),?,?,?)";
 			}else{
 				x_QUERY="UPDATE ADM_USERS SET COMPANY_ID=?, "
 						+ "		 FIRST_NAME=?, LAST_NAME=?, LOGIN_NAME=?, "
@@ -391,8 +393,8 @@ public class UserService {
 				query.setParameter(9, bean.getX_USER_TYPE_ID());		
 				query.setParameter(10, userBean.getX_USER_ID());	
 				query.setParameter(11, bean.getX_PASSWORD());	
-				query.setParameter(12, bean.getX_ASSIGN_LGA_ID());	
-				
+				query.setParameter(12, bean.getX_ASSIGN_LGA_ID());				
+				query.setParameter(13, (bean.getX_USER_TYPE_ID().equals("148433")?null:"N"));				
 			}else{
 				query.setParameter(9, bean.getX_USER_ID());	
 			}
@@ -419,7 +421,9 @@ public class UserService {
 	public int saveSetRoleIDMapping(UserBeanForUserForm bean, String action, AdmUserV userBean, Session session) {
 		int result=0;
 		String x_QUERY="";
+		String status="";
 		try {
+			status=(bean.getX_USER_TYPE_ID().equals("148433")?"A":"I");
 			if (action.equals("add")) {
 				x_QUERY="INSERT INTO ADM_USER_ROLE_MAPPINGS "
 						+ "	(  	  STATUS, "
@@ -430,10 +434,10 @@ public class UserService {
 						+ "        USER_ID,"//3
 						+ " ROLE_ID,"//4
 						+ "		COMPANY_ID) "
-						+ "		VALUES ('A',?,?,'N',?,?,?,21000)";
+						+ "		VALUES ('"+status+"',?,?,'N',?,?,?,21000)";
 			}else{
 				x_QUERY="UPDATE ADM_USER_ROLE_MAPPINGS SET "
-						+ "	STATUS='A', "
+//						+ "	STATUS='A', "
 						+ "	START_DATE=?, "//0
 						+ "	END_DATE=?,"//1
 						+ "	SYNC_FLAG='N' "
@@ -448,10 +452,13 @@ public class UserService {
 			}
 			if(action.equals("add")){
 				query.setParameter(2, bean.getX_ASSIGN_LGA_ID());
-				lastInsertUserId=getLastInsertUserID(bean.getX_LOGIN_NAME(),bean.getX_ASSIGN_LGA_ID());
-				query.setParameter(3,lastInsertUserId );
-				query.setParameter(4, bean.getX_USER_ROLE_ID());
-				
+				System.out.println("getX_ASSIGN_LGA_ID: "+bean.getX_ASSIGN_LGA_ID());
+				System.out.println("getX_LOGIN_NAME: "+bean.getX_LOGIN_NAME());
+				System.out.println("getX_ASSIGN_LGA_ID: "+bean.getX_USER_ROLE_ID());
+				lastInsertUserId=getLastInsertUserID(bean.getX_LOGIN_NAME(),bean.getX_ASSIGN_LGA_ID(),session);
+				System.out.println("lastInsertUserId: "+lastInsertUserId);
+				query.setParameter(3,lastInsertUserId );				
+				query.setParameter(4, bean.getX_USER_ROLE_ID());				
 			}else{
 				query.setParameter(2, bean.getX_USER_ID());
 			}
@@ -465,7 +472,9 @@ public class UserService {
 	public int setWarehouseIdAssingment(UserBeanForUserForm bean, String action, AdmUserV userBean, Session session) {
 		int result=0;
 		String x_QUERY="";
+		String status="";
 		try {
+			status=(bean.getX_USER_TYPE_ID().equals("148433")?"A":"I");
 			if (action.equals("add")) {
 				x_QUERY="INSERT INTO ADM_USER_WAREHOUSE_ASSIGNMENTS "
 						+ "		 (COMPANY_ID, "
@@ -485,7 +494,7 @@ public class UserService {
 						+ "		 COMPANY_ID=21000, "
 						+ "		 START_DATE=?, "// 0
 						+ "		 END_DATE=?,"// 1
-						+ "        STATUS='A',"// 
+						+ "        STATUS='"+status+"',"// 
 						+ "       UPDATED_BY=?,"// 2
 						+ "       LAST_UPDATED_ON=now(),"
 						+ "		SYNC_FLAG='N' " + " WHERE USER_ID=?";// 3
@@ -504,8 +513,7 @@ public class UserService {
 				query.setParameter(1, null);
 			} else {
 				query.setParameter(1, CalendarUtil.getDateStringInMySqlInsertFormat(bean.getX_END_DATE()) + " "
-						+ CalendarUtil.getCurrentTime());
-				
+						+ CalendarUtil.getCurrentTime());				
 			}
 			query.setParameter(2, userBean.getX_USER_ID());
 			 result=query.executeUpdate();
@@ -515,23 +523,26 @@ public class UserService {
 		return result;
 	}
 	
-	public String getLastInsertUserID(String user_name,String warehouse_id) {
-		Session session = sf1.openSession();
+	public String getLastInsertUserID(String user_name,String warehouse_id, Session session) {
 		try {
+			System.out.println("user_name: "+user_name+", warehouse_id: "+warehouse_id);
 			SQLQuery query = session.createSQLQuery("Select USER_ID from adm_users"
 					+ " Where LOGIN_NAME='"+user_name+"'  AND WAREHOUSE_ID="+warehouse_id+ " AND STATUS='A'");
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();
+			System.out.println("resultlist.size(): "+resultlist.size());
 			if (resultlist.size()==1) {
-				HashMap<String, String> row=(HashMap) resultlist.get(0);
+				HashMap<String, Object> row=(HashMap) resultlist.get(0);
+				System.out.println("last insert User Id is"+(row.get("USER_ID").toString()));
 				System.out.println("last insert User Id is"+String.valueOf(row.get("USER_ID")));
 				return String.valueOf(row.get("USER_ID"));
-			} else
+			} else{
+				System.out.println("resultlist.size()==1 is false, size!=1");
+				System.out.println("resultlist.size(): "+resultlist.size());
 				return null;
+			}
 		} catch (HibernateException e) {
 			return null;
-		} finally {
-			session.close();
-		}
+		} 
 	}
 }

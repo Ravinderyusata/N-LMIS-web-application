@@ -487,6 +487,7 @@ function loadProductOverViewData(warehouse_id){
 }
 </script>
 <script type="text/javascript">
+
 	function addProduct(){
 		submitType="add";
 		var validate=true;
@@ -497,8 +498,7 @@ function loadProductOverViewData(warehouse_id){
 	    $('#add_edit_form').attr('action','save_addedit_product?action=add');
 	    if('${userBean.getX_ROLE_NAME()}'=='NTO'){
 	      loadFormComboboxListsForForm('');
-	    }else if('${userBean.getX_ROLE_NAME()}'=='SCCO'){
-	    	
+	    }else if('${userBean.getX_ROLE_NAME()}'=='SCCO'){	    	
 	         loadFormComboboxListsForForm('');
 	    }
 	}

@@ -30,6 +30,7 @@ public class LgaStoreBeanForForm {
 	private String x_YEARLY_PREGNANT_WOMEN_TP;
 	private String x_YEARLY_TARGET_POPULATION;
 	private String x_UPDATED_BY;
+	private LabelValueBean labelValue;
 
 	// private String x_YEARLY_TARGET_POPULATION;
 	public Integer getX_WAREHOUSE_ID() {
@@ -209,6 +210,14 @@ public class LgaStoreBeanForForm {
 	}
 	public void setX_YEARLY_TARGET_POPULATION(String x_YEARLY_TARGET_POPULATION) {
 		this.x_YEARLY_TARGET_POPULATION = x_YEARLY_TARGET_POPULATION;
+	}
+
+	public LabelValueBean getLabelValue() {
+		return labelValue;
+	}
+
+	public void setLabelValue(LabelValueBean labelValue) {
+		this.labelValue = labelValue;
 	}
 		
 }

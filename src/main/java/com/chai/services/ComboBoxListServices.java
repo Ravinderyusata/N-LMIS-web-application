@@ -9,15 +9,19 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.json.JSONArray;
+import org.springframework.stereotype.Service;
 
 import com.chai.hibernartesessionfactory.HibernateSessionFactoryClass;
 import com.chai.model.LabelValueBean;
 import com.chai.util.GetJsonResultSet;
 
+@Service
 public class ComboBoxListServices {
+	
 	Transaction tx = null;
 	SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
 	SQLQuery query=null;
+	
 	public  JSONArray getComboboxList(String... args) {
 		System.out.println("-- ComboboxlistService.getComboboxList() mehtod called: -- ");
 		String x_QUERY="";

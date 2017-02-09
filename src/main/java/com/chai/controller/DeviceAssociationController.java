@@ -26,18 +26,18 @@ import com.chai.services.ItemService;
 
 @Controller
 public class DeviceAssociationController {
-	
+
 	DeviceAssociationServiceForList deviceAssSerForlist = new DeviceAssociationServiceForList();
-	
-@RequestMapping(value="/device_association_detail",method=RequestMethod.GET)
-public ModelAndView getDeviceAssociationDetail(HttpServletRequest request,HttpServletResponse respones
-		,@ModelAttribute("deviceAssBean") DeviceAssoiationGridBean deviceAssBean) throws IOException {
-	System.out.println("in DeviceAssociationController.getDeviceAssociationDetail()");
-	ModelAndView deviceAssociationDetail=new ModelAndView("DeviceAssociationDetail");
-	HttpSession session=request.getSession();
-	try {
-		AdmUserV userBean=(AdmUserV)session.getAttribute("userBean");
-		deviceAssociationDetail.addObject("userBean", userBean);
+
+	@RequestMapping(value = "/device_association_detail", method = RequestMethod.GET)
+	public ModelAndView getDeviceAssociationDetail(HttpServletRequest request, HttpServletResponse respones,
+			@ModelAttribute("deviceAssBean") DeviceAssoiationGridBean deviceAssBean) throws IOException {
+		System.out.println("in DeviceAssociationController.getDeviceAssociationDetail()");
+		ModelAndView deviceAssociationDetail = new ModelAndView("DeviceAssociationDetail");
+		HttpSession session = request.getSession();
+		try {
+			AdmUserV userBean = (AdmUserV) session.getAttribute("userBean");
+			deviceAssociationDetail.addObject("userBean", userBean);
 			List<LabelValueBean> product_list = new ItemService().getDropdownList("device_asso_product",
 					String.valueOf(userBean.getX_WAREHOUSE_ID()));
 			deviceAssociationDetail.addObject("product_list", product_list);
@@ -48,12 +48,12 @@ public ModelAndView getDeviceAssociationDetail(HttpServletRequest request,HttpSe
 			List<LabelValueBean> recons_syringe_list = new ItemService().getDropdownList("reconstitute_syrng",
 					String.valueOf(userBean.getX_WAREHOUSE_ID()));
 			deviceAssociationDetail.addObject("recons_syringe_list", recons_syringe_list);
-	} catch (Exception e) {
-		e.printStackTrace();
-		respones.sendRedirect("loginPage");
+		} catch (Exception e) {
+			e.printStackTrace();
+			respones.sendRedirect("loginPage");
+		}
+		return deviceAssociationDetail;
 	}
-	return deviceAssociationDetail;
-}
 
 	@RequestMapping(value = "/getdevice_association_detail")
 	public void getDeviceAssociationDetail(HttpServletRequest request, HttpServletResponse respones,
@@ -78,18 +78,17 @@ public ModelAndView getDeviceAssociationDetail(HttpServletRequest request,HttpSe
 		}
 	}
 
-@RequestMapping(value="/savedeviceAsso")
-	public void addDevice(@ModelAttribute("deviceAssBean") DeviceAssoiationGridBean bean,
-			HttpServletRequest request, HttpServletResponse respones, RedirectAttributes redirectAttributes)
-			throws IOException, ServletException {
-System.out.println("in deviceAssociationcontroller.addDevice()");
-System.out.println("beanbbbbbbbbbbbbbbbbbbb"+bean.getX_ASSOCIATION_ID());
-System.out.println("beanbbbbbbbbbbbbbbbbbbb"+bean.getX_ACTION());
-		HttpSession session=request.getSession();
-		AdmUserV userBean=(AdmUserV)session.getAttribute("userBean");
-	try {
+	@RequestMapping(value = "/savedeviceAsso")
+	public void addDevice(@ModelAttribute("deviceAssBean") DeviceAssoiationGridBean bean, HttpServletRequest request,
+			HttpServletResponse respones, RedirectAttributes redirectAttributes) throws IOException, ServletException {
+		System.out.println("in deviceAssociationcontroller.addDevice()");
+		System.out.println("beanbbbbbbbbbbbbbbbbbbb" + bean.getX_ASSOCIATION_ID());
+		System.out.println("beanbbbbbbbbbbbbbbbbbbb" + bean.getX_ACTION());
+		HttpSession session = request.getSession();
+		AdmUserV userBean = (AdmUserV) session.getAttribute("userBean");
+		try {
 			int insertUpdateFlag = new ItemService().add_edit_deviceAsso(bean, userBean);
-	redirectAttributes.addFlashAttribute("status", bean.getX_ACTION());
+			redirectAttributes.addFlashAttribute("status", bean.getX_ACTION());
 			System.out.println("\ninsertUpdateFlag =" + insertUpdateFlag);
 			PrintWriter out = respones.getWriter();
 			if (insertUpdateFlag == 1) {
@@ -98,11 +97,11 @@ System.out.println("beanbbbbbbbbbbbbbbbbbbb"+bean.getX_ACTION());
 				out.write("fail");
 			}
 			out.close();
-	} catch (Exception e) {
-		respones.sendRedirect("loginPage");
-		e.printStackTrace();
+		} catch (Exception e) {
+			respones.sendRedirect("loginPage");
+			e.printStackTrace();
+		}
 	}
-}
 
 	@RequestMapping(value = "/device_asso_product_list")
 	public void deviceAssoProductList(HttpServletRequest request, HttpServletResponse respones)

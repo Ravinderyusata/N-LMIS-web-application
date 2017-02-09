@@ -296,7 +296,8 @@ public  JSONArray getitemOnHandGridData(AdmUserV userBean,String warehouse_id,St
 		try {
 			if (action.equals("add")) {
 				x_QUERY = "INSERT INTO ITEM_MASTERS_INSERT_UPDATE_FOR_TRG "
-						+ "		 (COMPANY_ID," + " ITEM_DESCRIPTION," // 0
+						+ " (COMPANY_ID," 
+						+ " ITEM_DESCRIPTION," // 0
 						+ " ITEM_TYPE_ID," // 1
 						+ " DEFAULT_CATEGORY_ID, "// 2
 						+ "	TRANSACTION_BASE_UOM," // 3
@@ -313,12 +314,15 @@ public  JSONArray getitemOnHandGridData(AdmUserV userBean,String warehouse_id,St
 						+ " ITEM_NAME, "// 14
 						+ "ITEM_NUMBER ,"// 15
 						+ "LAST_UPDATED_ON, "//
-						+ "SYNC_FLAG," + " CREATED_BY, " // 16
-						+ "CREATED_ON," + "WAREHOUSE_ID) "// 17
+						+ "SYNC_FLAG," 
+						+ " CREATED_BY, " // 16
+						+ "CREATED_ON," 
+						+ "WAREHOUSE_ID) "// 17
 						+ " VALUES('21000',?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),'N',?,NOW(),?)";
 			} else {
 				x_QUERY = "UPDATE ITEM_MASTERS SET"
-						+ " COMPANY_ID='21000', " + "ITEM_DESCRIPTION=?,"// 0
+						+ " COMPANY_ID='21000', " 
+						+ "ITEM_DESCRIPTION=?,"// 0
 						+ " ITEM_TYPE_ID=?,"// 1
 						+ " DEFAULT_CATEGORY_ID=?, "// 2
 						+ " TRANSACTION_BASE_UOM=?, "// 3
@@ -334,18 +338,23 @@ public  JSONArray getitemOnHandGridData(AdmUserV userBean,String warehouse_id,St
 						+ " UPDATED_BY=?, " // 13
 						+ " ITEM_NAME=?, "// 14
 						+ " ITEM_NUMBER=?, "// 15
-						+ " LAST_UPDATED_ON=NOW()," + "SYNC_FLAG='N'" //
-						+ " WHERE (WAREHOUSE_ID = " + userBean.getX_WAREHOUSE_ID() + " and ITEM_NUMBER = '"
-						+ bean.getX_ITEM_NUMBER() + "') " + " OR  (WAREHOUSE_ID IN (SELECT WAREHOUSE_ID "
-						+ "  FROM INVENTORY_WAREHOUSES " + " WHERE DEFAULT_ORDERING_WAREHOUSE_ID = "
-						+ userBean.getX_WAREHOUSE_ID() + " ) " + " AND ITEM_NUMBER = '" + bean.getX_ITEM_NUMBER()
+						+ " LAST_UPDATED_ON=NOW()," 
+						+ "SYNC_FLAG='N'" //
+						+ " WHERE (WAREHOUSE_ID = " + userBean.getX_WAREHOUSE_ID() 
+						+ " and ITEM_NUMBER = '"
+						+ bean.getX_ITEM_NUMBER() + "') " 
+						+ " OR  (WAREHOUSE_ID IN (SELECT WAREHOUSE_ID "
+						+ "  FROM INVENTORY_WAREHOUSES " 
+						+ " WHERE DEFAULT_ORDERING_WAREHOUSE_ID = "
+						+ userBean.getX_WAREHOUSE_ID() + " ) " 
+						+ " AND ITEM_NUMBER = '" 
+						+ bean.getX_ITEM_NUMBER()
 						+ "')";
 			}
 			SQLQuery query = session.createSQLQuery(x_QUERY);
 			query.setParameter(0, bean.getX_ITEM_DESCRIPTION());
 			query.setParameter(1, bean.getX_ITEM_TYPE_ID());
-			query.setParameter(2,
-					(bean.getX_CATEGORY_ID().equalsIgnoreCase("n/a") || bean.getX_CATEGORY_ID().equals("")) ? 0
+			query.setParameter(2, (bean.getX_CATEGORY_ID().equalsIgnoreCase("n/a") || bean.getX_CATEGORY_ID().equals("")) ? 0
 							: bean.getX_CATEGORY_ID());
 			query.setParameter(3, bean.getX_PRIMARY_UOM());
 			query.setParameter(4, (bean.getX_VACCINE_PRESENTATION().equalsIgnoreCase("n/a")

@@ -31,8 +31,14 @@ public class LGAStoreBean implements Serializable {
 	@Column(name="STATE_NAME") private String x_STATE_NAME;
 	@Column(name="STATE_ID") private Integer x_STATE_ID;
 	@Column(name="CREATED_BY") private Integer x_CREATED_BY;
+	@Column(name=" CREATED_ON") private Date x_CREATED_ON;
+	@Column(name=" UPDATED_BY") private Integer x_UPDATED_BY;
+	@Column(name=" LAST_UPDATED_ON") private Date x_LAST_UPDATED_ON;
+	@Column(name=" DEFAULT_ORDERING_WAREHOUSE_ID") private Integer x_DEFAULT_ORDERING_WAREHOUSE_ID;
+	@Column(name=" DEFAULT_ORDERING_WAREHOUSE_NAME") private String x_DEFAULT_ORDERING_WAREHOUSE_NAME;
+	@Column(name=" MTP") private Integer x_MTP;
+	
 	public LGAStoreBean() {
-		// TODO Auto-generated constructor stub
 	}
 	public Integer getX_WAREHOUSE_ID() {
 		return x_WAREHOUSE_ID;
@@ -179,10 +185,10 @@ public class LGAStoreBean implements Serializable {
 		this.x_DEFAULT_ORDERING_WAREHOUSE_ID = x_DEFAULT_ORDERING_WAREHOUSE_ID;
 	}
 	public String getX_DEFAULT_ORDERING_WAREHOUSE_CODE() {
-		return x_DEFAULT_ORDERING_WAREHOUSE_CODE;
+		return x_DEFAULT_ORDERING_WAREHOUSE_NAME;
 	}
-	public void setX_DEFAULT_ORDERING_WAREHOUSE_CODE(String x_DEFAULT_ORDERING_WAREHOUSE_CODE) {
-		this.x_DEFAULT_ORDERING_WAREHOUSE_CODE = x_DEFAULT_ORDERING_WAREHOUSE_CODE;
+	public void setX_DEFAULT_ORDERING_WAREHOUSE_CODE(String x_DEFAULT_ORDERING_WAREHOUSE_NAME) {
+		this.x_DEFAULT_ORDERING_WAREHOUSE_NAME = x_DEFAULT_ORDERING_WAREHOUSE_NAME;
 	}
 	public Integer getX_MTP() {
 		return x_MTP;
@@ -190,11 +196,5 @@ public class LGAStoreBean implements Serializable {
 	public void setX_MTP(Integer x_MTP) {
 		this.x_MTP = x_MTP;
 	}
-	@Column(name=" CREATED_ON") private Date x_CREATED_ON;
-	@Column(name=" UPDATED_BY") private Integer x_UPDATED_BY;
-	@Column(name=" LAST_UPDATED_ON") private Date x_LAST_UPDATED_ON;
-	@Column(name=" DEFAULT_ORDERING_WAREHOUSE_ID") private Integer x_DEFAULT_ORDERING_WAREHOUSE_ID;
-	@Column(name=" DEFAULT_ORDERING_WAREHOUSE_CODE") private String x_DEFAULT_ORDERING_WAREHOUSE_CODE;
-	@Column(name=" MTP") private Integer x_MTP;
 
 }

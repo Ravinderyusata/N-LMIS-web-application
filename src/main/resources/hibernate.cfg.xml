@@ -19,6 +19,10 @@
 
 		<!-- Disable the second-level cache -->
 		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+		<!-- <property name="hbm2ddl.auto">validate</property> for stop schema validator -->
+
+		<!-- <mapping resource="UserBean.hbm.xml" /> -->
 		<mapping class="com.chai.model.UserBean" />
 		<mapping class="com.chai.model.views.AdmUserV" />
 	</session-factory>

@@ -109,16 +109,13 @@ history.pushState(null, null, "homepage");
 });	
 </script>
 <script type="text/javascript">
-
-		$(document).ready(function(){
- 		$('.tabs .tab').css('text-transform', 'none');
- 	 	});
+$(document).ready(function(){
+	$('.tabs .tab').css('text-transform', 'none');
+});
       
 	var reloadDashboards=true;
-	$(document).ready(function(){
-		
-// 		$('#mainHomePageDiv').show();	
-		
+	$(document).ready(function(){		
+// 		$('#mainHomePageDiv').show();		
 		$(".dropdown-button").dropdown({ hover: true });
 		$("#stockDashboardTabsUL .indicator").css('height','5px');
 		$("#ntoStockDashboardTabsUL .indicator").css('height','5px');
@@ -136,7 +133,7 @@ history.pushState(null, null, "homepage");
 				$('#warehouse_name').text('State: ${userdata.getX_WAREHOUSE_NAME()}');	
 				$('#ntoStockDashboardTabsUL').hide();
 				$('#lioMohStockDashboardTabsUL').hide();
-				$('#stockDashboardDropdown li:gt(6)').hide();
+				$('#stockDashboardDropdown li:gt(5)').hide();
 				$('#reportsDropdown li:gt(10)').hide();
 				if(reloadDashboards){
 					/* Below ajax request will run when user log-in(By-Default screen!) */
@@ -258,21 +255,22 @@ history.pushState(null, null, "homepage");
 				if(reloadDashboards){
 					/* Below ajax request will run when user log-in(By-Default screen!) */
 					var defaultDashboardPageUrl = $("#ntoStockDashboardTabsUL a").filter(".active").attr('name');
-//	 				alert("NTO LGA Aggregated-defaultDashboardPageUrl: "+defaultDashboardPageUrl);
-					var lgaStockSummaryDashboardPageUrl = $("#ntoStockDashboardTabsUL li:eq(1) > a").attr('name');
+// 	 				alert("NTO LGA Aggregated-defaultDashboardPageUrl: "+defaultDashboardPageUrl);
+// 	 				console.log("NTO LGA Aggregated-defaultDashboardPageUrl: ", defaultDashboardPageUrl);
+// 					var lgaStockSummaryDashboardPageUrl = $("#ntoStockDashboardTabsUL li:eq(1) > a").attr('name');
 //	 				alert("NTO LGA Stock Summary- lgaStockSummaryDashboardPageUrl: "+lgaStockSummaryDashboardPageUrl);
-					var lgaStockBalanceDashboardPageUrl = $("#ntoStockDashboardTabsUL li:eq(2) > a").attr('name'); // "hf_stock_summary_sheet_page"
+					var lgaStockBalanceDashboardPageUrl = $("#ntoStockDashboardTabsUL li:eq(1) > a").attr('name'); // "hf_stock_summary_sheet_page"
 					
 					var defaultDashboardTabdivID = $("#ntoStockDashboardTabsUL a").filter(".active").attr('href');
 //	 				alert("NTO defaultDashboardTabdivID: "+defaultDashboardTabdivID);
-					var lgaStockSummaryDashboardTabDivId = $("#ntoStockDashboardTabsUL li:eq(1) > a").attr('href');			
+// 					var lgaStockSummaryDashboardTabDivId = $("#ntoStockDashboardTabsUL li:eq(1) > a").attr('href');			
 //	 				alert("NTO lgaStockSummaryDashboardTabDivId: "+lgaStockSummaryDashboardTabDivId);
-					var lgaStockbalenceDashboardTabDivId = $("#ntoStockDashboardTabsUL li:eq(2) > a").attr('href');
+					var lgaStockbalenceDashboardTabDivId = $("#ntoStockDashboardTabsUL li:eq(1) > a").attr('href');
 //	 				alert("Current Week: "+getWeekNumber(new Date())+", Currrent-- : "+(getWeekNumber(new Date())-1));
 					
 					var stateStockStatusLgaAggDashboardDataUrl = "get_lga_agg_stock_dashboard_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR};
 //	 				alert("NTO stateStockStatusLgaAggDashboardDataUrl: "+stateStockStatusLgaAggDashboardDataUrl);
-					var lgaStockSummaryDashboardDataUrl = "get_lga_stock_summary_grid_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR}+"&stateId=null";
+// 					var lgaStockSummaryDashboardDataUrl = "get_lga_stock_summary_grid_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR}+"&stateId=null";
 					var lgaStockBalanceDashboardDataUrl = "get_lga_stock_balance_dashbaord_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR}+"&stateId=null";
 //	 				alert("NTO lgaStockSummaryDashboardDataUrl: "+lgaStockSummaryDashboardDataUrl);
 					document.getElementById("loader_div").style.display = "block";
@@ -308,112 +306,109 @@ history.pushState(null, null, "homepage");
 				    	$('#week_comboboxNTO').combobox('setText','${PREVIOUS_WEEK_OF_YEAR}');
 				    });
 					
-					ajaxGetRequest(lgaStockSummaryDashboardPageUrl, function(data){
+// 					ajaxGetRequest(lgaStockSummaryDashboardPageUrl, function(data){
 //					    	alert("NTO LGA STOCK SUMMARY DASHBOARD SUCCESS : "+data);		    	
-				    	$(lgaStockSummaryDashboardTabDivId).html(data);
+// 				    	$(lgaStockSummaryDashboardTabDivId).html(data);
 				    	/* When LGA STOCK SUMMARY DASHBOARD clicked */
-						$("state_combobox3_div").css('display','block');
-						loadStateCombobox3();
+// 						$("state_combobox3_div").css('display','block');
+// 						loadStateCombobox3();
 //	 				    	$('#state_combobox3').combobox('setValue','All');
 //	 				    	$('#state_combobox3').combobox('setText','All');
 //					    	$('#year_combobox3').combobox('setValue',new Date().getFullYear());
 //					    	$('#year_combobox3').combobox('setText',new Date().getFullYear());
 //					    	$('#week_combobox3').combobox('setValue',(getWeekNumber(new Date())-1));
 //					    	$('#week_combobox3').combobox('setText',(getWeekNumber(new Date())-1));
-				    });
+// 				    });
 					
-					ajaxGetRequest(lgaStockBalanceDashboardPageUrl, function(data){
-					$(lgaStockbalenceDashboardTabDivId).html(data);
-					loadStateCombobox5();
-			   		 });
 					
-					reloadDashboards=false;
-				}				
+					ajaxGetRequest(lgaStockBalanceDashboardPageUrl, function(data) {
+						$(lgaStockbalenceDashboardTabDivId).html(data);
+						loadStateCombobox5();
+					});
+
+								reloadDashboards = false;
+				}
 				break;
 			case "LIO":
-				$('#warehouse_name').text('LGA: ${userdata.getX_WAREHOUSE_NAME()}');				
+				$('#warehouse_name').text('LGA: ${userdata.getX_WAREHOUSE_NAME()}');
 				$('#ntoStockDashboardTabsUL').hide();
 				//$('#stockManagementNavigationUL').hide();
-				$('#stockDashboardTabsUL').hide();				
+				$('#stockDashboardTabsUL').hide();
 				$('#stockDashboardDropdown li:lt(11)').hide();
 				$('#reportsDropdown li:lt(6)').hide();
-				if(reloadDashboards){
+				if (reloadDashboards) {
 					/* Below ajax request will run when user log-in(By-Default screen!) */
 					var defaultDashboardPageUrl = $("#lioMohStockDashboardTabsUL a").filter(".active").attr('name');
 					var hfStockSummarySheetDashboardPageUrl = $("#lioMohStockDashboardTabsUL li:eq(1) > a").attr('name'); // "hf_stock_summary_sheet_page"
-					
 					var defaultDashboardTabdivID = $("#lioMohStockDashboardTabsUL a").filter(".active").attr('href');
 					var hfStockSummaryDashboardTabDivId = $("#lioMohStockDashboardTabsUL li:eq(1) > a").attr('href');
-					
-					var stateStockPerfoDashboardDataUrl = "get_state_stock_perfo_dashboard_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR}+"&lga_id=${userdata.x_WAREHOUSE_ID}";
+					var stateStockPerfoDashboardDataUrl = "get_state_stock_perfo_dashboard_data?year="+ new Date().getFullYear()+ "&week="+ ${PREVIOUS_WEEK_OF_YEAR}
+					+"&lga_id=${userdata.x_WAREHOUSE_ID}";
 // 					alert("stateStockPerfoDashboardDataUrl: "+stateStockPerfoDashboardDataUrl);
-					var hfStockSummarySheetDashboardDataUrl = "get_hf_stock_summary_grid_data?year="+new Date().getFullYear()+"&week="+${PREVIOUS_WEEK_OF_YEAR}+"&lgaId=${userdata.x_WAREHOUSE_ID}&lgaName=${userdata.x_WAREHOUSE_NAME}";
+					var hfStockSummarySheetDashboardDataUrl = "get_hf_stock_summary_grid_data?year="
+							+ new Date().getFullYear()+ "&week="+ ${PREVIOUS_WEEK_OF_YEAR}
+							+"&lgaId=${userdata.x_WAREHOUSE_ID}&lgaName=${userdata.x_WAREHOUSE_NAME}";
 					document.getElementById("loader_div").style.display = "block";
-					
-					ajaxGetRequest(defaultDashboardPageUrl, function(data){		    	
-				    	$(defaultDashboardTabdivID).html(data);
-				    	/* if('${loadCount}'==='1'){
-				    		showTableData(stateStockPerfoDashboardDataUrl);
-				    	}else{
-				    		document.getElementById("loader_div").style.display = "none";
-				    	} */
-				    	document.getElementById("loader_div").style.display = "none";
-//					    	$('#lga_label_span').hide();
-//							$('#lga_combobox').hide();
-						$('#lga_combobox_div').hide();
-				    	$('#lga_combobox').combobox('setValue','${userdata.x_WAREHOUSE_ID}');
-				    	$('#lga_combobox').combobox('setText','${userdata.x_WAREHOUSE_NAME}');
-				    	$('#year_combobox').combobox('setValue',new Date().getFullYear());
-				    	$('#year_combobox').combobox('setText',new Date().getFullYear());
-				    	$('#week_combobox').combobox({
-							url : 'get_week_list/week?yearParam='+(new Date().getFullYear()),
-							valueField : 'value',
-							textField : 'label'
-						});
-				    	$('#week_combobox').combobox('setValue','${PREVIOUS_WEEK_OF_YEAR}');
-				    	$('#week_combobox').combobox('setText','${PREVIOUS_WEEK_OF_YEAR}');
-				    });
-					
-					ajaxGetRequest(hfStockSummarySheetDashboardPageUrl, function(data){	    	
-				    	$(hfStockSummaryDashboardTabDivId).html(data);
-//					    	loadHeadingTable4('${userdata.x_WAREHOUSE_ID}','${userdata.x_WAREHOUSE_NAME}');
-//					    	showTableData4(hfStockSummarySheetDashboardDataUrl);
-				    	$('#lga_combobox_div4').css('display','none');
-//					    	$('#year_combobox4').combobox('setValue',new Date().getFullYear());
-//					    	$('#year_combobox4').combobox('setText',new Date().getFullYear());
-//					    	$('#week_combobox4').combobox('setValue',(getWeekNumber(new Date())-1));
-//					    	$('#week_combobox4').combobox('setText',(getWeekNumber(new Date())-1));
-				    });
-					
-					
+					ajaxGetRequest(defaultDashboardPageUrl,function(data) {
+								$(defaultDashboardTabdivID).html(data);
+								/* if('${loadCount}'==='1'){
+									showTableData(stateStockPerfoDashboardDataUrl);
+								}else{
+									document.getElementById("loader_div").style.display = "none";
+								} */
+								document.getElementById("loader_div").style.display = "none";
+	//					    	$('#lga_label_span').hide();
+	//							$('#lga_combobox').hide();
+								$('#lga_combobox_div').hide();
+								$('#lga_combobox').combobox('setValue','${userdata.x_WAREHOUSE_ID}');
+								$('#lga_combobox').combobox('setText','${userdata.x_WAREHOUSE_NAME}');
+								$('#year_combobox').combobox('setValue',new Date().getFullYear());
+								$('#year_combobox').combobox('setText',new Date().getFullYear());
+								$('#week_combobox').combobox({
+									url : 'get_week_list/week?yearParam='+(new Date().getFullYear()),
+									valueField : 'value',
+									textField : 'label'
+								});
+								$('#week_combobox').combobox('setValue','${PREVIOUS_WEEK_OF_YEAR}');
+								$('#week_combobox').combobox('setText','${PREVIOUS_WEEK_OF_YEAR}');
+							});
+					ajaxGetRequest(hfStockSummarySheetDashboardPageUrl,function(data) {
+								$(hfStockSummaryDashboardTabDivId).html(data);
+	//					    	loadHeadingTable4('${userdata.x_WAREHOUSE_ID}','${userdata.x_WAREHOUSE_NAME}');
+	//					    	showTableData4(hfStockSummarySheetDashboardDataUrl);
+								$('#lga_combobox_div4').css('display', 'none');
+	//					    	$('#year_combobox4').combobox('setValue',new Date().getFullYear());
+	//					    	$('#year_combobox4').combobox('setText',new Date().getFullYear());
+	//					    	$('#week_combobox4').combobox('setValue',(getWeekNumber(new Date())-1));
+	//					    	$('#week_combobox4').combobox('setText',(getWeekNumber(new Date())-1));
+							});
 					/* Above ajax request ends) */
-					reloadDashboards=false;
+					reloadDashboards = false;
 				}
 				break;
 			case "MOH":
-				$('#warehouse_name').text('LGA: ${userdata.getX_WAREHOUSE_NAME()}');				
-				
+				$('#warehouse_name').text('LGA: ${userdata.getX_WAREHOUSE_NAME()}');
 				break;
-		}		
-		
-		/* Below handler will run when Menu-Items(Navigation Menu-Dropdowns) clicked */
-		$("#stockDashboardDropdown a").on("click",function(e) {			  
-			elementId = ('#'+this.name);
+			}
+
+	/* Below handler will run when Menu-Items(Navigation Menu-Dropdowns) clicked */
+		$("#stockDashboardDropdown a").on("click", function(e) {
+			elementId = ('#' + this.name);
 			stockDashboardTabsUL = '#stockDashboardTabsUL';
-			if((this.id === '5') || (this.id === '7')){				
+			if ((this.id === '7') || (this.id === '9')) {
+				alert("this.id="+(this.id));
 				stockDashboardTabsUL = '#ntoStockDashboardTabsUL';
-			}else if((this.id === '9') || (this.id === '11')){
+			} else if ((this.id === '11') || (this.id === '13')) {
 				stockDashboardTabsUL = '#lioMohStockDashboardTabsUL';
 			}
 			var clickableTab = $(stockDashboardTabsUL+" a[href='"+elementId+"']").attr('id');
-			
 			/* $("#stockDashboardTabsUL a[href='"+elementId+"']").attr('class','active'); */
 			/* $(elementId).css('display','block'); */
-// 			alert("Element ID = "+$("#stockDashboardTabsUL a[href='"+elementId+"']").attr('id')+", HREF = "+$("#stockDashboardTabsUL a[href='"+elementId+"']").attr('href'));
-// 			alert("clicked url '"+$(this).attr('href')+"', this.name = "+elementId);			
+			// 			alert("Element ID = "+$("#stockDashboardTabsUL a[href='"+elementId+"']").attr('id')+", HREF = "+$("#stockDashboardTabsUL a[href='"+elementId+"']").attr('href'));
+			// 			alert("clicked url '"+$(this).attr('href')+"', this.name = "+elementId);			
 			e.preventDefault(); // cancel the link itself
-			if($(this).attr('href') !=='#!' || $(this).attr('href') !== '#'){
-				if(reloadDashboards){
+			if ($(this).attr('href') !== '#!' || $(this).attr('href') !== '#') {
+				if (reloadDashboards) {
 // 					$.get(this.href,function(data) {
 // //	 					alert(elementId+", response: "+data);						
 // 						$(elementId).html(data);
@@ -421,7 +416,7 @@ history.pushState(null, null, "homepage");
 // 					    if(('${userdata.getX_ROLE_NAME()}' === 'SCCO') && ($("#stockDashboardTabsUL .active").attr('id') === 'stockDashboardLiTab3Link')){
 // 							/* When LGA STOCK SUMMARY DASHBOARD clicked */
 // 							$('#state_combobox3_div').css('display','none');
-							
+
 // 						}else if(('${userdata.getX_ROLE_NAME()}' === 'NTO') && ($("#stockDashboardTabsUL .active").attr('id') === 'stockDashboardLiTab3Link')){
 // 							/* When LGA STOCK SUMMARY DASHBOARD clicked */
 // 							$('#state_combobox3_div').css('display','block');
@@ -430,43 +425,41 @@ history.pushState(null, null, "homepage");
 // 							$('#state_combobox3_div').css('display','block');
 // 						}							    
 // 					});	
-				}else{
-					$("#"+clickableTab).click();
-				    if(('${userdata.getX_ROLE_NAME()}' === 'SCCO') && ($("#stockDashboardTabsUL .active").attr('id') === 'stockDashboardLiTab3Link')){
+				} else {
+					$("#" + clickableTab).click();
+					if (('${userdata.getX_ROLE_NAME()}' === 'SCCO') && ($("#stockDashboardTabsUL .active").attr('id') === 'stockDashboardLiTab3Link')) {
 						/* When LGA STOCK SUMMARY DASHBOARD clicked */
 						$('#state_combobox3_div').css('display','none');
-						
-					}else if(('${userdata.getX_ROLE_NAME()}' === 'NTO') && ($(stockDashboardTabsUL+" .active").attr('id') === 'ntoStockDashboardLiTab2Link')){
+					} else if (('${userdata.getX_ROLE_NAME()}' === 'NTO') && ($(stockDashboardTabsUL+" .active").attr('id') === 'ntoStockDashboardLiTab5Link')) {
 						/* When LGA STOCK SUMMARY DASHBOARD clicked */
 						$('#state_combobox3_div').css('display','block');
 					}
-				}			
-			}		    
+				}
+			}
 		});
 		$('#iframe').hide();
 	});
-	
-	function showLicense(){
-		 $('#license_modal').openModal();
+
+	function showLicense() {
+		$('#license_modal').openModal();
 	}
-	function showDashBoardDivAndHideIframe(){
+	function showDashBoardDivAndHideIframe() {
 		$('#mainHomePageDiv').show();
 		$('#iframe').hide();
 	}
-	function showIframeAndHideDashBoardDiv(action){
+	function showIframeAndHideDashBoardDiv(action) {
 		$('#loader_for_iframe').show();
 		$('#mainHomePageDiv').hide();
 		$('#iframe').show();
-		$('#iframe').attr('src',"");
-		$('#iframe').attr('src',action);
-	    
-	    document.getElementById("iframe").onload= function() {
-			
+		$('#iframe').attr('src', "");
+		$('#iframe').attr('src', action);
+
+		document.getElementById("iframe").onload = function() {
+
 			$('#loader_for_iframe').hide();
-	    };
-		
-		}
-	
+		};
+
+	}
 </script>
 </head>
 
@@ -533,15 +526,17 @@ history.pushState(null, null, "homepage");
 	<!--SCCO - Stock Dashboard - Dropdown Structure -->
 	<ul id="stockDashboardDropdown" class="dropdown-content">
 		<li id="0"><a href="state_stock_perfo_dashboard" onclick="showDashBoardDivAndHideIframe()" name="stockDashboardTab1View">State Stock Performance Dashboard</a></li>
-		<li id="1" class="divider"></li>		
-		<li id="2"><a href="lga_stock_summary_grid" onclick="showDashBoardDivAndHideIframe()" name="stockDashboardTab3View">LGA Stock Summary</a></li>
+		<li id="1" class="divider"></li>
+		<li><a id="2" href="lga_stock_balance_dashboard_page" onclick="showDashBoardDivAndHideIframe()" name="stockDashboardTab5View">LGA Stock Summary</a></li>
+<!-- 		<li id="2"><a href="lga_stock_summary_grid" onclick="showDashBoardDivAndHideIframe()" name="stockDashboardTab3View">LGA Stock Summary</a></li> -->
 		<li id="3" class="divider"></li>
 		<li id="4"><a href="hf_stock_summary_sheet_page" onclick="showDashBoardDivAndHideIframe()" name="stockDashboardTab4View">HF Stock Summary Sheet</a></li>
 		<li id="5" class="divider"></li>
 <!-- 		<li><a id="6" href="lga_stock_balance_dashboard_page" onclick="showDashBoardDivAndHideIframe()" name="stockDashboardTab5View">LGA Stock Balance Dashboard</a></li> -->
-		<li><a id="7" href="state_Stock_Status_DashboardPage" name="stockDashboardTab1View">State Stock Status Dashboard</a></li>
+		<li><a id="7" href="state_Stock_Status_DashboardPage" onclick="showDashBoardDivAndHideIframe()" name="stockDashboardTab1View">State Stock Status Dashboard</a></li>
 		<li id="8" class="divider"></li>
-		<li><a id="9" href="lga_stock_summary_grid" onclick="showDashBoardDivAndHideIframe()" name="stockDashboardTab3View">LGA Stock Summary</a></li>
+		<li><a id="9" href="lga_stock_balance_dashboard_page" onclick="showDashBoardDivAndHideIframe()" name="stockDashboardTab5View">LGA Stock Summary</a></li>
+<!-- 		<li><a id="9" href="lga_stock_summary_grid" onclick="showDashBoardDivAndHideIframe()" name="stockDashboardTab3View">LGA Stock Summary</a></li> -->
 		<li id="10" class="divider"></li>
 		<li><a id="11" href="state_stock_perfo_dashboard" onclick="showDashBoardDivAndHideIframe()" name="stockDashboardTab1View">LGA Stock Performance Dashboard</a></li>
 		<li id="12" class="divider"></li>
@@ -605,8 +600,8 @@ history.pushState(null, null, "homepage");
 	      <ul id="ntoStockDashboardTabsUL" class="tabs" style="border-color: #95d0b7; height:7%">
 <!-- 	      	default dashboard data action - get_lga_agg_stock_dashboard_data -->
 	        <li id="ntoStockDashboardLiTab1" class="tab col l6"><a id="ntoStockDashboardLiTab1Link" href="#stockDashboardTab1View" name="state_Stock_Status_DashboardPage">State Stock Status Dashboard</a></li>
-	        <li id="ntoStockDashboardLiTab3" class="tab col l6"><a id="ntoStockDashboardLiTab3Link" href="#stockDashboardTab3View" name="lga_stock_summary_grid">LGA Stock Summary Sheet</a></li>
-	         <li id="stockDashboardLiTab5" class="tab col l4"><a id="stockDashboardLiTab5Link" href="#stockDashboardTab5View" name="lga_stock_balannce_dashboard_page">Lga Stock Balance Dashboard</a></li>
+<!-- 	        <li id="ntoStockDashboardLiTab3" class="tab col l6"><a id="ntoStockDashboardLiTab3Link" href="#stockDashboardTab3View" name="lga_stock_summary_grid">LGA Stock Summary Sheet</a></li> -->
+	         <li id="stockDashboardLiTab5" class="tab col l4"><a id="ntoStockDashboardLiTab5Link" href="#stockDashboardTab5View" name="lga_stock_balance_dashboard_page">LGA Stock Summary Sheet</a></li>
 	      </ul>
 	      <ul id="lioMohStockDashboardTabsUL" class="tabs" style="border-color: #95d0b7; height:7%">
 <!-- 	      	default dashboard data action - state_stock_perfo_dashboard : LGA dropdown hidden | default warehouse id passed is logged in LGA's ID -->

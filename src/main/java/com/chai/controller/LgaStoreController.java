@@ -43,23 +43,18 @@ public class LgaStoreController {
 		try {
 			AdmUserV userBean = (AdmUserV) request.getSession().getAttribute("userBean");
 			data = lgaStoreService.getLgaStoreListPageData(userBean);
-			// System.out.println("json ======"+data.toString());
-
 			PrintWriter out = respones.getWriter();
 			out.write(data.toString());
 			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			try {
 				respones.sendRedirect("loginPage");
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
 		return null;
-
 	}
 
 	@RequestMapping(value = "/get_Store_type_list", method = RequestMethod.POST)
@@ -112,7 +107,7 @@ public class LgaStoreController {
 		}
 	}
 
-	@RequestMapping(value = "/get_storename_acco_storetype_list_for_form", method = RequestMethod.POST)
+	@RequestMapping(value = "/storeTypeList", method = RequestMethod.POST)
 	public void getStoreNameAccoToStoreNameListForForm(HttpServletRequest request, HttpServletResponse respones,
 			@RequestParam("storeTypeLabel") String storeTypeLabel) {
 		System.out.println("in LGAlistController.getStoreNameAccoToStoreNameListForForm()");
@@ -181,18 +176,19 @@ public class LgaStoreController {
 	}
 
 	@RequestMapping(value = "/save_addedit_lgastore", method = RequestMethod.POST)
-	public void saveAddEditLgaStore(HttpServletRequest request, HttpServletResponse respones,
-			@ModelAttribute("lgaStoreFormBean") LgaStoreBeanForForm bean) {
+	public void saveAddEditLgaStore(@ModelAttribute("lgaStoreFormBean") LgaStoreBeanForForm bean,
+			HttpServletRequest request, HttpServletResponse response) {
 		AdmUserV userBean = (AdmUserV) request.getSession().getAttribute("userBean");
 		System.out.println("in UserController.saveAddEditUser()");
 		String action = request.getParameter("action");
-		System.out.println("aciton------" + action);
+		System.out.println("action------" + action);
 		// System.out.println("WAREHOUSE_CODE" + bean.getX_WAREHOUSE_CODE());
 		// System.out.println("WAREHOUSE_NAME" + bean.getX_WAREHOUSE_NAME());
 		// System.out.println("WAREHOUSE_DESCRIPTION " +
 		// bean.getX_WAREHOUSE_DESCRIPTION());
-		// System.out.println("WAREHOUSE_TYPE_ID " +
-		// bean.getX_WAREHOUSE_TYPE_ID());
+//		System.out.println("labelValue : "+bean.getLabelValue().getLabel());
+//		System.out.println("labelValue : "+bean.getLabelValue().getValue());
+		 System.out.println("WAREHOUSE_TYPE_ID " + bean.getX_WAREHOUSE_TYPE_ID());
 		// System.out.println("ADDRESS1" + bean.getX_ADDRESS1());
 		// System.out.println("COUNTRY_ID" + bean.getX_COUNTRY_ID());
 		// System.out.println("STATE_ID" + bean.getX_STATE_ID());
@@ -201,8 +197,8 @@ public class LgaStoreController {
 		// System.out.println("STATUS" + bean.getX_STATUS());
 		// System.out.println("START_DATE" + bean.getX_START_DATE());
 		// System.out.println("END_DATE" + bean.getX_END_DATE());
-		// System.out.println("DEFAULT_ORDERING_WAREHOUSE_ID" +
-		// bean.getX_DEFAULT_ORDERING_WAREHOUSE_ID());
+		 System.out.println("DEFAULT_ORDERING_WAREHOUSE_ID" +
+		 bean.getX_DEFAULT_ORDERING_WAREHOUSE_ID());
 		// System.out.println("MONTHLY_TARGET_POPULATION" +
 		// bean.getX_MONTHLY_TARGET_POPULATION());
 		int insertUpdateFlag = 0;
@@ -216,9 +212,9 @@ public class LgaStoreController {
 				insertUpdateFlag = lgaStoreService.saveAddEditLgaStore(bean, action, userBean);
 			}
 			System.out.println("\ninsertUpdateFlag =" + insertUpdateFlag);
-			PrintWriter out = respones.getWriter();
+			PrintWriter out = response.getWriter();
 			if (insertUpdateFlag == 1) {
-				out.write("succsess");
+				out.write("success");
 			} else {
 				out.write("fail");
 			}
@@ -237,7 +233,7 @@ public class LgaStoreController {
 		headerOfTableList.add(new LabelValueBean("WAREHOUSE_TYPE_NAME", "STORE NAME"));
 		headerOfTableList.add(new LabelValueBean("MONTHLY_TARGET_POPULATION", "MTP"));
 		headerOfTableList.add(new LabelValueBean("TELEPHONE_NUMBER", "TELEPHONE NUMBER"));
-		headerOfTableList.add(new LabelValueBean("DEFAULT_ORDERING_WAREHOUSE_CODE", "DEFAULT ORDERING WAREHOUSE CODE"));
+		headerOfTableList.add(new LabelValueBean("DEFAULT_ORDERING_WAREHOUSE_NAME", "DEFAULT ORDERING WAREHOUSE NAME"));
 		headerOfTableList.add(new LabelValueBean("STATUS", "STATUS"));
 		headerOfTableList.add(new LabelValueBean("START_DATE", "START DATE"));
 		headerOfTableList.add(new LabelValueBean("END_DATE", "END DATE"));

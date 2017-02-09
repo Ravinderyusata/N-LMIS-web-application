@@ -5,7 +5,7 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.util.HSSFColor;
 
 public class ExcelStyle {
-	public static void setBorderStyle(HSSFCellStyle cellStyle){
+	public static void setBorderStyle(HSSFCellStyle cellStyle) {
 		cellStyle.setBorderBottom(HSSFBorderFormatting.BORDER_THIN);
 		cellStyle.setBorderTop(HSSFBorderFormatting.BORDER_THIN);
 		cellStyle.setBorderRight(HSSFBorderFormatting.BORDER_THIN);

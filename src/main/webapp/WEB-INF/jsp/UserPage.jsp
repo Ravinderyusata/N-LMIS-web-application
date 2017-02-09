@@ -398,7 +398,7 @@ function AddUser(){
 				$('#assign_lga_combobox_form').combobox('enable',true);
 				$('#assign_lga_combobox_form').combobox('clear');
 				$('#rolename_combobox_form').combobox({
-					url : 'get_rolename_list?userType='+userType.label,
+					url : 'get_rolename_list?userType='+ userType.label,
 					valueField : 'value',
 					textField : 'label',
 					onSelect : function(roleName) {
@@ -422,10 +422,8 @@ function AddUser(){
 							$('#assign_lga_combobox_form').combobox('setValue','${userBean.getX_WAREHOUSE_ID()}');
 							$('#assign_lga_combobox_form').combobox('setText','${userBean.getX_WAREHOUSE_NAME()}');
 						}else{
-							$('#assign_lga_label').text("*Assign LGA");
-						
-						}
-						
+							$('#assign_lga_label').text("*Assign LGA");						
+						}						
 					}
 				});
 			}
