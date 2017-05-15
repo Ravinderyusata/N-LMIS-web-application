@@ -78,7 +78,6 @@ function setRole() {
 	height: 100%;
 	width: 100%;
 	position: absolute;
-	background: #0c1520;
 	overflow: overlay;
 	opacity: 0.5;
 	z-index: 2;
@@ -634,22 +633,23 @@ function editHfForm(buttonId){
         $('#add_edit_form').attr('action','save_addedit_hf?action=edit&CUSTOMER_ID='+row.CUSTOMER_ID);
     }else{
     	alertBox("Please Select Record!");
-    }   
-    
+    }    
 }
 
-function getStateStoreBasedOnLgaId(lgaId){
-	
-	ajaxPostRequest("get_state_store_id_basedon_lga_id", {LGA_ID: lgaId},
-		 function(response) {
-				  $('#state_store_combobox_form').combobox('setValue',response[0].value);
-		             $('#state_store_combobox_form').combobox('setText',response[0].label);
-		             $('#state_store_combobox_form').combobox('disable',true);
-			  });
-	
-}
 
-	function loadHfData(url){
+	function getStateStoreBasedOnLgaId(lgaId) {
+		ajaxPostRequest("get_state_store_id_basedon_lga_id", {
+			LGA_ID : lgaId
+		}, function(response) {
+			$('#state_store_combobox_form').combobox('setValue',
+					response[0].value);
+			$('#state_store_combobox_form').combobox('setText',
+					response[0].label);
+			$('#state_store_combobox_form').combobox('disable', true);
+		});
+	}
+
+	function loadHfData(url) {
 		$('#HFListTable').datagrid({
 			url : url,
 			remoteSort : false,
@@ -669,7 +669,7 @@ function getStateStoreBasedOnLgaId(lgaId){
 				field : 'COUNTRY_NAME',
 				title : 'COUNTRY_NAME',
 				hidden : 'true'
-			},{
+			}, {
 				field : 'CUSTOMER_TYPE_ID',
 				title : 'CUSTOMER TYPE ID',
 				hidden : 'true'
@@ -685,7 +685,7 @@ function getStateStoreBasedOnLgaId(lgaId){
 				field : 'CUSTOMER_DESCRIPTION',
 				title : 'CUSTOMER_DESCRIPTION',
 				hidden : 'true'
-			},{
+			}, {
 				field : 'customer_type_code',
 				title : 'Ward',
 				sortable : true
@@ -705,7 +705,7 @@ function getStateStoreBasedOnLgaId(lgaId){
 				field : 'DEFAULT_STORE',
 				title : 'Default Ordering Store',
 				sortable : true
-			},{
+			}, {
 				field : 'DEFAULT_STORE_ID',
 				title : 'DEFAULT STORE ID',
 				sortable : true,
@@ -715,26 +715,26 @@ function getStateStoreBasedOnLgaId(lgaId){
 				title : 'DB_ID',
 				sortable : true,
 				hidden : 'true'
-			},{
+			}, {
 				field : 'STATE_ID',
 				title : 'STATE_ID',
 				sortable : true,
 				hidden : 'true'
-			},{
+			}, {
 				field : 'STATE_NAME',
 				title : 'STATE_NAME',
 				sortable : true,
 				hidden : 'true'
-			},{
+			}, {
 				field : 'DAY_PHONE_NUMBER',
 				title : 'Telephone',
 				sortable : true
-			},  {
+			}, {
 				field : 'EMAIL_ADDRESS',
 				title : 'EMAIL_ADDRESS',
 				sortable : true,
 				hidden : 'true'
-			},{
+			}, {
 				field : 'VACCINE_FLAG',
 				title : 'Fridge Available',
 				sortable : true

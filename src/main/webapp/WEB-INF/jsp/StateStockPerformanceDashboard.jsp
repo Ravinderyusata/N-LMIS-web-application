@@ -57,7 +57,7 @@ h6 {
 	<div>
 		<!-- filters -->
 		<div class="row" style="padding: 0px 12;line-height: 3">
-			<div class="col l3">				
+			<div class="col l3" style="width:18%">				
 				<div id='lga_combobox_div'>
 					<span id='lga_label_span'>LGA:</span>
 					<select id="lga_combobox" class="easyui-combobox" name="lga_combobox" style="width: 200px;"></select>	

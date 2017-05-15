@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<html id="homepageHtmlElement">
+<html id="homepageHtmlElement" style="font-size:13px">
 <head>
 <link rel="shortcut icon" type="image/x-icon" href="resources/images/favicon.ico" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,11 +28,16 @@ nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
     line-height: 22px;
     padding: 7px 16px;
 }
+.preloader-wrapper.big {
+    height: 100px;
+    left: 42%;
+    top: 50%;
+    width: 100px;
+}
 .loader_div {
 	height: 100%;
 	width: 100%;
 	position: absolute;
-	background: #0c1520;
 	overflow: overlay;
 	opacity: 0.5;
 	z-index: 1000;
@@ -57,7 +62,6 @@ nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
 	height: 84%;
 	width: 100%;
 	position: absolute;
-	background: #0c1520;
 	overflow: overlay;
 	opacity: 0.5;
 	z-index: 1000;
@@ -455,7 +459,6 @@ $(document).ready(function(){
 		$('#iframe').attr('src', action);
 
 		document.getElementById("iframe").onload = function() {
-
 			$('#loader_for_iframe').hide();
 		};
 
@@ -628,14 +631,116 @@ $(document).ready(function(){
     </div>
      <iframe id="iframe" src=""  height="75%" width="100%"></iframe> 
 	<!-- loader div -->
-	<div style="display: none;" id="loader_div" class="loader_div">
-		<div class="loader" id="loader_show"></div>
+<!-- 	<div style="display: none;" id="loader_div" class="loader_div"> -->
+<!-- 		<div class="loader" id="loader_show"></div> -->
+<!-- 	</div> -->
+	<div id="loader_div" style="display: none" class="loader_div">
+		<div id="loader_show" class="preloader-wrapper big active">
+			<div class="spinner-layer spinner-blue">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+
+			<div class="spinner-layer spinner-red">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+
+			<div class="spinner-layer spinner-yellow">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+
+			<div class="spinner-layer spinner-green">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+		</div>
 	</div>
+
 	<!-- loader div for ifram-->
-	<div style="display: none;" id="loader_for_iframe" class="loader_div_for_iframe">
-		<div class="loader_circle" id="loader_show"></div>
+<!-- 	<div style="display: none;" id="loader_for_iframe" class="loader_div_for_iframe"> -->
+<!-- 		<div class="loader_circle" id="loader_show"></div> -->
+<!-- 	</div> -->
+	<div id="loader_for_iframe" style="display: none" class="loader_div_for_iframe">
+		<div id="loader_show" class="preloader-wrapper big active">
+			<div class="spinner-layer spinner-blue">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+
+			<div class="spinner-layer spinner-red">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+
+			<div class="spinner-layer spinner-yellow">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+
+			<div class="spinner-layer spinner-green">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+		</div>
 	</div>
-	
 	<!-- Modal Structure For license -->
   <div id="license_modal" class="modal modal-fixed-footer" >
     <div class="modal-content" >

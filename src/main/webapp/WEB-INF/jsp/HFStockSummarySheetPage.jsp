@@ -5,7 +5,10 @@
 <style>
 	.status-list {
 		display: inline-flex;
+		margin: 0px; 
+		padding: 0px;		
 	}
+	.status-list li{margin-right:10px}
 	.status-list li div {
 		display: inline-flex;
 		padding-left:2px; 
@@ -88,9 +91,9 @@ font-size: 12px;
 <body>
 	<div>
 		<!-- filters -->
-		<div id="filters" style="padding: 3px;box-shadow: 1px 1px 1px 0px;">
+		<div id="filters" style="padding: 2px;box-shadow: 1px 1px 1px 0px;">
 			<div id="lga_combobox_div4" style="display: inline;">
-				<label>LGA:</label> 
+				<span>LGA:</span> 
 				<select id="lga_combobox4" class="easyui-combobox" name="lga_combobox4" style="width:200px;">
 				</select> 	
 			</div>
@@ -103,19 +106,23 @@ font-size: 12px;
 			<a id="viewDashboardLinkBtn4" href="#" class="easyui-linkbutton" onclick="filterGridData4(true)">View Dashboard </a>
 			<a id="exportLinkBtn4" href="hf_stock_summary_export_data" class="easyui-linkbutton">Export</a>
 			&nbsp;&nbsp;
+			<span id="activeHFCount">Active Facilities with Functional CCE : </span>
+<!-- 			<select id="otherActiveHfs" class="easyui-combobox" name="otherActiveHfs" style="width: 200px;" -->
+<!-- 			        data-options="textField:'CUSTOMER_NAME',valueField:'CUSTOMER_NAME'"> -->
+<!-- 			</select>			 -->
 			<ul class="status-list" style="margin:0 0;">
-					<li><div><div class="red-status"></div><div>Antigen Below Minimum Level</div></div></li>
-					<li><div><div class="green-status"></div><div>Antigen Sufficient</div></div></li>
-					<li><div><div class="yellow-status"></div> <div>Antigen need to be re-orderd</div></div></li>
-					<li><div><div class="blue-status"></div> <div>Over Stock</div></div></li>
-				</ul>
+				<li><div><div class="red-status"></div><div>Antigen Below Minimum Level</div></div></li>
+				<li><div><div class="green-status"></div><div>Antigen Sufficient</div></div></li>
+				<li><div><div class="yellow-status"></div> <div>Antigen need to be re-orderd</div></div></li>
+				<li><div><div class="blue-status"></div> <div>Over Stock</div></div></li>
+			</ul>
 		</div>
 		<!-- filters end here -->
 
 		<div  class="table_div4">
 			<div class="wrap4">
 			<div class="headingTable4">
-			<table  id="heading_table4">
+				<table  id="heading_table4">
 					<!-- DYNAMICALLY ROWS WILL GENERATE HERE... -->			
 				</table>
 			</div>

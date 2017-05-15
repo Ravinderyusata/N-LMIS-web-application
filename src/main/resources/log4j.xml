@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="rollingFileAppender1" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="B:/NLMIS_WEB_LOG/chai.txt" /> 
+<!-- 		<param name="File" value="/NLMIS_WEB_LOG/chai.log" /> -->
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%6p %d{dd MMM yyyy HH:mm:ss,SSS} [%t] -%m%n" />
+		</layout>
+	</appender>
+	
+	<logger name="com.yusata">
+		<level value="all" />
+		<appender-ref ref="rollingFileAppender1" />
+	</logger>
+	
+</log4j:configuration>

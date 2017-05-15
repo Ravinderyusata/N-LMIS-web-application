@@ -222,6 +222,10 @@ function loadHeadingTable4(lgaId,lgaName){
 function loaddata4(data) {
 	var headingrow = document.getElementById("heading_table4").rows[0].cells;
 	var datacard = "";
+	console.log("data length: ", data.length);
+	var activeButZeroDataHFList = data.pop();
+	console.log("activeButZeroDataHFList: ", JSON.stringify(activeButZeroDataHFList));
+	$('#activeHFCount').html("Active Facilities with Functional CCE : "+activeButZeroDataHFList.length);
 	for (var i = 0; i < data.length; i++) {
 		datacard += "<tr>";
 		datacard += "<td>" + data[i].CUSTOMER_NAME + "</td>";

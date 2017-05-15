@@ -78,7 +78,6 @@
 	height: 100%;
 	width: 100%;
 	position: absolute;
-	background: #0c1520;
 	overflow: overlay;
 	opacity: 0.5;
 	z-index: 2;

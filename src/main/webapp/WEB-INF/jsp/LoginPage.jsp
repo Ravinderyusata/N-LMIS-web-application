@@ -25,7 +25,7 @@
 	}
 </script>
 </head>
-<body style="background-color: #ebeff9;">
+<body>
 	<div id="mainDiv" class="row">
 		<div id="logindiv" style="size: auto; margin: 2%; padding-left: 10%;"
 			class="row">

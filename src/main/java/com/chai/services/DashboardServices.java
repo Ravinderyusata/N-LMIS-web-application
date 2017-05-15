@@ -13,11 +13,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.stereotype.Repository;
 
 import com.chai.hibernartesessionfactory.HibernateSessionFactoryClass;
 import com.chai.model.views.AdmUserV;
 import com.chai.util.GetJsonResultSet;
 
+@Repository
 public class DashboardServices {
 	Logger logger=Logger.getLogger(DashboardServices.class);
 	SessionFactory sf = HibernateSessionFactoryClass.getSessionAnnotationFactory();
@@ -55,38 +57,48 @@ public class DashboardServices {
 		System.out.println("-- DashboardServices.getHFStockSummaryGridData() mehtod called: lgaID=-- "+lgaID);
 		JSONArray array = new JSONArray();
 		Session session = sf.openSession();
-		try {
-			String x_query = "";
-			x_query = "SELECT  LGA_ID,	LGA_NAME, CUSTOMER_ID, CUSTOMER_NAME, ITEM_ID, "
-					+ " ITEM_NUMBER, STOCK_RECEIVED_DATE, STOCK_BALANCE, MIN_STOCK, MAX_STOCK, "
-					+ " LEGEND_FLAG, LEGEND_COLOR FROM hf_stock_performance_dashbord_v "
-					+ " WHERE DATE_FORMAT(STOCK_RECEIVED_DATE,'%Y-%v') = '"+year+"-"+week+"' "+" AND LGA_ID="+lgaID;
-					
-//					+" union select default_store_id, '' LGA_NAME, "
-//					+ " CUSTOMER_ID,  CUSTOMER_NAME, '' ITEM_ID,'' ITEM_NUMBER,'' STOCK_RECEIVED_DATE, "
-//					+ " 0 STOCK_BALANCE, 0 MIN_STOCK, 0 MAX_STOCK, 'R' LEGEND_FLAG, 'red' LEGEND_COLOR"
-//					+ " from customers where customer_id not in( SELECT CUSTOMER_ID "
-//					+ " FROM hf_stock_performance_dashbord_v WHERE DATE_FORMAT(STOCK_RECEIVED_DATE,'%Y-%v')='"+year+"-"+week+"' "
-//					+ " AND LGA_ID="+lgaID+") "
-//					+ " AND default_store_id="+lgaID
-//					+ " AND STATUS='A'";
-
-			Transaction tx = null;
-			tx = session.beginTransaction();
-			SQLQuery query = session.createSQLQuery(x_query);
+		StringBuilder queryBuilder = new StringBuilder("SELECT LGA_ID, LGA_NAME, CUSTOMER_ID, CUSTOMER_NAME, ITEM_ID, ITEM_NUMBER, STOCK_RECEIVED_DATE, STOCK_BALANCE, MIN_STOCK, MAX_STOCK, LEGEND_FLAG, LEGEND_COLOR FROM HF_STOCK_PERFORMANCE_DASHBORD_V WHERE DATE_FORMAT(STOCK_RECEIVED_DATE,'%Y-%v')='");
+		  queryBuilder.append(year)
+					  .append("-")
+					  .append(week)
+					  .append("' AND LGA_ID=")
+					  .append(lgaID);	
+		try {					
+			SQLQuery query = session.createSQLQuery(queryBuilder.toString());
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
-			logger.info(x_query.toString());
+			logger.info(queryBuilder.toString());
 			List resultlist = query.list();
-			array = GetJsonResultSet.getjson(resultlist);
+			array = GetJsonResultSet.getjson(resultlist);			
 		} catch (HibernateException e) {
 			e.printStackTrace();
 		} finally {
-			session.close();
-			
-		}
-		
+			session.close();			
+		}		
 		return array;
 	}
+	
+	public List activeHFWithZeroData(String year, String week, String lgaID) throws Exception{
+//		StringBuilder queryBuilder = new StringBuilder("SELECT CUSTOMER_NAME FROM CUSTOMERS WHERE CUSTOMER_ID NOT IN (");
+//		queryBuilder.append("SELECT DISTINCT CUST.CUSTOMER_ID AS CUSTOMER_ID FROM ((((((VERTICAL.CUSTOMER_PRODUCT_CONSUMPTION CONS LEFT JOIN VERTICAL.ORDER_LINES LINE ON(((CONS.CONSUMPTION_ID = LINE.CONSUMPTION_ID) AND (CONS.WAREHOUSE_ID = LINE.ORDER_FROM_ID) AND (CONS.CUSTOMER_ID = LINE.ORDER_TO_ID) AND (CONS.ITEM_ID = LINE.ITEM_ID) AND (WEEK(CONS.DATE,0) = WEEK(LINE.CREATED_DATE,0)) AND (YEAR(CONS.DATE) = YEAR(LINE.CREATED_DATE))))) LEFT JOIN VERTICAL.ORDER_HEADERS HDR ON(((LINE.ORDER_HEADER_ID = HDR.ORDER_HEADER_ID) AND (HDR.ORDER_STATUS_ID = 10)))) JOIN VERTICAL.CUSTOMERS CUST ON(((CONS.CUSTOMER_ID = CUST.CUSTOMER_ID) AND (CUST.STATUS = 'A')))) JOIN VERTICAL.ITEM_MASTERS ITM ON(((CONS.ITEM_ID = ITM.ITEM_ID) AND (CUST.DEFAULT_STORE_ID = ITM.WAREHOUSE_ID)))) JOIN VERTICAL.INVENTORY_WAREHOUSES INV ON((CONS.WAREHOUSE_ID = INV.WAREHOUSE_ID))) JOIN VERTICAL.INVENTORY_WAREHOUSES INV2 ON((INV.DEFAULT_ORDERING_WAREHOUSE_ID = INV2.WAREHOUSE_ID))) WHERE (CONS.VALID = 'Y') AND DATE_FORMAT(CONS.DATE,'%Y-%v')='")
+//					.append(year)
+//					.append("-")
+//					.append(week)
+//					.append("' AND CONS.WAREHOUSE_ID=")
+//					.append(lgaID)
+//					.append(" GROUP BY INV.DEFAULT_ORDERING_WAREHOUSE_ID,CONS.WAREHOUSE_ID,CONS.CUSTOMER_ID, CONS.ITEM_ID,YEAR(CONS.DATE),WEEK(CONS.DATE,0)")
+//					.append(") AND DEFAULT_STORE_ID=")
+//					.append(lgaID)
+//					.append(" AND STATUS='A'");
+		StringBuilder queryBuilder = new StringBuilder("SELECT CUSTOMER_NAME FROM CUSTOMERS WHERE DEFAULT_STORE_ID = ");
+					  queryBuilder.append(lgaID)
+					  			  .append(" AND STATUS='A' AND VACCINE_FLAG='Y'");
+			SQLQuery query = sf.openSession().createSQLQuery(queryBuilder.toString());
+			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+			logger.info(queryBuilder.toString());
+		List list = query.list();
+		return list;
+	}
+	
 	public JSONArray getStateStockPerfDashboard(AdmUserV userBean,String year,String week,String lgaid){
 		System.out.println("-- DashboardServices.getStateStockPerfDashboard() mehtod called: -- ");
 		JSONArray array=new JSONArray();

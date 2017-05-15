@@ -94,6 +94,7 @@ public class ComboBoxListServices {
 		}
 		try {
 			query = session.createSQLQuery(x_QUERY);
+			System.out.println("HF DROP DOWN LIST QUERY: "+x_QUERY);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();
 			if (args.length == 3) {

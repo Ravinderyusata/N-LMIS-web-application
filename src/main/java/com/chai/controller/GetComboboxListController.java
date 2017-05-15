@@ -269,8 +269,10 @@ public class GetComboboxListController {
 		try {
 			JSONArray data = null;
 			if (option.equals("All")) {
+				System.out.println("option ALL");
 				data = comboboxServices.getComboboxList("hfListLgaBased", lgaid, option);
 			} else {
+				System.out.println("option NOT ALL");
 				data = comboboxServices.getComboboxList("hfListLgaBased", lgaid, "null");
 			}
 			// System.out.println("hflist: "+data.toString());

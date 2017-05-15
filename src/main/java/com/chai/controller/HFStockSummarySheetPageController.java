@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,10 @@ import com.chai.services.DashboardServices;
 
 @Controller
 public class HFStockSummarySheetPageController {
+	
+	@Autowired private DashboardServices dashboardServices;
+	@Autowired private ComboBoxListServices comboBoxListServices;
+	
 	List<LabelValueBean> productList = new LinkedList<LabelValueBean>();
 	JSONArray griddata = new JSONArray();
 	
@@ -40,7 +45,7 @@ public class HFStockSummarySheetPageController {
 			@RequestParam("lgaName") String lgaName) {
 		AdmUserV userBean = (AdmUserV) request.getSession().getAttribute("userBean");
 		try {
-			productList = new ComboBoxListServices().getProductListInBean("productlistbassedonlga",String.valueOf(userBean.getX_WAREHOUSE_ID()), "false");
+			productList = comboBoxListServices.getProductListInBean("productlistbassedonlga",String.valueOf(userBean.getX_WAREHOUSE_ID()), "false");
 			productList.add(0, new LabelValueBean(null, lgaName));
 			JSONArray array = new JSONArray();
 			for (LabelValueBean object : productList) {
@@ -60,15 +65,17 @@ public class HFStockSummarySheetPageController {
 	@RequestMapping(value = "/get_hf_stock_summary_grid_data")
 	public JSONArray HfstockSumaryPageController(HttpServletRequest request, HttpServletResponse respones,
 			@RequestParam("year") String year, @RequestParam("week") String week, @RequestParam("lgaId") String lgaId,
-			@RequestParam("lgaName") String lgaName) {
+			@RequestParam("lgaName") String lgaName) throws Exception {
 		JSONArray arrayforjsp = new JSONArray();
+		List activeHFWithZeroData = null;
 //		System.out.println("in HfstockSumaryPageController.HfstockSumaryPageController()");
 //		System.out.println("lgaId :" + lgaId);
 //		System.out.println("year :" + year);
 //		System.out.println("week :" + week);
 		try {
 			JSONArray data;
-			data = new DashboardServices().getHFStockSummaryGridData(year, week, lgaId);
+			data = dashboardServices.getHFStockSummaryGridData(year, week, lgaId);
+			activeHFWithZeroData = dashboardServices.activeHFWithZeroData(year, week, lgaId);
 //			System.out.println("lgaId: " + lgaId);
 //			System.out.println("get_hf_stock_summary_grid_data data.toSring(): " + data.toString());
 			SortedSet<String> hfNameList = new TreeSet<String>();
@@ -111,11 +118,13 @@ public class HFStockSummarySheetPageController {
 			}
 			productList.add(0, lgaNameBeen);//for add again lga Name
 			griddata = arrayforjsp;// for global
+			arrayforjsp.put(activeHFWithZeroData);
 //			System.out.println("get_hf_stock_summary_grid_data jsonforjsp ======" + arrayforjsp.toString());
 			PrintWriter out = respones.getWriter();
+			System.out.println("arrayFor HF STOCK SUMMARY: "+arrayforjsp.toString());
 			out.write(arrayforjsp.toString());
 			out.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;

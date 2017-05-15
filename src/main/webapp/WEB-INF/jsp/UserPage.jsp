@@ -65,7 +65,6 @@ font-weight: bold;
 	height: 100%;
 	width: 100%;
 	position: absolute;
-	background: #0c1520;
 	overflow: overlay;
 	opacity: 0.5;
 	z-index: 2;
@@ -529,12 +528,14 @@ function saveUser(){
           return validate;
         },
         success: function(result){
-        	if (result.toString()=='succsess'){
+        	if (result.toString()=='success'){
                   // close the dialog
-            	  alertBox("Operation Successfull");
+//             	  alertBox("Operation Successfull");
+                  $.messager.alert('Information', 'User Added Successfully', 'info');
             	  refreshData();
             } else {
-            	  alertBox("Operaction Failed");
+//             	  alertBox("Operaction Failed");
+            	  $.messager.alert('Error', 'Operaction Failed', 'error');
             }
         	 $('#form_dialog').dialog('close');
         }

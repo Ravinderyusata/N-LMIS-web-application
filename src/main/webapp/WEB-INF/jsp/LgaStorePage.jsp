@@ -64,7 +64,6 @@
 	height: 100%;
 	width: 100%;
 	position: absolute;
-	background: #0c1520;
 	overflow: overlay;
 	opacity: 0.5;
 	z-index: 2;
@@ -373,7 +372,7 @@
 					url : $('#add_edit_form').attr('action'),
 					onSubmit : function() {
 						$('#store_type_combobox_form_field').val($('#store_type_combobox_form').combobox('getValue'));
-						$('#default_ord_store_combobox_form_field').val($('#default_ord_store_combobox_form').combobox('getValue'));
+// 						$('#default_ord_store_combobox_form_field').val($('#default_ord_store_combobox_form').combobox('getValue'));
 						var errormessage = "";
 						var validate = true;
 						if ($('#status_checkbox').is(':checked')) {
@@ -418,15 +417,16 @@
 						if (errormessage != '') {
 							alertBox(errormessage);
 						}
-						alert(validate);
 						return true;
 					},
 					success : function(result) {
 						if (result.toString() == 'success') {
-							alertBox("Operation Successfull");
+// 							alertBox("Operation Successfull");
+							$.messager.alert('Information', 'Store Added Successfully', 'info');
 							refreshLgaStoreList();
 						} else {
-							alertBox("Operaction Failed");
+							$.messager.alert('Error', 'Operaction Failed', 'error');
+// 							alertBox("Operaction Failed");
 						}
 						$('#form_dialog').dialog('close');
 					}

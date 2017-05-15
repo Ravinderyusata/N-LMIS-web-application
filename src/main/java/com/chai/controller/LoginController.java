@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,6 +24,7 @@ import com.chai.services.UserService;
 
 @Controller
 	public class LoginController {
+	
 	@RequestMapping(value = "/loginPage", method = RequestMethod.GET)
 	public ModelAndView getForm(@ModelAttribute("userBean") UserBean userBean, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -35,6 +37,7 @@ import com.chai.services.UserService;
 			HttpServletRequest request, HttpServletResponse respones,
 			RedirectAttributes redirectAttributes) throws IOException {
 		Logger logger=Logger.getLogger(LoginController.class);
+		
 		logger.info("ok");
 		String page="";
 		System.out.println("in LoginController action login");
