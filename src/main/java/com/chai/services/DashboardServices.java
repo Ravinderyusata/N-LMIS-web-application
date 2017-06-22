@@ -65,6 +65,7 @@ public class DashboardServices {
 					  .append(lgaID);	
 		try {					
 			SQLQuery query = session.createSQLQuery(queryBuilder.toString());
+			System.out.println("query="+query);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			logger.info(queryBuilder.toString());
 			List resultlist = query.list();
@@ -93,6 +94,7 @@ public class DashboardServices {
 					  queryBuilder.append(lgaID)
 					  			  .append(" AND STATUS='A' AND VACCINE_FLAG='Y'");
 			SQLQuery query = sf.openSession().createSQLQuery(queryBuilder.toString());
+			System.out.println("query="+query);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			logger.info(queryBuilder.toString());
 		List list = query.list();

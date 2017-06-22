@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.chai.model.HealthFacilityBean;
+import com.chai.model.healthFacilityBean;
 import com.chai.model.LabelValueBean;
 import com.chai.model.views.AdmUserV;
 import com.chai.services.HealthFacilityService;
@@ -28,7 +28,7 @@ public class PrimaryHealthFacilityPageController {
 	HealthFacilityService hfService = new HealthFacilityService();
 @RequestMapping(value="/primaryhealthfacilitypage",method = RequestMethod.GET)
 	public ModelAndView getHFGridData(HttpServletRequest request, HttpServletResponse respones,
-			@ModelAttribute("hfBean") HealthFacilityBean bean) {
+			@ModelAttribute("hfBean") healthFacilityBean bean) {
 	System.out.println("in PrimaryHealthFacilityPage.getHFGridData()");
 	ModelAndView primaryHFGridPage= new ModelAndView("PrimaryHealthFacilityPage");
 	try {
@@ -95,7 +95,7 @@ public class PrimaryHealthFacilityPageController {
 
 	@RequestMapping(value = "/save_addedit_hf", method = RequestMethod.POST)
 	public void saveAddEditLgaStore(HttpServletRequest request, HttpServletResponse respones,
-			@ModelAttribute("hfBean") HealthFacilityBean bean) {
+			@ModelAttribute("hfBean") healthFacilityBean bean) {
 		AdmUserV userBean = (AdmUserV) request.getSession().getAttribute("userBean");
 		System.out.println("in UserController.saveAddEditUser()");
 		String action = request.getParameter("action");

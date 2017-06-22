@@ -157,6 +157,7 @@ public class ComboBoxListServices {
 		}
 		try {
 			query = sf.openSession().createSQLQuery(x_QUERY);
+			System.out.println("-- query for product list: -- "+x_QUERY);
 			query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
 			List resultlist = query.list();
 			array = GetJsonResultSet.getCombolistInBean(resultlist, Boolean.parseBoolean(args[2]));

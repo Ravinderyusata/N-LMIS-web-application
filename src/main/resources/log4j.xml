@@ -3,7 +3,7 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
 	<appender name="rollingFileAppender1" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="B:/NLMIS_WEB_LOG/chai.txt" /> 
+		<param name="File" value="/NLMIS_WEB_LOG/chai.txt" /> 
 <!-- 		<param name="File" value="/NLMIS_WEB_LOG/chai.log" /> -->
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />

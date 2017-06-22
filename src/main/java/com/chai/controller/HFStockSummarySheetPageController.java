@@ -51,7 +51,7 @@ public class HFStockSummarySheetPageController {
 			for (LabelValueBean object : productList) {
 				array.put(new JSONObject().put("product_name", object.getLabel()));
 			}
-//			System.out.println("heading data:" + array.toString());
+			System.out.println("heading data****:" + array.toString());
 			PrintWriter out = respones.getWriter();
 			out.write(array.toString());
 			out.close();
@@ -68,16 +68,16 @@ public class HFStockSummarySheetPageController {
 			@RequestParam("lgaName") String lgaName) throws Exception {
 		JSONArray arrayforjsp = new JSONArray();
 		List activeHFWithZeroData = null;
-//		System.out.println("in HfstockSumaryPageController.HfstockSumaryPageController()");
-//		System.out.println("lgaId :" + lgaId);
-//		System.out.println("year :" + year);
-//		System.out.println("week :" + week);
+		System.out.println("in HfstockSumaryPageController.HfstockSumaryPageController()");
+		System.out.println("lgaId :" + lgaId);
+		System.out.println("year :" + year);
+		System.out.println("week :" + week);
 		try {
 			JSONArray data;
 			data = dashboardServices.getHFStockSummaryGridData(year, week, lgaId);
 			activeHFWithZeroData = dashboardServices.activeHFWithZeroData(year, week, lgaId);
-//			System.out.println("lgaId: " + lgaId);
-//			System.out.println("get_hf_stock_summary_grid_data data.toSring(): " + data.toString());
+			System.out.println("lgaId: " + lgaId);
+			System.out.println("get_hf_stock_summary_grid_data data.toSring(): " + data.toString());
 			SortedSet<String> hfNameList = new TreeSet<String>();
 			for (Object obj : data) {
 				// to generate hf name list
@@ -86,7 +86,8 @@ public class HFStockSummarySheetPageController {
 			}
 			int i = 0;
 			int j = 0;
-//			System.out.println("get_hf_stock_summary_grid_data hf name list: " + hfNameList.toString());
+			System.out.println("get_hf_stock_summary_grid_data hf name list: " + hfNameList.toString());
+			System.out.println("productList size: " + productList.size());
 			LabelValueBean lgaNameBeen=productList.get(0);
 			productList.remove(0);// for remove lga from product name field
 			for (String hf : hfNameList) {
@@ -99,7 +100,7 @@ public class HFStockSummarySheetPageController {
 						JSONObject dataobjectresult = (JSONObject) dataresult;
 						if (String.valueOf(dataobjectresult.get("CUSTOMER_NAME")).equals(hf)
 								&& bean.getLabel().equals(String.valueOf(dataobjectresult.get("ITEM_NUMBER")))) {
-//							System.out.println("col" + j++);
+							System.out.println("col" + j++);
 							colObject.put("STOCK_BALANCE", String.valueOf(dataobjectresult.get("STOCK_BALANCE")));
 							colObject.put("LEGEND_COLOR", String.valueOf(dataobjectresult.get("LEGEND_COLOR")));
 							break;
@@ -108,7 +109,7 @@ public class HFStockSummarySheetPageController {
 					if (colObject.length() > 0) {
 
 					} else {
-//						System.out.println("col" + j++);
+						System.out.println("col" + j++);
 						colObject.put("STOCK_BALANCE", "0");
 						colObject.put("LEGEND_COLOR", "red");
 					}
@@ -119,7 +120,7 @@ public class HFStockSummarySheetPageController {
 			productList.add(0, lgaNameBeen);//for add again lga Name
 			griddata = arrayforjsp;// for global
 			arrayforjsp.put(activeHFWithZeroData);
-//			System.out.println("get_hf_stock_summary_grid_data jsonforjsp ======" + arrayforjsp.toString());
+			System.out.println("get_hf_stock_summary_grid_data jsonforjsp ======" + arrayforjsp.toString());
 			PrintWriter out = respones.getWriter();
 			System.out.println("arrayFor HF STOCK SUMMARY: "+arrayforjsp.toString());
 			out.write(arrayforjsp.toString());

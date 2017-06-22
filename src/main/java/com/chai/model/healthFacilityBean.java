@@ -1,6 +1,6 @@
 package com.chai.model;
 
-public class HealthFacilityBean {
+public class healthFacilityBean {
 	private String x_DB_ID;
 	private String x_WARD;
 	private String x_WARD_ID;
